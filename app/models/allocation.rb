@@ -5,6 +5,7 @@ class Allocation < ActiveRecord::Base
   belongs_to :person
   belongs_to :project
 
+  scope :current, includes(:project).where("projects.deleted_at is NULL")
   scope :for_date, lambda { |d| where("start_date <= ?",d.to_date).where("end_date >= ?", d.to_date) }
-  scope :today, lambda { for_date(Date.today) }
+  scope :today, lambda { for_date(Date.today).current }
 end

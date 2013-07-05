@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 gem 'rails', '3.2.13'
 gem 'pg'
 gem 'active_model_serializers'
+gem 'acts_as_paranoid'
 
 
 group :assets do
