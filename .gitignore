@@ -13,3 +13,14 @@
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
+
+.rvmrc
+.ruby-version
+.DS_Store
+.todo
+tags
+chromedriver.log
+.env
+zeus.json
+bin
+db/dumps
