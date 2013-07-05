@@ -6,4 +6,6 @@ class Project < ActiveRecord::Base
   has_many :slots
   has_many :allocations
 
+  scope :assignable, where(vacation: true)
+
 end

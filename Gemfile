@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.11'
+gem 'rails', '3.2.13'
 gem 'pg'
 gem 'active_model_serializers'
 
@@ -16,4 +16,7 @@ gem 'jquery-rails'
 
 group :development, :test do
   gem 'rspec-rails', '~> 2.0'
+  gem 'factory_girl_rails'
+  gem 'ffaker'
+  gem 'pry'
 end

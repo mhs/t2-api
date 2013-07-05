@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  devise :omniauthable, :token_authenticatable
+  # devise :omniauthable, :token_authenticatable
   attr_accessible :email, :name, :uid, :date_format, :office_id, :office, :provider
   belongs_to :office
 
