@@ -47,4 +47,23 @@ describe Allocation do
       Allocation.assignable.should_not include(allocation)
     end
   end
+
+  describe '.unassignable' do
+    it 'does not include an allocation on billable project' do
+      project = FactoryGirl.create(:project, :billable)
+      allocation = FactoryGirl.create(:allocation, :active, project: project)
+      Allocation.unassignable.should_not include(allocation)
+    end
+    it 'does include an allocation on a vacation project' do
+      project = FactoryGirl.create(:project, :vacation)
+      allocation = FactoryGirl.create(:allocation, :active, project: project)
+      Allocation.unassignable.should include(allocation)
+    end
+    it 'does not include an allocation on a project that has been deleted' do
+      project = FactoryGirl.create(:project, :vacation)
+      allocation = FactoryGirl.create(:allocation, :active, project: project)
+      project.destroy
+      Allocation.unassignable.should_not include(allocation)
+    end
+  end
 end
