@@ -40,5 +40,11 @@ describe Allocation do
       allocation = FactoryGirl.create(:allocation, :active, project: project)
       Allocation.assignable.should_not include(allocation)
     end
+    it 'does not include an allocation on a project that has been deleted' do
+      project = FactoryGirl.create(:project)
+      allocation = FactoryGirl.create(:allocation, :active, project: project)
+      project.destroy
+      Allocation.assignable.should_not include(allocation)
+    end
   end
 end

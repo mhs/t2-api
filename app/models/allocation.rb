@@ -8,5 +8,5 @@ class Allocation < ActiveRecord::Base
   scope :current, includes(:project).where("projects.deleted_at is NULL")
   scope :for_date, lambda { |d| where("start_date <= ?",d.to_date).where("end_date >= ?", d.to_date) }
   scope :today, lambda { for_date(Date.today).current }
-  scope :assignable, includes(:project).where(:projects => { vacation: false })
+  scope :assignable, current.includes(:project).where(:projects => { vacation: false })
 end
