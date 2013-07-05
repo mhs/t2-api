@@ -74,4 +74,27 @@ describe Person do
       Person.billable.should_not include(employee)
     end
   end
+
+  describe '.unassignable_today' do
+    let(:vacation) { FactoryGirl.create(:project, :vacation) }
+
+    it 'includes someone allocated to vacation today' do
+      employee = FactoryGirl.create(:person, unsellable: false)
+      FactoryGirl.create(:allocation, person: employee, project: vacation)
+      Person.unassignable_today.should include(employee)
+    end
+
+    it 'does not include someone allocated to a billable project today' do
+      employee = FactoryGirl.create(:person, unsellable: false)
+      project = FactoryGirl.create(:project, :billable)
+      FactoryGirl.create(:allocation, person: employee, project: project)
+      Person.unassignable_today.should_not include(employee)
+    end
+
+    it 'does not include someone who is unsellable' do
+      employee = FactoryGirl.create(:person, unsellable: true)
+      FactoryGirl.create(:allocation, person: employee, project: vacation)
+      Person.unassignable_today.should_not include(employee)
+    end
+  end
 end

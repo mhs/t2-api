@@ -10,4 +10,9 @@ class Person < ActiveRecord::Base
   scope :overhead, where(unsellable: true)
   scope :billable, where(unsellable: false)
 
+  def self.unassignable_today
+    # Unsellable = ALWAYS overhead (e.g. the CEO)
+    # Unassignable = Usually available to be assigned, but out on vacation or something like that
+    Allocation.today.unassignable.map(&:person).reject{|p| p.unsellable?}
+  end
 end
