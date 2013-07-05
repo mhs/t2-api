@@ -38,4 +38,40 @@ describe Person do
       Person.currently_employed.should be_empty
     end
   end
+
+  describe '.overhead' do
+    it 'includes people marked as unsellable' do
+      employee = FactoryGirl.create(:person, unsellable: true)
+      Person.overhead.should include(employee)
+    end
+
+    it 'does not include people marked as sellable' do
+      employee = FactoryGirl.create(:person, unsellable: false)
+      Person.overhead.should_not include(employee)
+    end
+
+    it 'does not include deleted employees' do
+      employee = FactoryGirl.create(:person, unsellable: true)
+      employee.destroy
+      Person.overhead.should_not include(employee)
+    end
+  end
+
+  describe '.billable' do
+    it 'does not include people marked as unsellable' do
+      employee = FactoryGirl.create(:person, unsellable: true)
+      Person.billable.should_not include(employee)
+    end
+
+    it 'includes people marked as sellable' do
+      employee = FactoryGirl.create(:person, unsellable: false)
+      Person.billable.should include(employee)
+    end
+
+    it 'does not include deleted employees' do
+      employee = FactoryGirl.create(:person, unsellable: false)
+      employee.destroy
+      Person.billable.should_not include(employee)
+    end
+  end
 end

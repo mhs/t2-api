@@ -7,5 +7,7 @@ class Person < ActiveRecord::Base
 
   scope :employed_on_date, lambda { |d| where("start_date is NULL or start_date < ?",d).where("end_date is NULL or end_date > ?", d) }
   scope :currently_employed, lambda { employed_on_date(Date.today) }
+  scope :overhead, where(unsellable: true)
+  scope :billable, where(unsellable: false)
 
 end
