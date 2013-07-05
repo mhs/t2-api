@@ -80,21 +80,28 @@ describe Person do
 
     it 'includes someone allocated to vacation today' do
       employee = FactoryGirl.create(:person, unsellable: false)
-      FactoryGirl.create(:allocation, person: employee, project: vacation)
+      FactoryGirl.create(:allocation, person: employee, project: vacation, start_date: 1.week.ago, end_date: Date.tomorrow)
       Person.unassignable_today.should include(employee)
     end
 
     it 'does not include someone allocated to a billable project today' do
       employee = FactoryGirl.create(:person, unsellable: false)
       project = FactoryGirl.create(:project, :billable)
-      FactoryGirl.create(:allocation, person: employee, project: project)
+      FactoryGirl.create(:allocation, person: employee, project: project, start_date: 1.week.ago, end_date: Date.tomorrow)
       Person.unassignable_today.should_not include(employee)
     end
 
     it 'does not include someone who is unsellable' do
       employee = FactoryGirl.create(:person, unsellable: true)
-      FactoryGirl.create(:allocation, person: employee, project: vacation)
+      FactoryGirl.create(:allocation, person: employee, project: vacation, start_date: 1.week.ago, end_date: Date.tomorrow)
       Person.unassignable_today.should_not include(employee)
+    end
+
+    it 'does not include someone who no longer works here' do
+      former_employee = FactoryGirl.create(:person)
+      FactoryGirl.create(:allocation, person: former_employee, project: vacation, start_date: 1.week.ago, end_date: Date.tomorrow)
+      former_employee.update_attributes!(end_date: Date.yesterday)
+      Person.unassignable_today.should_not include(former_employee)
     end
   end
 end
