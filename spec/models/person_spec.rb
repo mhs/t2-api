@@ -32,5 +32,10 @@ describe Person do
       non_employee = FactoryGirl.create(:person, start_date: 1.week.from_now)
       Person.currently_employed.should_not include(non_employee)
     end
+    it 'does not include a person deleted in a paranoid way' do
+      employee = FactoryGirl.create(:person)
+      employee.destroy
+      Person.currently_employed.should be_empty
+    end
   end
 end
