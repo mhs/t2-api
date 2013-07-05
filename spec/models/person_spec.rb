@@ -1,6 +1,20 @@
 require 'spec_helper'
 
 describe Person do
+  it 'acts as paranoid' do
+    Person.count.should eql(0)
+    Person.only_deleted.should be_empty
+
+    person = FactoryGirl.create(:person)
+
+    Person.count.should_not eql(0)
+
+    person.destroy
+
+    Person.count.should eql(0)
+    Person.only_deleted.should_not be_empty
+  end
+
   describe '.currently_employed' do
     it 'includes someone without a start or end date' do
       employee = FactoryGirl.create(:person)
