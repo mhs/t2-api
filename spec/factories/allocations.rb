@@ -11,5 +11,10 @@ FactoryGirl.define do
       start_date { Date.today.at_beginning_of_week }
       end_date { Date.today.at_beginning_of_week + 6.days }
     end
+
+    trait :active do
+      start_date { 1.week.ago }
+      end_date { 1.week.from_now}
+    end
   end
 end

@@ -28,4 +28,17 @@ describe Allocation do
       Allocation.today.should_not include(allocation)
     end
   end
+
+  describe '.assignable' do
+    it 'includes an allocation on billable project' do
+      project = FactoryGirl.create(:project)
+      allocation = FactoryGirl.create(:allocation, :active, project: project)
+      Allocation.assignable.should include(allocation)
+    end
+    it 'does not include an allocation on a vacation project' do
+      project = FactoryGirl.create(:project, :vacation)
+      allocation = FactoryGirl.create(:allocation, :active, project: project)
+      Allocation.assignable.should_not include(allocation)
+    end
+  end
 end

@@ -14,5 +14,9 @@ FactoryGirl.define do
       billable true
       binding true
     end
+
+    trait :vacation do
+      vacation true
+    end
   end
 end
