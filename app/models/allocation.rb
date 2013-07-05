@@ -10,4 +10,5 @@ class Allocation < ActiveRecord::Base
   scope :today, lambda { for_date(Date.today).current }
   scope :assignable, current.includes(:project).where(:projects => { vacation: false })
   scope :unassignable, current.includes(:project).where(:projects => { vacation: true })
+  scope :billable, where(billable: true)
 end

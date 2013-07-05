@@ -14,6 +14,11 @@ class Person < ActiveRecord::Base
     # Unsellable = ALWAYS overhead (e.g. the CEO)
     # Unassignable = Usually available to be assigned, but out on vacation or something like that
     eligible_employees = billable.currently_employed
-    Allocation.today.unassignable.map(&:person).select{|p| eligible_employees.include?(p)}
+    Allocation.today.unassignable.map(&:person).select{|p| eligible_employees.include?(p)}.uniq
+  end
+
+  def self.billing_today
+    on_vacation = unassignable_today
+    Allocation.today.billable.assignable.map(&:person).reject{|p| on_vacation.include?(p)}.uniq
   end
 end

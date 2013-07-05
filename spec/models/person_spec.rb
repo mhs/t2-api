@@ -84,6 +84,16 @@ describe Person do
       Person.unassignable_today.should include(employee)
     end
 
+    it 'includes them only once even if they are billed on two vacation projects' do
+      employee = FactoryGirl.create(:person, unsellable: false)
+      conference = FactoryGirl.create(:project, :vacation)
+      FactoryGirl.create(:allocation, person: employee, project: vacation, start_date: 1.week.ago, end_date: Date.tomorrow)
+      FactoryGirl.create(:allocation, person: employee, project: conference, start_date: 1.week.ago, end_date: Date.tomorrow)
+      Person.unassignable_today.should include(employee)
+      Person.unassignable_today.size.should eql(1)
+    end
+
+
     it 'does not include someone allocated to a billable project today' do
       employee = FactoryGirl.create(:person, unsellable: false)
       project = FactoryGirl.create(:project, :billable)
@@ -102,6 +112,54 @@ describe Person do
       FactoryGirl.create(:allocation, person: former_employee, project: vacation, start_date: 1.week.ago, end_date: Date.tomorrow)
       former_employee.update_attributes!(end_date: Date.yesterday)
       Person.unassignable_today.should_not include(former_employee)
+    end
+  end
+
+  describe '.billing_today' do
+    let(:billable_project) { FactoryGirl.create(:project, :billable) }
+    let(:employee) { FactoryGirl.create(:person) }
+
+    it 'includes someone allocated to a billable project today' do
+      FactoryGirl.create(:allocation, person: employee, project: billable_project, start_date: 1.week.ago, end_date: Date.tomorrow, billable: true)
+      Person.billing_today.should include(employee)
+    end
+
+    it 'includes the person only once, even if they are allocated to two different projects' do
+      another_billable_project = FactoryGirl.create(:project, billable: true)
+      FactoryGirl.create(:allocation, person: employee, project: billable_project, start_date: 1.week.ago, end_date: Date.tomorrow, billable: true)
+      FactoryGirl.create(:allocation, person: employee, project: another_billable_project, start_date: 1.week.ago, end_date: Date.tomorrow, billable: true)
+      Person.billing_today.should include(employee)
+      Person.billing_today.size.should eql(1)
+    end
+
+    it 'does not include someone allocated to a billable project in an unbillable way' do
+      FactoryGirl.create(:allocation, person: employee, project: billable_project, start_date: 1.week.ago, end_date: Date.tomorrow, billable: false)
+      Person.billing_today.should_not include(employee)
+    end
+
+    it 'does not include someone allocated to an unbillable project' do
+      unbillable_project = FactoryGirl.create(:project, billable: false)
+      FactoryGirl.create(:allocation, person: employee, project: unbillable_project, start_date: 1.week.ago, end_date: Date.tomorrow, billable: false)
+      Person.billing_today.should_not include(employee)
+    end
+
+    it 'does not include someone on vacation' do
+      vacation = FactoryGirl.create(:project, :vacation)
+      FactoryGirl.create(:allocation, person: employee, project: vacation, start_date: 1.week.ago, end_date: Date.tomorrow)
+      Person.billing_today.should_not include(employee)
+    end
+
+    it 'does not include someone on vacation if they are also allocated to a billable project' do
+      vacation = FactoryGirl.create(:project, :vacation)
+      FactoryGirl.create(:allocation, person: employee, project: vacation, start_date: 1.day.ago, end_date: Date.tomorrow)
+      FactoryGirl.create(:allocation, person: employee, project: billable_project, start_date: 1.week.ago, end_date: 1.week.from_now, billable: true)
+      Person.billing_today.should_not include(employee)
+    end
+
+    it 'does include someone who is billing even though they normall do not' do
+      overhead_employee = FactoryGirl.create(:person, unsellable: true)
+      FactoryGirl.create(:allocation, person: overhead_employee, project: billable_project, start_date: 1.week.ago, end_date: Date.tomorrow, billable: true)
+      Person.billing_today.should include(overhead_employee)
     end
   end
 end
