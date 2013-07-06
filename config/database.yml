@@ -1,6 +1,6 @@
 development:
   adapter: postgresql
-  database: t2
+  database: t2api
   host: localhost
 
 # Warning: The database defined as "test" will be erased and
