@@ -22,4 +22,6 @@ group :development, :test do
   gem 'factory_girl_rails'
   gem 'ffaker'
   gem 'pry'
+  gem 'taps'
+  gem 'sqlite3'
 end

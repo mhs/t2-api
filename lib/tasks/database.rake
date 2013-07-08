@@ -1,6 +1,6 @@
 namespace :db do
   desc "Copy database instance from t2.herokuapp.com to t2api.herokuapp.com"
-  task :copy_prod do
+  task :transfer_prod_db do
     def sysputs(s)
       puts s
       system s
@@ -15,4 +15,13 @@ namespace :db do
     puts "migrating database..."
     sysputs "heroku run rake db:migrate"
   end
+
+
+  desc "Copy database from t2api to localhost"
+  task :pull do
+    system "heroku db:pull -a t2api --confirm t2api"
+  end
+
+  desc "Complete reset of local database from prod"
+  task :refresh => [ :drop, :create, :pull, :migrate ]
 end

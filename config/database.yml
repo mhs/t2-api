@@ -8,10 +8,10 @@ development:
 # Do not set this db to the same as development or production.
 test: &test
   adapter: postgresql
-  database: t2_test
+  database: t2api_test
   host: localhost
 
 production:
   adapter: postgresql
-  database: t2
+  database: t2api
   host: localhost
