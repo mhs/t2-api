@@ -6,6 +6,7 @@ gem 'rails', '3.2.13'
 gem 'pg'
 gem 'active_model_serializers'
 gem 'acts_as_paranoid'
+gem 'hashie'
 
 
 group :assets do

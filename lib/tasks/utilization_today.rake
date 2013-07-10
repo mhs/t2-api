@@ -1,31 +1,33 @@
 desc "Spit out a report on utilization for Daniel"
 task :utilization_today => :environment do
   def puts_names_for(list)
-    list.map(&:name).sort.each{|p| puts p}
+    list.sort.each{|p| puts p}
   end
 
-  staff = Person.currently_employed
+  snapshot = Hashie::Mash.new(Snapshot.today!.utilization)
+
+  staff = snapshot.staff
   staff_size = staff.size
 
-  overhead = Person.overhead.currently_employed
+  overhead = snapshot.overhead
   overhead_size = overhead.size
 
-  billable = Person.billable.currently_employed
+  billable = snapshot.billable
   billable_size = billable.size
 
-  unassignable = Person.unassignable_today
+  unassignable = snapshot.unassignable
   unassignable_size = unassignable.size
 
-  assignable = billable - unassignable
+  assignable = snapshot.assignable
   assignable_size = assignable.size
 
-  billing = Person.billing_today
+  billing = snapshot.billing
   billing_size = billing.size
 
   non_billing = assignable - billing
   non_billing_size = non_billing.size
 
-  utilization = sprintf "%.1f", (100.0 * billing_size) / assignable_size
+  utilization = snapshot.utilization
 
   puts "Current staff count is #{staff_size} of which #{billable_size} are billable and #{overhead_size} are not"
   puts "Of the #{billable_size} billable, #{assignable_size} are assignable and  #{unassignable_size} are not"
