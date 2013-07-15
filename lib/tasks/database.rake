@@ -12,8 +12,6 @@ namespace :db do
     restore_url = `heroku pgbackups:url -a t2-production`
     puts "copying data..."
     sysputs "heroku pgbackups:restore HEROKU_POSTGRESQL_WHITE -a t2api --confirm t2api '#{restore_url}'"
-    puts "migrating database..."
-    sysputs "heroku run rake db:migrate"
   end
 
 
@@ -23,5 +21,5 @@ namespace :db do
   end
 
   desc "Complete reset of local database from prod"
-  task :refresh => [ :drop, :create, :pull, :migrate ]
+  task :refresh => [ :drop, :create, :pull ]
 end
