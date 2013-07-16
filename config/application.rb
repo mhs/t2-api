@@ -65,5 +65,16 @@ module T2Api
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
+
+    # Allow cross origin
+    config.middleware.use Rack::Cors do
+        allow do
+          origins '*'
+          resource '*',
+                  #headers: ['Origin', 'Accept', 'Content-Type', 'X-CSRF-Token'],
+                  headers: :any,
+                  methods: [:get, :post, :put, :delete, :options]
+        end
+      end 
   end
 end
