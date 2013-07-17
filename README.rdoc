@@ -1,8 +1,0 @@
-# API layer for T2
-
-This is a simple API layer for serving up T2 data to client apps.  To get started:
-
-## Tasks to do
-* Create a better seeds.rb file
-* Add specs
-* Update controllers and models to allow for parameterized fetching of models
