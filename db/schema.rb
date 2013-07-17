@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130710190718) do
+ActiveRecord::Schema.define(:version => 20130603201330) do
 
   create_table "allocations", :force => true do |t|
     t.date     "start_date"
