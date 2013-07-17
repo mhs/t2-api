@@ -13,11 +13,11 @@ describe Snapshot do
     end
 
     it 'populates the utilization data for today' do
-      snapshot.utilization.should_not be_nil
+      snapshot.utilization.should_not be_empty
     end
 
     it 'includes utilization for the whole company' do
-      snapshot.utilization.keys.should include(:neo)
+      snapshot.utilization.select{|u| u[:office_name] == 'Neo'}.should_not be_empty
     end
   end
 
