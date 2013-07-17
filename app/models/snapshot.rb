@@ -25,15 +25,17 @@ class Snapshot < ActiveRecord::Base
     non_billing = assignable - billing
     utilization = sprintf "%.1f", (100.0 * billing.size) / assignable.size
 
-    {
-      staff: staff,
-      overhead: overhead,
-      billable: billable,
-      unassignable: unassignable,
-      assignable: assignable,
-      billing: billing,
-      non_billing: non_billing,
-      utilization: utilization
+    { neo:
+      {
+        staff: staff,
+        overhead: overhead,
+        billable: billable,
+        unassignable: unassignable,
+        assignable: assignable,
+        billing: billing,
+        non_billing: non_billing,
+        utilization: utilization
+      }
     }
   end
 end

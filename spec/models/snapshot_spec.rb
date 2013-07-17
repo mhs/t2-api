@@ -15,6 +15,10 @@ describe Snapshot do
     it 'populates the utilization data for today' do
       snapshot.utilization.should_not be_nil
     end
+
+    it 'includes utilization for the whole company' do
+      snapshot.utilization.keys.should include(:neo)
+    end
   end
 
   describe '.today' do
