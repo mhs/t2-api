@@ -3,8 +3,8 @@ FactoryGirl.define do
     person
     project
     notes      { Faker::HipsterIpsum.sentence }
-    start_date { Date.today + (-5..3).to_a.sample.weeks }
-    end_date   { Date.today + (4..9).to_a.sample.weeks }
+    start_date { Date.today + - 1.week }
+    end_date   { Date.today + 1.week }
     billable   { [true, false].sample }
 
     trait :this_week do
@@ -15,6 +15,10 @@ FactoryGirl.define do
     trait :active do
       start_date { 1.week.ago }
       end_date { 1.week.from_now}
+    end
+
+    trait :billable do
+      billable true
     end
   end
 end

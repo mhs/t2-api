@@ -1,10 +1,10 @@
 desc "Spit out a report on utilization for Daniel"
 task :utilization_today => :environment do
   def puts_names_for(list)
-    list.sort.each{|p| puts p}
+    list.sort_by(&:name).each{|p| puts p.name}
   end
 
-  snapshot = Hashie::Mash.new(Snapshot.today!.utilization)
+  snapshot = Snapshot.today!
 
   staff = snapshot.staff
   staff_size = staff.size

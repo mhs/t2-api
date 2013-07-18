@@ -4,6 +4,11 @@ describe Snapshot do
   describe '.today!' do
     let(:snapshot) {Snapshot.today!}
 
+    before(:each) do
+      employee = FactoryGirl.create(:person, :current)
+      FactoryGirl.create(:allocation, :active, :billable, person: employee)
+    end
+
     it 'creates a snapshot' do
       expect{Snapshot.today!}.to change{Snapshot.count}.by(1)
     end
@@ -12,8 +17,8 @@ describe Snapshot do
       snapshot.snap_date.should eql(Date.today)
     end
 
-    it 'populates the utilization data for today' do
-      snapshot.utilization.should_not be_empty
+    it 'captures currently employed staff' do
+      snapshot.staff.should_not be_empty
     end
 
     it 'defaults the office to the entire company' do

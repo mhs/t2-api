@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130718005952) do
+ActiveRecord::Schema.define(:version => 20130718012447) do
 
   create_table "allocations", :force => true do |t|
     t.date     "start_date"
@@ -118,9 +118,16 @@ ActiveRecord::Schema.define(:version => 20130718005952) do
   create_table "snapshots", :force => true do |t|
     t.text     "utilization"
     t.date     "snap_date"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
     t.integer  "office_id"
+    t.text     "staff_ids"
+    t.text     "overhead_ids"
+    t.text     "billable_ids"
+    t.text     "unassignable_ids"
+    t.text     "assignable_ids"
+    t.text     "billing_ids"
+    t.text     "non_billing_ids"
   end
 
   create_table "users", :force => true do |t|
