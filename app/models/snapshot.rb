@@ -1,4 +1,7 @@
 class Snapshot < ActiveRecord::Base
+
+  extend Memoist
+
   serialize :staff_ids
   serialize :overhead_ids
   serialize :billable_ids
@@ -22,37 +25,14 @@ class Snapshot < ActiveRecord::Base
     from_today.order("created_at ASC").last
   end
 
-  def staff
-    Person.where(id: staff_ids)
+  %w{ assignable billing non_billing overhead billable unassignable staff }.each do |method_name|
+    define_method method_name do
+      Person.where(id: send("#{method_name}_ids"))
+    end
+    memoize method_name
   end
 
-  def people
-    staff
-  end
-
-  def overhead
-    Person.where(id: overhead_ids)
-  end
-
-  def billable
-    Person.where(id: billable_ids)
-  end
-
-  def unassignable
-    Person.where(id: unassignable_ids)
-  end
-
-  def assignable
-    Person.where(id: assignable_ids)
-  end
-
-  def billing
-    Person.where(id: billing_ids)
-  end
-
-  def non_billing
-    Person.where(id: non_billing_ids)
-  end
+  alias_method :people, :staff
 
   def capture_data
     self.staff_ids = Person.currently_employed.map(&:id)
@@ -64,4 +44,5 @@ class Snapshot < ActiveRecord::Base
     self.non_billing_ids = assignable_ids - billing_ids
     self.utilization = sprintf "%.1f", (100.0 * billing_ids.size) / assignable_ids.size
   end
+
 end

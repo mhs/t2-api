@@ -65,6 +65,7 @@ GEM
     mail (2.5.4)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
+    memoist (0.9.0)
     method_source (0.8.1)
     mime-types (1.23)
     multi_json (1.7.7)
@@ -159,6 +160,7 @@ DEPENDENCIES
   ffaker
   hashie
   jquery-rails
+  memoist
   pg
   pry
   rack-cors

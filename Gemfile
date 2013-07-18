@@ -8,6 +8,7 @@ gem 'active_model_serializers'
 gem 'acts_as_paranoid'
 gem 'hashie'
 gem 'rack-cors', require: 'rack/cors'
+gem 'memoist'
 
 
 group :assets do

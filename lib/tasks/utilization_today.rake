@@ -19,59 +19,40 @@ task :utilization_today => :environment do
     UtilizationTodayOutput.utilization_puts x
   end
 
-
   snapshot = Snapshot.today!
+  overhead_size     = snapshot.overhead.size
+  billable_size     = snapshot.billable.size
+  unassignable_size = snapshot.unassignable.size
+  assignable_size   = snapshot.assignable.size
+  billing_size      = snapshot.billing.size
 
-  staff = snapshot.staff
-  staff_size = staff.size
-
-  overhead = snapshot.overhead
-  overhead_size = overhead.size
-
-  billable = snapshot.billable
-  billable_size = billable.size
-
-  unassignable = snapshot.unassignable
-  unassignable_size = unassignable.size
-
-  assignable = snapshot.assignable
-  assignable_size = assignable.size
-
-  billing = snapshot.billing
-  billing_size = billing.size
-
-  non_billing = assignable - billing
-  non_billing_size = non_billing.size
-
-  utilization = snapshot.utilization
-
-  utilization_puts "Current staff count is #{staff_size} of which #{billable_size} are billable and #{overhead_size} are not"
+  utilization_puts "Current staff count is #{snapshot.staff_ids.size} of which #{billable_size} are billable and #{overhead_size} are not"
   utilization_puts "Of the #{billable_size} billable, #{assignable_size} are assignable and  #{unassignable_size} are not"
   utilization_puts "Of the #{assignable_size} assignable employees, #{billing_size} are billing today"
   utilization_puts
   utilization_puts
   utilization_puts "Daily utilization is billing as a percentage of assignable"
   utilization_puts "That is, non-billable people and those out on vacation are omitted from the calculation"
-  utilization_puts "For today, that is #{billing_size} / #{assignable_size} = #{utilization}%"
+  utilization_puts "For today, that is #{billing_size} / #{assignable_size} = #{snapshot.utilization}%"
   utilization_puts
   utilization_puts
   utilization_puts
   utilization_puts "Non billable staff in T2 - #{overhead_size}"
   utilization_puts "--------------------------------------"
-  puts_names_for overhead
+  puts_names_for snapshot.overhead
   utilization_puts
   utilization_puts
   utilization_puts "Unassignable (vacation, etc.) - #{unassignable_size}"
   utilization_puts "----------------------------------------"
-  puts_names_for unassignable
+  puts_names_for snapshot.unassignable
   utilization_puts
   utilization_puts
-  utilization_puts "Working, but not billing - #{non_billing_size}"
+  utilization_puts "Working, but not billing - #{snapshot.non_billing.size}"
   utilization_puts "--------------------------------"
-  puts_names_for non_billing
+  puts_names_for snapshot.non_billing
   utilization_puts
   utilization_puts
   utilization_puts "Billing today - #{billing_size}"
   utilization_puts "---------------------"
-  puts_names_for billing
+  puts_names_for snapshot.billing
 end
