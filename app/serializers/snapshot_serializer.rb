@@ -1,11 +1,5 @@
 class SnapshotSerializer < ActiveModel::Serializer
-  embed :ids, include: true
-  attributes :id, :utilization, :snap_date
-  has_many :staff
-  has_many :overhead
-  has_many :billable
-  has_many :unassignable
-  has_many :assignable
-  has_many :billing
-  has_many :non_billing
+  attributes :id, :snap_date, :staff_ids, :overhead_ids, :billable_ids, :unassignable_ids, :assignable_ids, :billing_ids, :non_billing_ids, :utilization
+  has_many :people
+  has_one :office, embed: :ids
 end

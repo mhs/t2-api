@@ -26,6 +26,10 @@ class Snapshot < ActiveRecord::Base
     Person.where(id: staff_ids)
   end
 
+  def people
+    staff
+  end
+
   def overhead
     Person.where(id: overhead_ids)
   end
