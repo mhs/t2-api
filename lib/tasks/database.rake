@@ -23,6 +23,8 @@ namespace :db do
     restore_url = `heroku pgbackups:url -a t2-production`
     puts "copying data..."
     sysputs "heroku pgbackups:restore HEROKU_POSTGRESQL_ORANGE -a t2api-staging --confirm t2api-staging '#{restore_url}'"
+    puts "obscuring project names..."
+    sysputs "heroku run rake obscure_projects -a t2api-staging"
   end
 
 

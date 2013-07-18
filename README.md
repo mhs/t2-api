@@ -96,6 +96,17 @@ rake db:refresh
 
 to pull down the latest development database.
 
+## Obscuring Projects
+
+Working on t2-api is something we sometimes do with candidates on pairing days.  Some of our clients
+insist that our work for them is confidential. As such, we keep project names in staging obscure via
+
+```
+heroku run rake obscure_projects -a t2api-staging
+```
+
+This is done automatically whenever we transfer data from production to staging (see below).
+
 
 #### Start the server
 
