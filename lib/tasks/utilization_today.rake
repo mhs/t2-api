@@ -1,8 +1,24 @@
+# This seems repetitive, but gives us a hook into for testing the task
+class UtilizationTodayOutput
+  def self.puts_names_for(list)
+    list.sort_by(&:name).each{|p| puts p.name}
+  end
+
+  def self.utilization_puts(x = '')
+    puts x
+  end
+end
+
 desc "Spit out a report on utilization for Daniel"
 task :utilization_today => :environment do
   def puts_names_for(list)
-    list.sort_by(&:name).each{|p| puts p.name}
+    UtilizationTodayOutput.puts_names_for list
   end
+
+  def utilization_puts(x = '')
+    UtilizationTodayOutput.utilization_puts x
+  end
+
 
   snapshot = Snapshot.today!
 
@@ -29,33 +45,33 @@ task :utilization_today => :environment do
 
   utilization = snapshot.utilization
 
-  puts "Current staff count is #{staff_size} of which #{billable_size} are billable and #{overhead_size} are not"
-  puts "Of the #{billable_size} billable, #{assignable_size} are assignable and  #{unassignable_size} are not"
-  puts "Of the #{assignable_size} assignable employees, #{billing_size} are billing today"
-  puts
-  puts
-  puts "Daily utilization is billing as a percentage of assignable"
-  puts "That is, non-billable people and those out on vacation are omitted from the calculation"
-  puts "For today, that is #{billing_size} / #{assignable_size} = #{utilization}%"
-  puts
-  puts
-  puts
-  puts "Non billable staff in T2 - #{overhead_size}"
-  puts "--------------------------------------"
+  utilization_puts "Current staff count is #{staff_size} of which #{billable_size} are billable and #{overhead_size} are not"
+  utilization_puts "Of the #{billable_size} billable, #{assignable_size} are assignable and  #{unassignable_size} are not"
+  utilization_puts "Of the #{assignable_size} assignable employees, #{billing_size} are billing today"
+  utilization_puts
+  utilization_puts
+  utilization_puts "Daily utilization is billing as a percentage of assignable"
+  utilization_puts "That is, non-billable people and those out on vacation are omitted from the calculation"
+  utilization_puts "For today, that is #{billing_size} / #{assignable_size} = #{utilization}%"
+  utilization_puts
+  utilization_puts
+  utilization_puts
+  utilization_puts "Non billable staff in T2 - #{overhead_size}"
+  utilization_puts "--------------------------------------"
   puts_names_for overhead
-  puts
-  puts
-  puts "Unassignable (vacation, etc.) - #{unassignable_size}"
-  puts "----------------------------------------"
+  utilization_puts
+  utilization_puts
+  utilization_puts "Unassignable (vacation, etc.) - #{unassignable_size}"
+  utilization_puts "----------------------------------------"
   puts_names_for unassignable
-  puts
-  puts
-  puts "Working, but not billing - #{non_billing_size}"
-  puts "--------------------------------"
+  utilization_puts
+  utilization_puts
+  utilization_puts "Working, but not billing - #{non_billing_size}"
+  utilization_puts "--------------------------------"
   puts_names_for non_billing
-  puts
-  puts
-  puts "Billing today - #{billing_size}"
-  puts "---------------------"
+  utilization_puts
+  utilization_puts
+  utilization_puts "Billing today - #{billing_size}"
+  utilization_puts "---------------------"
   puts_names_for billing
 end
