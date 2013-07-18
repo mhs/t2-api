@@ -38,8 +38,8 @@ Have bench time and want to help contribute to T2?  Fantastic.  Here are the rul
 
 - Hop into the T2 room in hipchat.  Those of us working on it actively hang out there.
 - Work in a branch and submit a pull request when you have something to contribute.  Don't work in master.
-- Want to contribute but don't know what to work on?  Ask in hipchat.  We will eventually use Github issues once
-  we have reached a stable state.
+- Want to contribute but don't know what to work on?  Ask in hipchat.  We will eventually more use of Github
+  issue (though there are already a few you can pick from) once we have reached a stable state.
 - Mike Doel is currently acting as the primary gatekeeper on pull requests - reviewing and merging.
 
 
@@ -121,16 +121,19 @@ rake
 
 #### Setup
 
-t2-api runs on Heroku, you will need to be added as a collaborator there in order to deploy, to set up the heroku git remote run:
+The api app runs on Heroku in both production (t2api) and staging (t2api-staging) instances.  You will need to
+be added as a collaborator to one or both in order to deploy. To set up the heroku git remotes run:
 
 ```
 ./git_remotes_setup.sh
 ```
 
-We currently only have a single instance (production) but will add a staging instance once we are closer to full launch.
 
 #### Deploy
 
+```
+git push staging master
+```
 ```
 git push production master
 ```
@@ -138,10 +141,16 @@ git push production master
 
 As mentioned above, this repository is not yet the authoritative copy of the allocation
 and related data.  That exists in the heroku app named t2-production.  We periodically
-pull data from that app into the heroku app for this repository.  To do this, you need
-to be a collaborator on both t2-production and t2api apps in heroku.  Send a note to
+pull data from that app into one of the heroku apps for this repository.  To do this, you need
+to be a collaborator on both t2-production and the appropriate api apps in heroku.  Send a note to
 ask@neo.com if you need either.  Once you are setup, you can refresh the heroku data
 with:
+
+```
+rake db:transfer_staging_db
+```
+
+or
 
 ```
 rake db:transfer_prod_db
@@ -152,3 +161,11 @@ and then pull that data down for your own development use with:
 ```
 rake db:refresh
 ```
+
+for staging or
+
+```
+rake db:refresh_from_production
+```
+
+for production
