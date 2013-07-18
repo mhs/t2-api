@@ -1,11 +1,12 @@
 class Snapshot < ActiveRecord::Base
   serialize :utilization
 
-  attr_accessible :snap_date, :utilization
+  attr_accessible :snap_date, :utilization, :office_id
+  belongs_to :office
   scope :from_today, lambda { where(snap_date: Date.today) }
 
   def self.today!
-    create! snap_date: Date.today, utilization: utilization_data
+    create! snap_date: Date.today, office_id: nil, utilization: utilization_data
   end
 
   def self.today
@@ -25,18 +26,15 @@ class Snapshot < ActiveRecord::Base
     non_billing = assignable - billing
     utilization = sprintf "%.1f", (100.0 * billing.size) / assignable.size
 
-    [
-      {
-        office_name: 'Neo',
-        staff: staff,
-        overhead: overhead,
-        billable: billable,
-        unassignable: unassignable,
-        assignable: assignable,
-        billing: billing,
-        non_billing: non_billing,
-        utilization: utilization
-      }
-    ]
+    {
+      staff: staff,
+      overhead: overhead,
+      billable: billable,
+      unassignable: unassignable,
+      assignable: assignable,
+      billing: billing,
+      non_billing: non_billing,
+      utilization: utilization
+    }
   end
 end

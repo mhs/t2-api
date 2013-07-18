@@ -16,8 +16,8 @@ describe Snapshot do
       snapshot.utilization.should_not be_empty
     end
 
-    it 'includes utilization for the whole company' do
-      snapshot.utilization.select{|u| u[:office_name] == 'Neo'}.should_not be_empty
+    it 'defaults the office to the entire company' do
+      snapshot.office.should be_nil
     end
   end
 

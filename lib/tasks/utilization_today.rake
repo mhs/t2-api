@@ -4,7 +4,7 @@ task :utilization_today => :environment do
     list.sort.each{|p| puts p}
   end
 
-  snapshot = Hashie::Mash.new(Snapshot.today!.utilization.first)
+  snapshot = Hashie::Mash.new(Snapshot.today!.utilization)
 
   staff = snapshot.staff
   staff_size = staff.size
