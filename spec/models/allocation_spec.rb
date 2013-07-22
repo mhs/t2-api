@@ -66,4 +66,17 @@ describe Allocation do
       Allocation.unassignable.should_not include(allocation)
     end
   end
+  describe '.with_start_date' do
+    let!(:time_window) { Allocation::TIME_WINDOW }
+    let!(:allocation_before) { FactoryGirl.create(:allocation, start_date: 3.weeks.ago, end_date: 1.week.ago) }
+    let!(:allocation_start) { FactoryGirl.create(:allocation, start_date: 3.weeks.ago, end_date: 1.week.from_now) }
+    let!(:allocation_end) { FactoryGirl.create(:allocation, start_date: 3.weeks.from_now, end_date: (time_window + 1).weeks.from_now) }
+    let!(:allocation_after) { FactoryGirl.create(:allocation, start_date: (time_window + 1).weeks.from_now, end_date: (time_window + 5).weeks.from_now) }
+    subject(:allocations) { Allocation.with_start_date( Date.today ) }
+
+    it { should_not include allocation_before }
+    it { should include allocation_start }
+    it { should include allocation_end }
+    it { should_not include allocation_after }
+  end
 end

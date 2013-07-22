@@ -25,6 +25,7 @@ group :development, :test do
   gem 'factory_girl_rails'
   gem 'ffaker'
   gem 'pry'
+  gem 'pry-debugger'
   gem 'taps'
   gem 'sqlite3'
 end

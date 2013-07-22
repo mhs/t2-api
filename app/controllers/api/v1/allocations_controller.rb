@@ -1,7 +1,11 @@
 class Api::V1::AllocationsController < ApplicationController
   # GET /allocations.json
   def index
-    render json: Allocation.all
+    if (start_date = params[:startDate])
+      render json: Allocation.with_start_date(start_date)
+    else
+      render json: Allocation.all
+    end
   end
 
   # GET /allocations/1.json
