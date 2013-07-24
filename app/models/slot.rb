@@ -1,7 +1,7 @@
 class Slot < ActiveRecord::Base
   # include TimeLimit
 
-  attr_accessible :project_id
+  attr_accessible :project, :project_id, :start_date, :end_date
 
   belongs_to :project
   has_many :allocations, dependent: :nullify
