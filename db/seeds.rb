@@ -18,14 +18,14 @@ mike_person = Person.create name: "Mike Doel", office: columbus_office, start_da
 
 nexia_home_project = Project.create name: "Nexia Home", billable: true, binding: true, slug: "nexia-home"
 nexia_home_project.offices << cincinnati_office
-t3_project = Project.create name: "T2", slug: "t2", client_principal: mike_person
-t3_project.offices << cincinnati_office
-t3_project.offices << columbus_office
+t2_project = Project.create name: "T2", slug: "t2", client_principal: mike_person
+t2_project.offices << cincinnati_office
+t2_project.offices << columbus_office
 
-slot_1 = Slot.create start_date: Date.today, end_date: 2.months.from_now, project: t3_project
-slot_2 = Slot.create start_date: 1.month.from_now, end_date: 75.days.from_now, project: t3_project
+slot_1 = Slot.create start_date: Date.today, end_date: 2.months.from_now, project: t2_project
+slot_2 = Slot.create start_date: 1.month.from_now, end_date: 75.days.from_now, project: nexia_home_project
 
-Allocation.create start_date: Date.today, end_date: 1.month.from_now, billable: true, binding: true, person: dave_person
-Allocation.create start_date: Date.today, end_date: 2.months.from_now, billable: true, binding: true, person: mike_person
-Allocation.create start_date: 1.month.from_now, end_date: 80.days.from_now, billable: true, binding: true, person: lauren_person
-Allocation.create start_date: 1.month.from_now, end_date: 60.days.from_now, billable: true, binding: true, slot: slot_2, person: dan_person
+Allocation.create start_date: Date.today, end_date: 1.month.from_now, billable: true, binding: true, person: dave_person, project: t2_project, office: cincinnati_office
+Allocation.create start_date: Date.today, end_date: 2.months.from_now, billable: true, binding: true, person: mike_person, project: t2_project, office: columbus_office
+Allocation.create start_date: 1.month.from_now, end_date: 80.days.from_now, billable: true, binding: true, person: lauren_person, project: t2_project, office: cincinnati_office
+Allocation.create start_date: 1.month.from_now, end_date: 60.days.from_now, billable: true, binding: true, slot: slot_2, person: dan_person, project: nexia_home_project, office: cincinnati_office
