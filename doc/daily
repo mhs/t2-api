@@ -1,11 +1,11 @@
 Current staff count is 70 of which 64 are billable and 6 are not
-Of the 64 billable, 57 are assignable and  7 are not
-Of the 57 assignable employees, 41 are billing today
+Of the 64 billable, 59 are assignable and  5 are not
+Of the 59 assignable employees, 43 are billing today
 
 
 Daily utilization is billing as a percentage of assignable
 That is, non-billable people and those out on vacation are omitted from the calculation
-For today, that is 41 / 57 = 71.9%
+For today, that is 43 / 59 = 72.9%
 
 
 
@@ -19,11 +19,9 @@ Paul Wilson
 Swayam Narain
 
 
-Unassignable (vacation, etc.) - 7
+Unassignable (vacation, etc.) - 5
 ----------------------------------------
-Aly Fluckey
 Carin Meier
-Diego Garcia
 Federico Baña
 Mike Doel
 Peter Aitken
@@ -32,12 +30,12 @@ Scott Walker
 
 Working, but not billing - 16
 --------------------------------
-Abhaya Shenoy
 Ally Reeves
 Alvaro Gil
 Bruno Aguirre
 Dan Williams
 Fernando Briano
+Gabe
 Gustavo Armagno
 Jaime Dávila
 Justine Arreche
@@ -50,14 +48,16 @@ Tommy Sullivan
 Winston Teo
 
 
-Billing today - 41
+Billing today - 43
 ---------------------
 Aaron Christy
+Abhaya Shenoy
 Adam McCrea
 Alan Gardner
 Alex Burkhart
 Alex Kim
 Alfonso Cora
+Aly Fluckey
 Anil Podduturi
 Chandu Tennety
 Daniel Cadenas
@@ -65,9 +65,9 @@ Daniel Grieve
 Dave Anderson
 Delisa Mason
 Derek Briggs
+Diego Garcia
 Doug Rohrer
 Felix Flores
-Gabe
 Giff Constable
 Gina Winkler
 Jeff Gothelf
