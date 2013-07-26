@@ -1,11 +1,14 @@
-Current staff count is 70 of which 64 are billable and 6 are not
-Of the 64 billable, 59 are assignable and  5 are not
-Of the 59 assignable employees, 43 are billing today
+Running `rake utilization_today` attached to terminal... up, run.5864
+DEPRECATION WARNING: You have Rails 2.3-style plugins in vendor/plugins! Support for these plugins will be removed in Rails 4.0. Move them out and bundle them in your Gemfile, or fold them in to your app as lib/myplugin/* and config/initializers/myplugin.rb. See the release notes for more on this: http://weblog.rubyonrails.org/2012/1/4/rails-3-2-0-rc2-has-been-released. (called from <top (required)> at /app/Rakefile:7)
+DEPRECATION WARNING: You have Rails 2.3-style plugins in vendor/plugins! Support for these plugins will be removed in Rails 4.0. Move them out and bundle them in your Gemfile, or fold them in to your app as lib/myplugin/* and config/initializers/myplugin.rb. See the release notes for more on this: http://weblog.rubyonrails.org/2012/1/4/rails-3-2-0-rc2-has-been-released. (called from <top (required)> at /app/Rakefile:7)
+Current staff count is 69 of which 63 are billable and 6 are not
+Of the 63 billable, 56 are assignable and  7 are not
+Of the 56 assignable employees, 43 are billing today
 
 
 Daily utilization is billing as a percentage of assignable
 That is, non-billable people and those out on vacation are omitted from the calculation
-For today, that is 43 / 59 = 72.9%
+For today, that is 43 / 56 = 76.8%
 
 
 
@@ -19,25 +22,25 @@ Paul Wilson
 Swayam Narain
 
 
-Unassignable (vacation, etc.) - 5
+Unassignable (vacation, etc.) - 7
 ----------------------------------------
 Carin Meier
+Derek Briggs
+Doug Rohrer
 Federico Baña
 Mike Doel
 Peter Aitken
 Scott Walker
 
 
-Working, but not billing - 16
+Working, but not billing - 14
 --------------------------------
 Ally Reeves
 Alvaro Gil
 Bruno Aguirre
 Dan Williams
 Fernando Briano
-Gabe
 Gustavo Armagno
-Jaime Dávila
 Justine Arreche
 Lauren Woodrick
 Lucía Escanellas
@@ -64,12 +67,12 @@ Daniel Cadenas
 Daniel Grieve
 Dave Anderson
 Delisa Mason
-Derek Briggs
 Diego Garcia
-Doug Rohrer
 Felix Flores
+Gabe
 Giff Constable
 Gina Winkler
+Jaime Dávila
 Jeff Gothelf
 Jerry Nummi
 John Andrews
@@ -93,4 +96,3 @@ Tony Schneider
 Wei Lu
 Yoz Grahame
 Zi (Huong Vu)
-
