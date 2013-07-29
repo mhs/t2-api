@@ -1,14 +1,14 @@
-Running `rake utilization_today` attached to terminal... up, run.6836
+Running `rake utilization_today` attached to terminal... up, run.2558
 DEPRECATION WARNING: You have Rails 2.3-style plugins in vendor/plugins! Support for these plugins will be removed in Rails 4.0. Move them out and bundle them in your Gemfile, or fold them in to your app as lib/myplugin/* and config/initializers/myplugin.rb. See the release notes for more on this: http://weblog.rubyonrails.org/2012/1/4/rails-3-2-0-rc2-has-been-released. (called from <top (required)> at /app/Rakefile:7)
 DEPRECATION WARNING: You have Rails 2.3-style plugins in vendor/plugins! Support for these plugins will be removed in Rails 4.0. Move them out and bundle them in your Gemfile, or fold them in to your app as lib/myplugin/* and config/initializers/myplugin.rb. See the release notes for more on this: http://weblog.rubyonrails.org/2012/1/4/rails-3-2-0-rc2-has-been-released. (called from <top (required)> at /app/Rakefile:7)
 Current staff count is 69 of which 63 are billable and 6 are not
 Of the 63 billable, 57 are assignable and  6 are not
-Of the 57 assignable employees, 50 are billing today
+Of the 57 assignable employees, 51 are billing today
 
 
 Daily utilization is billing as a percentage of assignable
 That is, non-billable people and those out on vacation are omitted from the calculation
-For today, that is 50 / 57 = 87.7%
+For today, that is 51 / 57 = 89.5%
 
 
 
@@ -32,10 +32,9 @@ Luke Chamberlin
 Peter Aitken
 
 
-Working, but not billing - 8
+Working, but not billing - 7
 --------------------------------
 Alvaro Gil
-Carin Meier
 Justine Arreche
 Lauren Woodrick
 María Pérez
@@ -44,7 +43,7 @@ Winston Teo
 Yoz Grahame
 
 
-Billing today - 50
+Billing today - 51
 ---------------------
 Aaron Christy
 Abhaya Shenoy
@@ -55,6 +54,7 @@ Ally Reeves
 Aly Fluckey
 Anil Podduturi
 Bruno Aguirre
+Carin Meier
 Chandu Tennety
 Dan Williams
 Daniel Cadenas
