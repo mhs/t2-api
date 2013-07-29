@@ -1,14 +1,14 @@
-Running `rake utilization_today` attached to terminal... up, run.5864
+Running `rake utilization_today` attached to terminal... up, run.6836
 DEPRECATION WARNING: You have Rails 2.3-style plugins in vendor/plugins! Support for these plugins will be removed in Rails 4.0. Move them out and bundle them in your Gemfile, or fold them in to your app as lib/myplugin/* and config/initializers/myplugin.rb. See the release notes for more on this: http://weblog.rubyonrails.org/2012/1/4/rails-3-2-0-rc2-has-been-released. (called from <top (required)> at /app/Rakefile:7)
 DEPRECATION WARNING: You have Rails 2.3-style plugins in vendor/plugins! Support for these plugins will be removed in Rails 4.0. Move them out and bundle them in your Gemfile, or fold them in to your app as lib/myplugin/* and config/initializers/myplugin.rb. See the release notes for more on this: http://weblog.rubyonrails.org/2012/1/4/rails-3-2-0-rc2-has-been-released. (called from <top (required)> at /app/Rakefile:7)
 Current staff count is 69 of which 63 are billable and 6 are not
-Of the 63 billable, 56 are assignable and  7 are not
-Of the 56 assignable employees, 43 are billing today
+Of the 63 billable, 57 are assignable and  6 are not
+Of the 57 assignable employees, 50 are billing today
 
 
 Daily utilization is billing as a percentage of assignable
 That is, non-billable people and those out on vacation are omitted from the calculation
-For today, that is 43 / 56 = 76.8%
+For today, that is 50 / 57 = 87.7%
 
 
 
@@ -22,77 +22,77 @@ Paul Wilson
 Swayam Narain
 
 
-Unassignable (vacation, etc.) - 7
+Unassignable (vacation, etc.) - 6
 ----------------------------------------
-Carin Meier
-Derek Briggs
+Alan Gardner
 Doug Rohrer
 Federico Baña
-Mike Doel
+Jono Mallanyk
+Luke Chamberlin
 Peter Aitken
-Scott Walker
 
 
-Working, but not billing - 14
+Working, but not billing - 8
 --------------------------------
-Ally Reeves
 Alvaro Gil
-Bruno Aguirre
-Dan Williams
-Fernando Briano
-Gustavo Armagno
+Carin Meier
 Justine Arreche
 Lauren Woodrick
-Lucía Escanellas
-Marcelo Nieves
-Raven Keller
+María Pérez
 Tomek Maszkowski
-Tommy Sullivan
 Winston Teo
+Yoz Grahame
 
 
-Billing today - 43
+Billing today - 50
 ---------------------
 Aaron Christy
 Abhaya Shenoy
-Adam McCrea
-Alan Gardner
 Alex Burkhart
 Alex Kim
 Alfonso Cora
+Ally Reeves
 Aly Fluckey
 Anil Podduturi
+Bruno Aguirre
 Chandu Tennety
+Dan Williams
 Daniel Cadenas
 Daniel Grieve
 Dave Anderson
 Delisa Mason
+Derek Briggs
 Diego Garcia
 Felix Flores
+Fernando Briano
 Gabe
 Giff Constable
 Gina Winkler
+Gustavo Armagno
 Jaime Dávila
 Jeff Gothelf
 Jerry Nummi
 John Andrews
 John Colvin
 Jonathan Irwin
-Jono Mallanyk
 Josh Seiden
-Luke Chamberlin
+Lucía Escanellas
+Marcelo Nieves
 Mark Connell
-María Pérez
 Matt Jones
 Mike Danko
+Mike Doel
 Mike Mazur
 Mohan Krishnan
 Paul Henrich
+Raven Keller
 Scott Barron
 Scott Burwinkel
+Scott Walker
 Sebastian Heit
+Swayam Narain
 Tim Lombardo
+Tommy Sullivan
 Tony Schneider
 Wei Lu
-Yoz Grahame
 Zi (Huong Vu)
