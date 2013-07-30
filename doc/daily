@@ -1,14 +1,11 @@
-Running `rake utilization_today` attached to terminal... up, run.2558
-DEPRECATION WARNING: You have Rails 2.3-style plugins in vendor/plugins! Support for these plugins will be removed in Rails 4.0. Move them out and bundle them in your Gemfile, or fold them in to your app as lib/myplugin/* and config/initializers/myplugin.rb. See the release notes for more on this: http://weblog.rubyonrails.org/2012/1/4/rails-3-2-0-rc2-has-been-released. (called from <top (required)> at /app/Rakefile:7)
-DEPRECATION WARNING: You have Rails 2.3-style plugins in vendor/plugins! Support for these plugins will be removed in Rails 4.0. Move them out and bundle them in your Gemfile, or fold them in to your app as lib/myplugin/* and config/initializers/myplugin.rb. See the release notes for more on this: http://weblog.rubyonrails.org/2012/1/4/rails-3-2-0-rc2-has-been-released. (called from <top (required)> at /app/Rakefile:7)
 Current staff count is 69 of which 63 are billable and 6 are not
-Of the 63 billable, 57 are assignable and  6 are not
-Of the 57 assignable employees, 51 are billing today
+Of the 63 billable, 58 are assignable and  5 are not
+Of the 58 assignable employees, 50 are billing today
 
 
 Daily utilization is billing as a percentage of assignable
 That is, non-billable people and those out on vacation are omitted from the calculation
-For today, that is 51 / 57 = 89.5%
+For today, that is 50 / 58 = 86.2%
 
 
 
@@ -22,9 +19,8 @@ Paul Wilson
 Swayam Narain
 
 
-Unassignable (vacation, etc.) - 6
+Unassignable (vacation, etc.) - 5
 ----------------------------------------
-Alan Gardner
 Doug Rohrer
 Federico Baña
 Jono Mallanyk
@@ -32,21 +28,24 @@ Luke Chamberlin
 Peter Aitken
 
 
-Working, but not billing - 7
+Working, but not billing - 9
 --------------------------------
 Alvaro Gil
 Justine Arreche
 Lauren Woodrick
 María Pérez
+Mike Danko
+Scott Walker
 Tomek Maszkowski
 Winston Teo
 Yoz Grahame
 
 
-Billing today - 51
+Billing today - 50
 ---------------------
 Aaron Christy
 Abhaya Shenoy
+Alan Gardner
 Alex Burkhart
 Alex Kim
 Alfonso Cora
@@ -80,7 +79,6 @@ Lucía Escanellas
 Marcelo Nieves
 Mark Connell
 Matt Jones
-Mike Danko
 Mike Doel
 Mike Mazur
 Mohan Krishnan
@@ -88,7 +86,6 @@ Paul Henrich
 Raven Keller
 Scott Barron
 Scott Burwinkel
-Scott Walker
 Sebastian Heit
 Swayam Narain
 Tim Lombardo
