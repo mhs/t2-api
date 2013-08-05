@@ -28,6 +28,7 @@ group :development, :test do
   gem 'pry-debugger'
   gem 'taps'
   gem 'sqlite3'
+  gem 'foreman'
 end
 
 group :production do
