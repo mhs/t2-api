@@ -14,6 +14,14 @@ class Snapshot < ActiveRecord::Base
   belongs_to :office
   scope :from_today, lambda { where(snap_date: Date.today) }
 
+  def self.one_per_day
+    snaps = {}
+    Snapshot.order("snap_date ASC").all.each do |snap|
+      snaps[snap.snap_date] = snap
+    end
+    snaps.values
+  end
+
   def self.today!
     snap = new snap_date: Date.today, office_id: nil
     snap.capture_data

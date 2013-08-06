@@ -1,6 +1,23 @@
 require 'spec_helper'
 
 describe Snapshot do
+  describe '.one_per_day' do
+    it 'is empty if there are no snapshots' do
+      Snapshot.one_per_day.should be_empty
+    end
+
+    it 'returns the snapshot for today' do
+      Snapshot.today!
+      Snapshot.one_per_day.should_not be_empty
+    end
+
+    it 'returns only the most recent snapshot for the day' do
+      Snapshot.today!
+      Snapshot.today!
+      Snapshot.one_per_day.size.should eql(1)
+    end
+  end
+
   describe '.today!' do
     let(:snapshot) {Snapshot.today!}
 

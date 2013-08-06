@@ -1,6 +1,6 @@
 class Api::V1::SnapshotsController < ApplicationController
   def index
-    @snapshots = Snapshot.all
+    @snapshots = Snapshot.one_per_day
     render json: @snapshots
   end
 
