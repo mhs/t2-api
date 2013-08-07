@@ -1,11 +1,11 @@
 Current staff count is 68 of which 62 are billable and 6 are not
-Of the 62 billable, 58 are assignable and  4 are not
-Of the 58 assignable employees, 45 are billing today
+Of the 62 billable, 59 are assignable and  3 are not
+Of the 59 assignable employees, 46 are billing today
 
 
 Daily utilization is billing as a percentage of assignable
 That is, non-billable people and those out on vacation are omitted from the calculation
-For today, that is 45 / 58 = 77.6%
+For today, that is 46 / 59 = 78.0%
 
 
 
@@ -19,11 +19,10 @@ Paul Wilson
 Swayam Narain
 
 
-Unassignable (vacation, etc.) - 4
+Unassignable (vacation, etc.) - 3
 ----------------------------------------
 Daniel Grieve
 Doug Rohrer
-Felix Flores
 Winston Teo
 
 
@@ -44,7 +43,7 @@ Tomek Maszkowski
 Tommy Sullivan
 
 
-Billing today - 45
+Billing today - 46
 ---------------------
 Aaron Christy
 Alan Gardner
@@ -61,6 +60,7 @@ Dan Williams
 Dave Anderson
 Derek Briggs
 Diego Garcia
+Felix Flores
 Fernando Briano
 Gabe
 Giff Constable
