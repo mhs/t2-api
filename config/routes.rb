@@ -6,7 +6,9 @@ T2Api::Application.routes.draw do
       resources :projects, only: [:index, :show, :update, :create, :destroy]
       resources :slots, only: [:index, :show]
       resources :allocations, only: [:index, :show, :update, :create, :destroy]
-      resources :people, only: [:index, :show]
+      resources :people, only: [:index, :show] do
+        resources :pto_requests, only: [:index, :create, :update]
+      end
       resources :offices, only: [:index, :show]
       resources :snapshots, only: [:index, :show]
     end
