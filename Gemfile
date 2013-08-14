@@ -10,7 +10,6 @@ gem 'hashie'
 gem 'rack-cors', require: 'rack/cors'
 gem 'memoist'
 
-
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
   gem 'coffee-rails', '~> 3.2.1'
@@ -19,13 +18,14 @@ group :assets do
 end
 
 gem 'jquery-rails'
+gem 'validates_timeliness'
 
 group :development, :test do
   gem 'rspec-rails', '~> 2.0'
   gem 'factory_girl_rails'
   gem 'ffaker'
-  gem 'pry'
-  gem 'pry-debugger'
+  gem 'pry-rails'
+  gem 'pry-plus'
   gem 'taps'
   gem 'sqlite3'
   gem 'foreman'

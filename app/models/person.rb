@@ -22,4 +22,8 @@ class Person < ActiveRecord::Base
     on_vacation = unassignable_today
     Allocation.today.billable.assignable.map(&:person).reject{|p| on_vacation.include?(p)}.uniq
   end
+
+  def pto_requests
+    allocations.this_year.vacation
+  end
 end

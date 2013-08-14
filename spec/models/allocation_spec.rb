@@ -1,6 +1,27 @@
 require 'spec_helper'
 
 describe Allocation do
+
+  it 'should not be valid without a person' do
+    FactoryGirl.build(:allocation, person: nil).should_not be_valid
+  end
+
+  it 'should not be valid without a project' do
+    FactoryGirl.build(:allocation, project: nil).should_not be_valid
+  end
+
+  it 'should not be valid without a start date' do
+    FactoryGirl.build(:allocation, start_date: nil).should_not be_valid
+  end
+
+  it 'should not be valid without a end_date' do
+    FactoryGirl.build(:allocation, end_date: nil).should_not be_valid
+  end
+
+  it 'should not be valid with an end date before the start date' do
+    FactoryGirl.build(:allocation, start_date: Date.today, end_date: 2.days.ago).should_not be_valid
+  end
+
   describe '.today' do
     it 'includes an allocation that spans today' do
       allocation = FactoryGirl.create(:allocation, start_date: 1.week.ago, end_date: 1.week.from_now)
@@ -66,6 +87,7 @@ describe Allocation do
       Allocation.unassignable.should_not include(allocation)
     end
   end
+
   describe '.with_start_date' do
     let!(:time_window) { Allocation::TIME_WINDOW }
     let!(:allocation_before) { FactoryGirl.create(:allocation, start_date: 3.weeks.ago, end_date: 1.week.ago) }
@@ -79,4 +101,86 @@ describe Allocation do
     it { should include allocation_end }
     it { should_not include allocation_after }
   end
+
+  describe '.between_date_range' do
+    let(:start_date) {1.month.ago}
+    let(:end_date) {1.month.from_now}
+
+    it 'includes allocations falling on the range boundaries' do
+      allocation = FactoryGirl.create(:allocation, start_date: start_date, end_date: end_date)
+      Allocation.between_date_range(start_date, end_date).should include(allocation)
+    end
+
+    it 'includes allocations inside the range boundaries' do
+      allocation = FactoryGirl.create(:allocation, start_date: start_date + 1.day, end_date: end_date - 1.day)
+      Allocation.between_date_range(start_date, end_date).should include(allocation)
+    end
+
+    it "does not include allocations starting before the range boundary" do
+      allocation = FactoryGirl.create(:allocation, start_date: start_date - 1.day, end_date: end_date)
+      Allocation.between_date_range(start_date, end_date).should_not include(allocation)
+    end
+
+    it "does not include allocations ending after the range boundary" do
+      allocation = FactoryGirl.create(:allocation, start_date: start_date, end_date: end_date + 1.day)
+      Allocation.between_date_range(start_date, end_date).should_not include(allocation)
+    end
+  end
+
+  describe '.this_year' do
+    let(:start_date) {1.month.ago}
+    let(:end_date) {1.month.from_now}
+    let(:start_of_year) { Date.today.beginning_of_year }
+    let(:end_of_year) { Date.today.end_of_year }
+
+    it 'includes allocations falling within this year' do
+      allocation = FactoryGirl.create(:allocation, start_date: start_date, end_date: end_date)
+      Allocation.this_year.should include(allocation)
+    end
+
+    it 'includes allocations falling on the year boundaries' do
+      allocation = FactoryGirl.create(:allocation, start_date: start_of_year, end_date: end_of_year)
+      Allocation.this_year.should include(allocation)
+    end
+
+    it "does not include allocations starting before the year boundary" do
+      allocation = FactoryGirl.create(:allocation, start_date: start_of_year - 1.day, end_date: end_date)
+      Allocation.this_year.should_not include(allocation)
+    end
+
+    it "does not include allocations ending after the year boundary" do
+      allocation = FactoryGirl.create(:allocation, start_date: start_date, end_date: end_of_year + 1.day)
+      Allocation.this_year.should_not include(allocation)
+    end
+  end
+
+  describe '.vacation' do
+    let(:vacation_project) { FactoryGirl.create(:project, :vacation) }
+
+    it 'includes allocations for vacation projects' do
+      allocation = FactoryGirl.create(:allocation, project: vacation_project)
+      Allocation.vacation.should include(allocation)
+    end
+
+    it 'does not include allocations for non-vacation projects' do
+      allocation = FactoryGirl.create(:allocation)
+      Allocation.vacation.should_not include(allocation)
+    end
+  end
+
+  describe '.for_person' do
+    let  (:bob) { FactoryGirl.create(:person) }
+    let! (:bob_allocation) { FactoryGirl.create(:allocation, person: bob) }
+    let! (:somoneone_elses_allocation) { FactoryGirl.create(:allocation) }
+
+    it 'includes allocations for the specified person' do
+      Allocation.for_person(bob).should include(bob_allocation)
+      Allocation.for_person(bob.id).should include(bob_allocation)
+    end
+
+    it 'does not include allocations for other people' do
+      Allocation.for_person(bob).should_not include(somoneone_elses_allocation)
+    end
+  end
+
 end
