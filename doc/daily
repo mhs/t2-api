@@ -1,11 +1,11 @@
 Current staff count is 68 of which 62 are billable and 6 are not
-Of the 62 billable, 57 are assignable and  5 are not
-Of the 57 assignable employees, 46 are billing today
+Of the 62 billable, 55 are assignable and  7 are not
+Of the 55 assignable employees, 46 are billing today
 
 
 Daily utilization is billing as a percentage of assignable
 That is, non-billable people and those out on vacation are omitted from the calculation
-For today, that is 46 / 57 = 80.7%
+For today, that is 46 / 55 = 83.6%
 
 
 
@@ -19,23 +19,23 @@ Paul Wilson
 Swayam Narain
 
 
-Unassignable (vacation, etc.) - 5
+Unassignable (vacation, etc.) - 7
 ----------------------------------------
+Alvaro Gil
 Daniel Cadenas
 Derek Briggs
+Jonathan Irwin
 Josh Seiden
 Mike Danko
 Winston Teo
 
 
-Working, but not billing - 12
+Working, but not billing - 10
 --------------------------------
-Alvaro Gil
 Carin Meier
 Delisa Mason
 Diego Garcia
 Federico Baña
-Geoff Lane
 Jono Mallanyk
 Lauren Woodrick
 María Pérez
@@ -64,6 +64,7 @@ Doug Rohrer
 Felix Flores
 Fernando Briano
 Gabe
+Geoff Lane
 Giff Constable
 Gina Winkler
 Gustavo Armagno
@@ -72,7 +73,6 @@ Jeff Gothelf
 Jerry Nummi
 John Andrews
 John Colvin
-Jonathan Irwin
 Lucía Escanellas
 Luke Chamberlin
 Marcelo Nieves
