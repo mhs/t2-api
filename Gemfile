@@ -9,6 +9,8 @@ gem 'acts_as_paranoid'
 gem 'hashie'
 gem 'rack-cors', require: 'rack/cors'
 gem 'memoist'
+gem 'devise'
+gem 'omniauth-google-oauth2'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'

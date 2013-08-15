@@ -1,0 +1,20 @@
+!!!
+%html
+  %head
+    %title t2
+    = stylesheet_link_tag    "chivito", :media => "all"
+    = javascript_include_tag "sessions"
+    %script{:src => "//use.typekit.net/kdf1jpv.js", :type => "text/javascript"}
+    %link{:href => "//get.pictos.cc/fonts/1717/9", :rel => "stylesheet", :type => "text/css"}/
+    :javascript
+      try{Typekit.load();}catch(e){}
+    = csrf_meta_tags
+  %body
+    %div{:role => "singleton"}
+      %header{:role => "primary"}
+        %h3
+          %strong t2
+          %span the neo allocation tool
+      = yield
+      %footer{:role => "primary"}
+        %p.copyright &copy #{Date.today.year} #{link_to "neo", "http://neo.com"}
