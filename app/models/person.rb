@@ -6,21 +6,23 @@ class Person < ActiveRecord::Base
   belongs_to :office
   belongs_to :project
 
-  scope :employed_on_date, lambda { |d| where("start_date is NULL or start_date < ?",d).where("end_date is NULL or end_date > ?", d) }
-  scope :currently_employed, lambda { employed_on_date(Date.today) }
+  scope :employed_on_date, lambda { |d|
+    where("start_date is NULL or start_date < ?",d)
+    .where("end_date is NULL or end_date > ?", d)
+  }
   scope :overhead, where(unsellable: true)
   scope :billable, where(unsellable: false)
 
-  def self.unassignable_today
+  def self.unassignable_on_date(date)
     # Unsellable = ALWAYS overhead (e.g. the CEO)
     # Unassignable = Usually available to be assigned, but out on vacation or something like that
-    eligible_employees = billable.currently_employed
-    Allocation.today.unassignable.map(&:person).select{|p| eligible_employees.include?(p)}.uniq
+    eligible_employees = billable.employed_on_date(date)
+    Allocation.on_date(date).unassignable.map(&:person).select{|p| eligible_employees.include?(p)}.uniq
   end
 
-  def self.billing_today
-    on_vacation = unassignable_today
-    Allocation.today.billable.assignable.map(&:person).reject{|p| on_vacation.include?(p)}.uniq
+  def self.billing_on_date(date)
+    on_vacation = unassignable_on_date(date)
+    Allocation.on_date(date).billable.assignable.map(&:person).reject{|p| on_vacation.include?(p)}.uniq
   end
 
   def pto_requests

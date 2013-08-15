@@ -22,11 +22,15 @@ class Snapshot < ActiveRecord::Base
     snaps.values
   end
 
-  def self.today!
-    snap = new snap_date: Date.today, office_id: nil
+  def self.on_date!(date)
+    snap = new snap_date: date, office_id: nil
     snap.capture_data
     snap.save!
     snap
+  end
+
+  def self.today!
+    on_date!(Date.today)
   end
 
   def self.today
@@ -43,14 +47,14 @@ class Snapshot < ActiveRecord::Base
   alias_method :people, :staff
 
   def capture_data
-    self.staff_ids = Person.currently_employed.map(&:id)
-    self.overhead_ids = Person.overhead.currently_employed.map(&:id)
-    self.billable_ids = Person.billable.currently_employed.map(&:id)
-    self.unassignable_ids = Person.unassignable_today.map(&:id)
-    self.assignable_ids = billable_ids - unassignable_ids
-    self.billing_ids = Person.billing_today.map(&:id)
-    self.non_billing_ids = assignable_ids - billing_ids
-    self.utilization = sprintf "%.1f", (100.0 * billing_ids.size) / assignable_ids.size
+    self.staff_ids        = Person.employed_on_date(snap_date).map(&:id)
+    self.overhead_ids     = Person.overhead.employed_on_date(snap_date).map(&:id)
+    self.billable_ids     = Person.billable.employed_on_date(snap_date).map(&:id)
+    self.unassignable_ids = Person.unassignable_on_date(snap_date).map(&:id)
+    self.assignable_ids   = billable_ids - unassignable_ids
+    self.billing_ids      = Person.billing_on_date(snap_date).map(&:id)
+    self.non_billing_ids  = assignable_ids - billing_ids
+    self.utilization      = sprintf "%.1f", (100.0 * billing_ids.size) / assignable_ids.size
   end
 
 end

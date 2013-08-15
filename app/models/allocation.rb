@@ -11,9 +11,17 @@ class Allocation < ActiveRecord::Base
   validates_date :end_date, on_or_after: :start_date
 
   scope :current, includes(:project).where("projects.deleted_at is NULL")
-  scope :between_date_range, lambda { |start_date, end_date| where("allocations.start_date >= ?", start_date.to_date).where("allocations.end_date <= ?", end_date.to_date) }
-  scope :for_date, lambda { |d| where("allocations.start_date <= ?", d.to_date).where("allocations.end_date >= ?", d.to_date) }
-  scope :today, lambda { for_date(Date.today).current }
+  scope :between_date_range, lambda { |start_date, end_date|
+    where("allocations.start_date >= ?", start_date.to_date)
+    .where("allocations.end_date <= ?", end_date.to_date)
+  }
+  scope :for_date, lambda {|d|
+    joins(:project)
+    .where("projects.id IS NOT NULL")
+    .where("allocations.start_date <= ?", d.to_date)
+    .where("allocations.end_date >= ?", d.to_date)
+  }
+  scope :on_date, lambda { |d| for_date(d).current }
   scope :this_year, lambda { between_date_range(Date.today.beginning_of_year, Date.today.end_of_year).current }
   scope :assignable, current.includes(:project).where(:projects => { vacation: false })
   scope :unassignable, current.includes(:project).where(:projects => { vacation: true })

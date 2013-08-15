@@ -18,8 +18,8 @@ describe Snapshot do
     end
   end
 
-  describe '.today!' do
-    let(:snapshot) {Snapshot.today!}
+  describe '.on_date!' do
+    let(:snapshot) {Snapshot.on_date!(Date.today)}
 
     before(:each) do
       employee = FactoryGirl.create(:person, :current)
@@ -27,11 +27,16 @@ describe Snapshot do
     end
 
     it 'creates a snapshot' do
-      expect{Snapshot.today!}.to change{Snapshot.count}.by(1)
+      expect{Snapshot.on_date!(Date.today)}.to change{Snapshot.count}.by(1)
     end
 
-    it 'sets the snapshot date to today' do
-      snapshot.snap_date.should eql(Date.today)
+    it 'should raise an error when invoked without arguments' do
+      expect{Snapshot.on_date!}.to raise_error(ArgumentError)
+    end
+
+    it 'sets the snapshot date' do
+      date = 3.days.ago
+      Snapshot.on_date!(date).snap_date.should eql(date)
     end
 
     it 'captures currently employed staff' do
@@ -43,12 +48,44 @@ describe Snapshot do
     end
   end
 
+  describe '.today!' do
+    it "should call .on_date with today's date" do
+      Snapshot.should_receive(:on_date!).with(Date.today)
+      Snapshot.today!
+    end
+  end
+
   describe '.today' do
     before(:each) { Snapshot.today! }
 
     it 'provides a snapshot with todays date' do
       Snapshot.today.snap_date.should eql(Date.today)
     end
+  end
 
+  describe '.capture_data' do
+    let(:date)            { 1.month.ago.to_date }
+    let(:snapshot)        { Snapshot.new(snap_date: date) }
+    let(:collection)      { [ FactoryGirl.create(:person) ] }
+    let(:collection_ids)  { collection.map(&:id) }
+    let(:scope) do
+      scope = mock()
+    end
+
+    before do
+      Person.should_receive(:employed_on_date).with(date).at_least(3).times.and_return(collection)
+      Person.should_receive(:unassignable_on_date).with(date).once.and_return(collection)
+      Person.should_receive(:billing_on_date).with(date).once.and_return(collection)
+    end
+
+    it 'should fetch staff_ids, overhead_ids, billable_ids, unassignable_ids' do
+      snapshot.capture_data
+
+      snapshot.staff_ids.should eql(collection_ids)
+      snapshot.overhead_ids.should eql(collection_ids)
+      snapshot.billable_ids.should eql(collection_ids)
+      snapshot.unassignable_ids.should eql(collection_ids)
+      snapshot.billing_ids.should eql(collection_ids)
+    end
   end
 end
