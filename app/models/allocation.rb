@@ -6,6 +6,7 @@ class Allocation < ActiveRecord::Base
   belongs_to :slot
   belongs_to :person
   belongs_to :project
+  has_one :office, through: :person
 
   validates :person_id, :project_id, :start_date, :end_date, presence: true
   validates_date :end_date, on_or_after: :start_date
@@ -29,6 +30,7 @@ class Allocation < ActiveRecord::Base
   scope :with_start_date, lambda { |d| where("allocations.start_date <= ?", d.to_date + TIME_WINDOW.weeks).where("allocations.end_date >= ?", d.to_date).current }
   scope :vacation, current.includes(:project).where(:projects => { vacation: true })
   scope :for_person, lambda { |person_or_id| joins(:person).where("people.id = ?", person_or_id.is_a?(Fixnum) ? person_or_id : person_or_id.id) }
+  scope :by_office, lambda { |office| office ? joins(:office).where("people.office_id" => office.id) : where(false) }
 
   delegate :name, to: :project, prefix: true, :allow_nil => true
 end

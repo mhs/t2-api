@@ -15,6 +15,25 @@ describe Person do
     Person.only_deleted.should_not be_empty
   end
 
+  describe 'by_office Scope' do
+    let(:office_a_person) { FactoryGirl.create(:person) }
+    let(:office_b_person) { FactoryGirl.create(:person) }
+
+    it 'should return an ActiveRecord::Relation Class' do
+      Person.by_office(office_a_person).should be_kind_of(ActiveRecord::Relation)
+      Person.by_office(nil).should be_kind_of(ActiveRecord::Relation)
+    end
+
+    it 'should return people that belongs to that office' do
+      Person.by_office(office_a_person.office).should include(office_a_person)
+      Person.by_office(office_b_person.office).should include(office_b_person)
+    end
+
+    it 'should return all people when office is nil' do
+      Person.by_office(nil).to_a.should eql(Person.all)
+    end
+  end
+
   describe '.employed_on_date with today as date' do
     let(:date) { Date.today }
 
@@ -78,6 +97,23 @@ describe Person do
       employee = FactoryGirl.create(:person, unsellable: false)
       employee.destroy
       Person.billable.should_not include(employee)
+    end
+  end
+
+  describe '.unassignable_on_date by office' do
+    let(:date) { Date.today }
+    let(:project) { FactoryGirl.create(:project, :vacation) }
+    let(:office_employee) { FactoryGirl.create(:person, unsellable: false) }
+    let(:other_office_employee) { FactoryGirl.create(:person, unsellable: false) }
+
+    before do
+      FactoryGirl.create(:allocation, project: project, person: office_employee, start_date: 1.week.ago, end_date: Date.tomorrow)
+      FactoryGirl.create(:allocation, project: project, person: other_office_employee, start_date: 1.week.ago, end_date: Date.tomorrow)
+    end
+
+    it 'should return unassignable people by office' do
+      Person.unassignable_on_date(date, office_employee.office).should include(office_employee)
+      Person.unassignable_on_date(date, office_employee.office).should_not include(other_office_employee)
     end
   end
 
@@ -167,6 +203,12 @@ describe Person do
       overhead_employee = FactoryGirl.create(:person, unsellable: true)
       FactoryGirl.create(:allocation, person: overhead_employee, project: billable_project, start_date: 1.week.ago, end_date: Date.tomorrow, billable: true)
       Person.billing_on_date(date).should include(overhead_employee)
+    end
+
+    it 'should be able to filter by office' do
+      FactoryGirl.create(:allocation, person: employee, project: billable_project, start_date: 1.week.ago, end_date: Date.tomorrow, billable: true)
+      Person.billing_on_date(date, employee.office).should include(employee)
+      Person.billing_on_date(date, FactoryGirl.create(:office)).should_not include(employee)
     end
   end
 

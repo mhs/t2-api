@@ -30,6 +30,12 @@ describe Snapshot do
       expect{Snapshot.on_date!(Date.today)}.to change{Snapshot.count}.by(1)
     end
 
+    it 'creates a snapshot for the given office' do
+      snapshot = Snapshot.on_date!(Date.today, 1)
+      snapshot.office_id.should eql(1)
+      snapshot.should be_persisted
+    end
+
     it 'should raise an error when invoked without arguments' do
       expect{Snapshot.on_date!}.to raise_error(ArgumentError)
     end

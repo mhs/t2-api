@@ -22,6 +22,33 @@ describe Allocation do
     FactoryGirl.build(:allocation, start_date: Date.today, end_date: 2.days.ago).should_not be_valid
   end
 
+  describe "by_office Scope" do
+    let(:office_a_person) { FactoryGirl.create(:person) }
+    let(:office_b_person) { FactoryGirl.create(:person) }
+    let(:project) { FactoryGirl.create(:project, offices: [office_a_person.office, office_b_person.office]) }
+
+    before do
+      @office_a_allocation = FactoryGirl.create(:allocation, project: project, person: office_a_person)
+      @office_b_allocation = FactoryGirl.create(:allocation, project: project, person: office_b_person)
+    end
+
+    it 'should return an ActiveRecord::Relation Class' do
+      Allocation.by_office(office_a_person).should be_kind_of(ActiveRecord::Relation)
+      Allocation.by_office(nil).should be_kind_of(ActiveRecord::Relation)
+    end
+
+    it 'should be able to fetch Allocations for giveno Office' do
+      Allocation.by_office(@office_a_allocation.office).count.should eql(1)
+      Allocation.by_office(@office_a_allocation.office).should include(@office_a_allocation)
+      Allocation.by_office(@office_b_allocation.office).count.should eql(1)
+      Allocation.by_office(@office_b_allocation.office).should include(@office_b_allocation)
+    end
+
+    it 'should return all allocations if office is nil' do
+      Allocation.by_office(nil).to_a.should eql(Allocation.all)
+    end
+  end
+
   describe '.on_date' do
     let(:date) { Date.today }
 
