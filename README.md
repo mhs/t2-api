@@ -30,7 +30,43 @@ source of data. Instead, we have a rake task to copy the production data from th
 here.  Once we have an allocation tool built off this version and a daily utilization reporting tool built off this,
 we'll be ready to retire the existing T2 and promote this app as the authoritative source of data.  Dan Williams
 in Cincinnati is working on the allocation tool and Mike Doel in Columbus is building the daily utilization tool.
-These are ember.js applications contained in separate repositories.
+These are ember.js applications contained in separate repositories.  In addition, Scott Walker in Columbus is
+building a PTO tool that uses this API for scheduling paid time off by employees. That is an angular.js app.
+
+
+# What This Is Responsible For
+
+As mentioned above, the T2 ecosystem is made up of several diferent applications/repositories. This one is
+responsible for the following:
+
+- RESTful API that can be used to build new applications on allocation, project, office, person, etc. data
+- Authentication for this and other related applications (more below)
+- Navigation - the primary view for this app is a page with a nav strip in one frame and another app in the other, larger frame.
+  This app knows the set of T2 apps a user can access and provides the links for them.
+
+## Authentication and Navigation Flow
+
+**Note - some of this section is speculative at this point. We are still building this piece.**
+
+The navigation and authentication flow works like this.
+
+1. A user begins by navigating to the root page for this application (eventually http://t2.neo.com).
+2. If the user is not already authenticated, they get redirected to /sign_in which takes them through Google OAuth.
+3. After Google OAuth completes, the user is directed (or redirected) to one of the T2 applications.  The application
+   is passed a query string parameter named *token* that contains an authentication token to use when talking
+   to the API.
+4. Each application grabs that token and shoves it into an HTTP header named 'Authorization' with each call it
+   makes.
+
+Note that in step 3, the application is called from within a frame. The other frame in the frame set is the navigation
+strip provided by this application.
+
+In cases where a T2 application is called directly (e.g. navigating to http://t2-utilization.herokuapp.com directly
+in your browser), the app will be unable to use the API layer until it authenticates. In this case, the app should
+redirect the user to the /sign_in route for this app and include a *return_url* query string parameter.  After
+authentication is completed, the API layer will redirect the user to that URL and included the token parameter
+mentioned above.
+
 
 # Contributing
 
