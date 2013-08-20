@@ -53,10 +53,10 @@ The navigation and authentication flow works like this.
 1. A user begins by navigating to the root page for this application (eventually http://t2.neo.com).
 2. If the user is not already authenticated, they get redirected to /sign_in which takes them through Google OAuth.
 3. After Google OAuth completes, the user is directed (or redirected) to one of the T2 applications.  The application
-   is passed a query string parameter named *token* that contains an authentication token to use when talking
+   is passed a query string parameter named *authentication_token* that contains an authentication token to use when talking
    to the API.
 4. Each application grabs that token and shoves it into an HTTP header named 'Authorization' with each call it
-   makes.
+   makes. Optionally the client app can also authenticate it's API calls by passing it as a query param named *authentication_token*.
 
 Note that in step 3, the application is called from within a frame. The other frame in the frame set is the navigation
 strip provided by this application.
