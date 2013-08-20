@@ -1,11 +1,11 @@
 Current staff count is 68 of which 62 are billable and 6 are not
-Of the 62 billable, 56 are assignable and  6 are not
-Of the 56 assignable employees, 46 are billing today
+Of the 62 billable, 58 are assignable and  4 are not
+Of the 58 assignable employees, 47 are billing today
 
 
 Daily utilization is billing as a percentage of assignable
 That is, non-billable people and those out on vacation are omitted from the calculation
-For today, that is 46 / 56 = 82.1%
+For today, that is 47 / 58 = 81.0%
 
 
 
@@ -19,19 +19,18 @@ Paul Wilson
 Swayam Narain
 
 
-Unassignable (vacation, etc.) - 6
+Unassignable (vacation, etc.) - 4
 ----------------------------------------
 Alan Gardner
 Daniel Cadenas
-Delisa Mason
-Giff Constable
 Jeff Gothelf
 Jono Mallanyk
 
 
-Working, but not billing - 11
+Working, but not billing - 12
 --------------------------------
 Alvaro Gil
+Delisa Mason
 Diego Garcia
 Federico Baña
 Geoff Lane
@@ -44,7 +43,7 @@ Tomek Maszkowski
 Tommy Sullivan
 
 
-Billing today - 46
+Billing today - 47
 ---------------------
 Aaron Christy
 Abhaya Shenoy
@@ -65,6 +64,7 @@ Doug Rohrer
 Felix Flores
 Fernando Briano
 Gabe
+Giff Constable
 Gina Winkler
 Gustavo Armagno
 Jaime Dávila
