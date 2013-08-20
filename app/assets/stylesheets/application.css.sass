@@ -1,0 +1,121 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the top of the
+ * compiled file, but it's generally better to create a new file per style scope.
+ *
+ *= require "normalize"
+ *= require_self
+ *= require_tree .
+ */
+
+$sans: "myriad-pro",sans-serif
+$icons: "Pictos Custom"
+
+$blue-accent: #73d7f4
+$blue-ink: darken($blue-accent,20%)
+
+$ink0: #2c2e2e
+$ink1: lighten($ink0,10%)
+$ink2: lighten($ink1,10%)
+$ink3: lighten($ink2,10%)
+
+$hint: #eaeaea
+
+$white3: #fdfdfd
+$white2: #f3f3f3
+$white1: #eee
+$white0: #e3e3e3
+
+// indicators
+$green: #3bcf91
+$yellow: #f4cf38
+$orange: #fa9225
+$red: #e5684c
+
+
+$em: 16px
+
+body
+  background: $ink2
+  color: $ink0
+  font-weight: 400
+  font-family: $sans
+  font-size: $em * 2
+  line-height: $em * 1.2
+
+  a, a:link, a:visited
+    color: $blue-ink
+    text-decoration: none
+
+
+nav.primary
+  position: fixed
+  top: 0
+  bottom: 0
+  left: 0
+  z-index: 99
+  width: 48px
+  background: darken($ink3,15%)
+  box-shadow: inset -1px 0 2px darken($ink3,20%)
+  a, a:link, a:visited
+    font-weight: normal
+    font-family: $icons
+    display: block
+    width: 48px
+    height: 48px
+    padding: ($em * .75) 0 0 0
+    font-size: $em * 2
+    line-height: $em * 2
+    text-align: center
+    color: darken($white0,10%)
+    text-shadow: 0px 1px 1px darken($ink3,25%)
+    -webkit-transition: all .125s ease-in-out
+    -moz-transition: all 0.125s ease-in-out
+    transition: all 0.125s ease-in-out
+    strong
+      display: none
+    &:active
+      color: $white3
+      text-shadow: 0px 0px 6px lighten($blue-accent,25%)
+    &:hover
+      color: $white2
+    &.current
+      color: $white3
+      background-color: rgba(0,0,0,.0825)
+    &.logo
+      text-indent: -9999px
+      overflow: hidden
+      position: absolute
+      background-image: url(image-path('neo.png'))
+      background-position: center top
+      background-color: transparent
+      background-repeat: no-repeat
+      background-size: 50% auto
+      width: 36px
+      left: 6px
+      height: 74px
+      bottom: 96px + ($em * .5)
+      border-bottom: 1px solid rgba(0,0,0,.1)
+    &.settings
+      position: absolute
+      bottom: 48px
+    &.exit
+      position: absolute
+      bottom: 0
+
+div.window
+  height: 100%
+  margin-left: 48px
+  overflow-y: auto
+  overflow-x: hidden
+  background: $white1
+
+iframe.main-window
+  height: 100%
+  width: 100%
+

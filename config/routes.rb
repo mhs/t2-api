@@ -1,4 +1,9 @@
 T2Api::Application.routes.draw do
+  devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
+  devise_scope :user do
+    get 'sign_in', :to => 'sessions#new', :as => :new_user_session
+    get 'sign_out', :to => 'devise/sessions#destroy', :as => :destroy_user_session
+  end
 
   # allows for the url in form of 'api.neo.com/v1/clients'
   namespace :api, :defaults => {:format => :json} do
@@ -11,6 +16,9 @@ T2Api::Application.routes.draw do
       end
       resources :offices, only: [:index, :show]
       resources :snapshots, only: [:index, :show]
+      resources :users, only: [:show]
     end
   end
+
+  root to: "application#index"
 end

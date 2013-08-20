@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  # devise :omniauthable, :token_authenticatable
+  devise :omniauthable, :token_authenticatable, :omniauth_providers => [:google_oauth2]
   attr_accessible :email, :name, :uid, :date_format, :office_id, :office, :provider
   belongs_to :office
 
@@ -18,6 +18,7 @@ class User < ActiveRecord::Base
                           )
       end
     end
+    user.ensure_authentication_token!
 
     user
   end
