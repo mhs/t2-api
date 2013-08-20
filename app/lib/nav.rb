@@ -1,7 +1,8 @@
 module Nav
   def self.links
     [
-      {url: "http://www.download.com", icon: "c", title: "Allocations"},
+      {url: "#", icon: "c", title: "Allocations"},
+      {url: "http://t2-utilization.herokuapp.com", icon: "h", title: "Utilization"},
       {url: "#", icon: "g", title: "Reports"},
       {url: "#", icon: "b", title: "Pipeline"},
       {url: "#", icon: "p", title: "PTO"}
