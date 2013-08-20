@@ -3,12 +3,8 @@ class ApplicationController < ActionController::Base
   before_filter :authenticate_user!
   prepend_before_filter :get_auth_token
 
-  def after_sign_in_path_for(user)
-    # Holy fuck
-    url = URI.parse(session[:return_url] || 'http://t2.neo.com')
-    token = [['authentication_token',user.authentication_token]]
-    url.query = URI.encode_www_form(URI.decode_www_form(url.query || "") + token)
-    url.to_s
+  def index
+
   end
 
   private

@@ -19,4 +19,6 @@ T2Api::Application.routes.draw do
       resources :users, only: [:show]
     end
   end
+
+  root to: "application#index"
 end
