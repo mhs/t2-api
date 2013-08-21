@@ -1,11 +1,11 @@
 Current staff count is 68 of which 62 are billable and 6 are not
 Of the 62 billable, 58 are assignable and  4 are not
-Of the 58 assignable employees, 47 are billing today
+Of the 58 assignable employees, 49 are billing today
 
 
 Daily utilization is billing as a percentage of assignable
 That is, non-billable people and those out on vacation are omitted from the calculation
-For today, that is 47 / 58 = 81.0%
+For today, that is 49 / 58 = 84.5%
 
 
 
@@ -23,19 +23,18 @@ Unassignable (vacation, etc.) - 4
 ----------------------------------------
 Alan Gardner
 Daniel Cadenas
-PROD Jeff Gothelf
-PROD Jono Mallanyk
+Jeff Gothelf
+Jono Mallanyk
 
 
-Working, but not billing - 12
+Working, but not billing - 11
 --------------------------------
 Alvaro Gil
 Delisa Mason
 Diego Garcia
 Federico Baña
-Geoff Lane
 Lauren Woodrick
-PROD María Pérez
+María Pérez
 Mike Danko
 Mohan Krishnan
 Scott Walker
@@ -43,51 +42,53 @@ Tomek Maszkowski
 Tommy Sullivan
 
 
-Billing today - 47
+Billing today - 49
 ---------------------
 Aaron Christy
 Abhaya Shenoy
 Alex Burkhart
-PROD Alex Kim
+Alex Kim
 Alfonso Cora
-PROD Ally Reeves
+Ally Reeves
 Aly Fluckey
-PROD Anil Podduturi
+Anil Podduturi
 Bruno Aguirre
 Carin Meier
 Chandu Tennety
 Dan Williams
 Daniel Grieve
 Dave Anderson
-PROD Derek Briggs
+Derek Briggs
 Doug Rohrer
 Felix Flores
 Fernando Briano
 Gabe
-PROD Giff Constable
-PROD Gina Winkler
+Geoff Lane
+Giff Constable
+Gina Winkler
 Gustavo Armagno
 Jaime Dávila
 Jerry Nummi
 John Andrews
 John Colvin
-PROD Jonathan Irwin
-PROD Josh Seiden
+Jonathan Irwin
+Josh Seiden
 Lucía Escanellas
-PROD Luke Chamberlin
+Luke Chamberlin
 Marcelo Nieves
 Mark Connell
 Matt Jones
-PROD Mike Doel
+Mike Doel
 Mike Mazur
 Paul Henrich
+Paul Wilson
 Peter Aitken
-PROD Raven Keller
+Raven Keller
 Scott Barron
 Scott Burwinkel
-PROD Sebastian Heit
+Sebastian Heit
 Swayam Narain
-PROD Tim Lombardo
+Tim Lombardo
 Tony Schneider
 Wei Lu
 Winston Teo
