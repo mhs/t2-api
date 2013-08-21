@@ -31,6 +31,8 @@ group :development, :test do
   gem 'taps'
   gem 'sqlite3'
   gem 'foreman'
+  gem 'capybara'
+  gem 'launchy'
 end
 
 group :production do

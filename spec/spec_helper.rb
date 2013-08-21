@@ -35,4 +35,7 @@ RSpec.configure do |config|
   # the seed, which is printed after each run.
   #     --seed 1234
   config.order = "random"
+  config.include Capybara::DSL
+  OmniAuth.config.test_mode = true
+  config.include OauthHelpers
 end
