@@ -1,0 +1,41 @@
+=border-radius($radius)
+  -webkit-border-radius: $radius
+  -moz-border-radius: $radius
+  border-radius: $radius
+
+=box-shadow($x, $y, $s, $c)
+  -webkit-box-shadow: $x $y $s $c
+  -moz-box-shadow: $x $y $s $c
+  box-shadow: $x $y $s $c
+
+=clearfix
+  &:before,
+  &:after
+    content: ""
+    display: table
+  &:after
+    clear: both
+  &
+    zoom: 1
+
+=blue-button
+  -webkit-appearance: none
+  display: block
+  background: darken($blue-accent,5%)
+  color: $white3
+  font-family: $sans
+  font-size: em(1)
+  padding: em(.25) em(1)
+  border: 0
+  +border-radius(3px)
+  &:hover
+    cursor: pointer
+    background-color: darken($blue-accent,2.5%)
+  &:active
+    background-color: darken($blue-accent,7.5%)
+  &.working
+    background: darken($blue-accent,5%) center center url(image-path('gr-spinner.gif')) no-repeat
+    color: rgba(0,0,0,.0)
+
+@function em($multiplier)
+  @return $em * $multiplier

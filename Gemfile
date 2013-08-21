@@ -11,6 +11,7 @@ gem 'rack-cors', require: 'rack/cors'
 gem 'memoist'
 gem 'devise'
 gem 'omniauth-google-oauth2'
+gem 'haml'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
