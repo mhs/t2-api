@@ -1,4 +1,4 @@
-class T2Applications < ActiveRecord::Base
+class T2Application < ActiveRecord::Base
   attr_accessible :icon, :position, :title, :url
 
 

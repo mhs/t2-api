@@ -9,6 +9,6 @@ module ApplicationHelper
   end
 
   def t2_applications
-    T2Applications.order('position ASC').all
+    T2Application.order('position ASC').all
   end
 end
