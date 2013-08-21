@@ -11,10 +11,10 @@
 <body>
 
 <nav class="primary">
-  <% Nav.links.each do |link| %>
-    <a href="<%= add_query_param(link[:url], "authentication_token", current_user.authentication_token) %>" title="<%= link[:title] %>" target="main_window">
-      <span class="icon"><%= link[:icon] %></span>
-      <strong><%= link[:title].downcase %></strong>
+  <% t2_applications.each do |application| %>
+    <a href="<%= add_query_param(application.url, "authentication_token", current_user.authentication_token) %>" title="<%= application.title %>" target="main_window">
+      <span class="icon"><%= application.icon %></span>
+      <strong><%= application.title.downcase %></strong>
     </a>
   <% end %>
 

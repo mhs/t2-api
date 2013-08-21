@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130603201330) do
+ActiveRecord::Schema.define(:version => 20130821143139) do
 
   create_table "allocations", :force => true do |t|
     t.date     "start_date"
@@ -128,6 +128,15 @@ ActiveRecord::Schema.define(:version => 20130603201330) do
     t.text     "assignable_ids"
     t.text     "billing_ids"
     t.text     "non_billing_ids"
+  end
+
+  create_table "t2_applications", :force => true do |t|
+    t.string   "url"
+    t.string   "icon"
+    t.string   "title"
+    t.integer  "position"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "users", :force => true do |t|
