@@ -1,0 +1,55 @@
+div[role='singleton']
+  width: 90%
+  max-width: 360px
+  margin: 72px auto 0
+  background: $white3
+  border: 1px solid #fff
+  +box-shadow(0,1px,4px,rgba(0,0,0,.5))
+  header[role='primary']
+    padding: (em(.25) + 1) (em(.5) + 1) em(.25)
+    margin: -1px -1px 0
+    border-width: 1px
+    border-color: lighten($blue-accent,12.5%) lighten($blue-accent,10%) darken($blue-accent,2.5%)
+    border-style: solid
+    background: $blue-accent
+    +clearfix
+    a, a:link, a:visited
+      float: left
+      margin-top: em(.2)
+      margin-right: em(.5)
+      font-family: $icons
+      -webkit-font-smoothing: antialiased
+      font-size: em(1.5)
+      line-height: em(1.5)
+      color: rgba(0,0,0,.15)
+      &:hover
+        color: rgba(0,0,0,.35)
+      &:active, &.active
+        color: rgba(0,0,0,.375)
+    h3
+      float: left
+      margin-top: em(.1)
+      font-weight: 400
+      color: $white3
+      span
+        color: rgba(255,255,255,.75)
+      font-size: em(1)
+
+  footer[role='primary']
+    +clearfix
+    padding: em(.5)
+    background-color: $white2
+    border-top: 1px solid $hint
+    text-align: center
+    font-size: em(.8)
+    line-height: em(.8 * 1.1)
+
+  .action
+    padding: em(1) 0 em(2)
+    p
+      text-align: center
+    a, a:link, a:visited
+      +blue-button
+      width: 58%
+      text-align: center
+      margin: em(1) auto 0
