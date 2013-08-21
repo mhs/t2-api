@@ -11,4 +11,8 @@ module ApplicationHelper
   def t2_applications
     T2Application.order('position ASC').all
   end
+
+  def default_application
+    T2Application.where(title: 'Utilization').first || T2Application.first
+  end
 end
