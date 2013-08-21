@@ -13,6 +13,6 @@ module ApplicationHelper
   end
 
   def default_application
-    T2Application.where(id: current_user.t2_application_id).first || T2Application.first
+    T2Application.find_by_id(current_user.t2_application_id) || T2Application.first
   end
 end
