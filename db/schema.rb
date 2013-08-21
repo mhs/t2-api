@@ -168,6 +168,7 @@ ActiveRecord::Schema.define(:version => 20130823182509) do
     t.integer  "office_id"
     t.string   "date_format"
     t.string   "authentication_token"
+    t.integer  "t2_application_id"
   end
 
   add_index "users", ["authentication_token"], :name => "index_users_on_authentication_token", :unique => true

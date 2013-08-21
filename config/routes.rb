@@ -4,7 +4,8 @@ T2Api::Application.routes.draw do
     get 'sign_in', :to => 'sessions#new', :as => :new_user_session
     get 'sign_out', :to => 'devise/sessions#destroy', :as => :destroy_user_session
   end
-
+  resources :users
+  get 'edit', :to => 'users#edit', :as => :edit_user
   # allows for the url in form of 'api.neo.com/v1/clients'
   namespace :api, :defaults => {:format => :json} do
     namespace :v1 do
@@ -20,7 +21,7 @@ T2Api::Application.routes.draw do
       end
       resources :offices, only: [:index, :show]
       resources :snapshots, only: [:index, :show]
-      resources :users, only: [:show]
+      resources :users
     end
   end
 
