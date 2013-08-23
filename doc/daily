@@ -1,11 +1,11 @@
 Current staff count is 68 of which 62 are billable and 6 are not
-Of the 62 billable, 55 are assignable and  7 are not
-Of the 55 assignable employees, 45 are billing today
+Of the 62 billable, 54 are assignable and  8 are not
+Of the 54 assignable employees, 45 are billing today
 
 
 Daily utilization is billing as a percentage of assignable
 That is, non-billable people and those out on vacation are omitted from the calculation
-For today, that is 45 / 55 = 81.8%
+For today, that is 45 / 54 = 83.3%
 
 
 
@@ -19,9 +19,10 @@ Paul Wilson
 Swayam Narain
 
 
-Unassignable (vacation, etc.) - 7
+Unassignable (vacation, etc.) - 8
 ----------------------------------------
 Alan Gardner
+Alfonso Cora
 Aly Fluckey
 Chandu Tennety
 Daniel Cadenas
@@ -51,7 +52,6 @@ Aaron Christy
 Abhaya Shenoy
 Alex Burkhart
 Alex Kim
-Alfonso Cora
 Ally Reeves
 Anil Podduturi
 Bruno Aguirre
@@ -81,6 +81,7 @@ Matt Jones
 Mike Doel
 Mike Mazur
 Paul Henrich
+Paul Wilson
 Peter Aitken
 Raven Keller
 Scott Barron
