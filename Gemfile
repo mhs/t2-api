@@ -12,6 +12,7 @@ gem 'memoist'
 gem 'devise'
 gem 'omniauth-google-oauth2'
 gem 'haml'
+gem 'acts-as-taggable-on'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'

@@ -1,5 +1,7 @@
 class Person < ActiveRecord::Base
   acts_as_paranoid
+  acts_as_taggable_on :skills
+
   attr_accessible :name, :notes, :email, :unsellable, :office, :office_id, :start_date, :end_date
 
   has_many :allocations
