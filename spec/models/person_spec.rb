@@ -15,6 +15,12 @@ describe Person do
     Person.only_deleted.should_not be_empty
   end
 
+  it "does not allow duplicat emails" do
+    person = FactoryGirl.create(:person, email: "joe@example.com")
+    person2 = FactoryGirl.build(:person, email: "joe@example.com")
+    person2.should_not be_valid
+  end
+
   describe 'by_office Scope' do
     let(:office_a_person) { FactoryGirl.create(:person) }
     let(:office_b_person) { FactoryGirl.create(:person) }

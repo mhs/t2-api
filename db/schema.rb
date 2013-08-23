@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130821143139) do
+ActiveRecord::Schema.define(:version => 20130823161949) do
 
   create_table "allocations", :force => true do |t|
     t.date     "start_date"
@@ -153,5 +153,6 @@ ActiveRecord::Schema.define(:version => 20130821143139) do
   end
 
   add_index "users", ["authentication_token"], :name => "index_users_on_authentication_token", :unique => true
+  add_index "users", ["email"], :name => "index_users_on_email", :unique => true
 
 end
