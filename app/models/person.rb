@@ -2,13 +2,13 @@ class Person < ActiveRecord::Base
   acts_as_paranoid
   attr_accessible :name, :notes, :email, :unsellable, :office, :office_id, :start_date, :end_date
 
-  has_one     :user
+  belongs_to  :user, inverse_of: :person
   has_many    :allocations
   belongs_to  :office
   belongs_to  :project
 
   validates :email, uniqueness: true
-  validates :user_id, presence: true
+  validates :user_id, presence: true, on: :update
 
   scope :employed_on_date, lambda { |d|
     where("start_date is NULL or start_date < ?",d)
@@ -38,7 +38,7 @@ class Person < ActiveRecord::Base
 
   private
   def create_or_associate_user
-    self.user = User.find_or_create_by!(email: email) do |u|
+    self.user = User.find_or_create_by_email!(email) do |u|
       u.name = name
     end
   end

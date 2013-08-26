@@ -2,7 +2,7 @@ class User < ActiveRecord::Base
   devise :omniauthable, :token_authenticatable, :omniauth_providers => [:google_oauth2]
   attr_accessible :email, :name, :uid, :date_format, :office_id, :office, :provider
   belongs_to :office
-  belongs_to :person
+  has_one :person, inverse_of: :user
 
   before_create :set_date_format_if_unset
 
