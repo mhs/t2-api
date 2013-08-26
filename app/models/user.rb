@@ -28,7 +28,7 @@ class User < ActiveRecord::Base
                           )
       end
     end
-    user.ensure_authentication_token!
+    user.ensure_authentication_token! if user
 
     user
   end
