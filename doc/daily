@@ -1,11 +1,11 @@
 Current staff count is 68 of which 62 are billable and 6 are not
-Of the 62 billable, 54 are assignable and  8 are not
-Of the 54 assignable employees, 45 are billing today
+Of the 62 billable, 60 are assignable and  2 are not
+Of the 60 assignable employees, 46 are billing today
 
 
 Daily utilization is billing as a percentage of assignable
 That is, non-billable people and those out on vacation are omitted from the calculation
-For today, that is 45 / 54 = 83.3%
+For today, that is 46 / 60 = 76.7%
 
 
 
@@ -19,24 +19,22 @@ Paul Wilson
 Swayam Narain
 
 
-Unassignable (vacation, etc.) - 8
+Unassignable (vacation, etc.) - 2
 ----------------------------------------
-Alan Gardner
 Alfonso Cora
-Aly Fluckey
-Chandu Tennety
-Daniel Cadenas
-Jeff Gothelf
-John Colvin
-Jono Mallanyk
+Mark Connell
 
 
-Working, but not billing - 11
+Working, but not billing - 16
 --------------------------------
 Alvaro Gil
+Daniel Cadenas
 Delisa Mason
 Diego Garcia
 Federico Baña
+Gabe
+Jeff Gothelf
+Jono Mallanyk
 Lauren Woodrick
 María Pérez
 Mike Danko
@@ -44,18 +42,22 @@ Mohan Krishnan
 Scott Walker
 Tomek Maszkowski
 Tommy Sullivan
+Winston Teo
 
 
-Billing today - 45
+Billing today - 46
 ---------------------
 Aaron Christy
 Abhaya Shenoy
+Alan Gardner
 Alex Burkhart
 Alex Kim
 Ally Reeves
+Aly Fluckey
 Anil Podduturi
 Bruno Aguirre
 Carin Meier
+Chandu Tennety
 Dan Williams
 Daniel Grieve
 Dave Anderson
@@ -63,7 +65,6 @@ Derek Briggs
 Doug Rohrer
 Felix Flores
 Fernando Briano
-Gabe
 Geoff Lane
 Giff Constable
 Gina Winkler
@@ -71,12 +72,12 @@ Gustavo Armagno
 Jaime Dávila
 Jerry Nummi
 John Andrews
+John Colvin
 Jonathan Irwin
 Josh Seiden
 Lucía Escanellas
 Luke Chamberlin
 Marcelo Nieves
-Mark Connell
 Matt Jones
 Mike Doel
 Mike Mazur
@@ -91,5 +92,4 @@ Swayam Narain
 Tim Lombardo
 Tony Schneider
 Wei Lu
-Winston Teo
 Zi (Huong Vu)
