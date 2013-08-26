@@ -1,22 +1,38 @@
-Current staff count is 68 of which 62 are billable and 6 are not
-Of the 62 billable, 60 are assignable and  2 are not
-Of the 60 assignable employees, 46 are billing today
+Current staff count is 85 of which 63 are billable and 22 are not
+Of the 63 billable, 61 are assignable and  2 are not
+Of the 61 assignable employees, 46 are billing today
 
 
 Daily utilization is billing as a percentage of assignable
 That is, non-billable people and those out on vacation are omitted from the calculation
-For today, that is 46 / 60 = 76.7%
+For today, that is 46 / 61 = 75.4%
 
 
 
-Non billable staff in T2 - 6
+Non billable staff in T2 - 22
 --------------------------------------
+Aaron Baker
+Andrew Robinson
+Ariena Kaneshima
+Brian Flanagan
+Bryan Cunningham
 Carl Coryell-Martin
+Cecilia Castro
+Daniel Riedel
+Deb Schultz
+Diego Algorta
+Evan Henshaw-Plath
+Felipe Pérez
+Ian McFarland
 Jim Weirich
 Juanita Sabapathy
 Ken Barker
 Paul Wilson
+Peter Shanley
+Rika Nakazawa
+Shelley Byers
 Swayam Narain
+Tami Carpenter
 
 
 Unassignable (vacation, etc.) - 2
@@ -25,7 +41,7 @@ Alfonso Cora
 Mark Connell
 
 
-Working, but not billing - 16
+Working, but not billing - 17
 --------------------------------
 Alvaro Gil
 Daniel Cadenas
@@ -40,6 +56,7 @@ María Pérez
 Mike Danko
 Mohan Krishnan
 Scott Walker
+Stuart Nelson
 Tomek Maszkowski
 Tommy Sullivan
 Winston Teo
