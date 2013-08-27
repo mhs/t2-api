@@ -22,16 +22,20 @@ that contains the business objects and a constellation of small, focused apps, t
 ways. We dont' want a monolithic beast with all features in one spot. As just one example, few people need to work
 with billing/invoicing.
 
+The [first effort to build (and then rebuild) this](https://github.com/neo/T2) ran into several problems along the way, most
+of which aren't worth discussing here. Suffice to say, we are in the midst of a reboot on things to get to the
+vision that will work best for Neo.
+
 
 ## Current status
 
 This API layer was extracted from the first attempt to build T2.  It is not yet ready to be the authoritative
-source of data. Instead, we have a rake task to copy the production data from the current T2 heroku app into
-here.  Once we have an allocation tool built off this version and a daily utilization reporting tool built off this,
-we'll be ready to retire the existing T2 and promote this app as the authoritative source of data.  Dan Williams
-in Cincinnati is working on the allocation tool and Mike Doel in Columbus is building the daily utilization tool.
-These are ember.js applications contained in separate repositories.  In addition, Scott Walker in Columbus is
-building a PTO tool that uses this API for scheduling paid time off by employees. That is an angular.js app.
+source of data. Instead, we have a rake task to copy the production data from the [current T2 heroku app](https://t2.neo.com)
+into here.  Once we have an allocation tool built off this version and a daily utilization reporting tool built off this,
+we'll be ready to retire the [existing T2 repository](https://github.com/neo/T2) and promote this app/repo as the authoritative source of data.
+[A new allocation tool](https://github.com/neo/t2-allocation) is in progress, as is a [new daily utilization tool.](https://github.com/neo/t2-utilization).
+These are ember.js applications contained in separate repositories from this API layer.  In addition, we are building
+[a PTO tool](https://github.com/neo/t2-pto) that uses this API for scheduling paid time off by employees. That is an angular.js app.
 
 
 # What This Is Responsible For
@@ -67,6 +71,7 @@ redirect the user to the /sign_in route for this app and include a *return_url* 
 authentication is completed, the API layer will redirect the user to that URL and included the token parameter
 mentioned above.
 
+[Note that an open issue](https://github.com/neo/t2-api/issues/14) is going to change a bit of how this works.
 
 # Contributing
 
@@ -160,7 +165,7 @@ The api app runs on Heroku in both production (t2api) and staging (t2api-staging
 be added as a collaborator to one or both in order to deploy. To set up the heroku git remotes run:
 
 ```
-./git_remotes_setup.sh
+./.git_remotes_setup.sh
 ```
 
 
