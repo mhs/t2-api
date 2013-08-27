@@ -15,6 +15,12 @@ describe Person do
     Person.only_deleted.should_not be_empty
   end
 
+  it "does not allow duplicate emails" do
+    person = FactoryGirl.create(:person, email: "joe@example.com")
+    person2 = FactoryGirl.build(:person, email: "joe@example.com")
+    person2.should_not be_valid
+  end
+
   describe 'by_office Scope' do
     let(:office_a_person) { FactoryGirl.create(:person) }
     let(:office_b_person) { FactoryGirl.create(:person) }
@@ -31,6 +37,25 @@ describe Person do
 
     it 'should return all people when office is nil' do
       Person.by_office(nil).to_a.should eql(Person.all)
+    end
+  end
+
+  describe 'associating with User' do
+    let(:email) { email = 'neon@example.com' }
+
+    it 'should associate a new person with an already created user' do
+      user = FactoryGirl.create(:user, email: email)
+      person = FactoryGirl.create(:person, email: email)
+      expect(person.user).to eq(user)
+    end
+
+    it 'should create a new user if one doesnt exist' do
+      expect {
+
+        person = FactoryGirl.create(:person, email: email)
+        expect(person.user.email).to eq(email)
+
+      }.to change(User, :count).by(1)
     end
   end
 

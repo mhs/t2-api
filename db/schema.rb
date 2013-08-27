@@ -77,6 +77,7 @@ ActiveRecord::Schema.define(:version => 20130823182509) do
     t.boolean  "unsellable", :default => false, :null => false
     t.date     "start_date"
     t.date     "end_date"
+    t.integer  "user_id"
   end
 
   add_index "people", ["end_date"], :name => "index_people_on_end_date"
@@ -113,21 +114,6 @@ ActiveRecord::Schema.define(:version => 20130823182509) do
     t.date     "end_date"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
-  end
-
-  create_table "snapshots", :force => true do |t|
-    t.text     "utilization"
-    t.date     "snap_date"
-    t.datetime "created_at",       :null => false
-    t.datetime "updated_at",       :null => false
-    t.integer  "office_id"
-    t.text     "staff_ids"
-    t.text     "overhead_ids"
-    t.text     "billable_ids"
-    t.text     "unassignable_ids"
-    t.text     "assignable_ids"
-    t.text     "billing_ids"
-    t.text     "non_billing_ids"
   end
 
   create_table "t2_applications", :force => true do |t|

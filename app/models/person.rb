@@ -4,9 +4,13 @@ class Person < ActiveRecord::Base
 
   attr_accessible :name, :notes, :email, :unsellable, :office, :office_id, :start_date, :end_date
 
-  has_many :allocations
-  belongs_to :office
-  belongs_to :project
+  belongs_to  :user, inverse_of: :person
+  has_many    :allocations
+  belongs_to  :office
+  belongs_to  :project
+
+  validates :email, uniqueness: true
+  validates :user_id, presence: true, on: :update
 
   scope :employed_on_date, lambda { |d|
     where("start_date is NULL or start_date < ?",d)
@@ -15,6 +19,12 @@ class Person < ActiveRecord::Base
   scope :overhead, where(unsellable: true)
   scope :billable, where(unsellable: false)
   scope :by_office, lambda {|office| office ? where(office_id: office.id) : where(false) }
+
+  after_create :create_or_associate_user
+
+  def self.from_auth_token(token)
+    joins(:user).where("users.authentication_token = ?", token).first
+  end
 
   def self.unassignable_on_date(date, office=nil)
     # Unsellable = ALWAYS overhead (e.g. the CEO)
@@ -30,5 +40,12 @@ class Person < ActiveRecord::Base
 
   def pto_requests
     allocations.this_year.vacation
+  end
+
+  private
+  def create_or_associate_user
+    self.user = User.find_or_create_by_email!(email) do |u|
+      u.name = name
+    end
   end
 end

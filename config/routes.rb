@@ -13,6 +13,10 @@ T2Api::Application.routes.draw do
       resources :allocations, only: [:index, :show, :update, :create, :destroy]
       resources :people, only: [:index, :show] do
         resources :pto_requests, only: [:index, :create, :update]
+
+        member do
+          get "profile"
+        end
       end
       resources :offices, only: [:index, :show]
       resources :snapshots, only: [:index, :show]

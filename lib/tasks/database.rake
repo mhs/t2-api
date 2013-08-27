@@ -43,4 +43,14 @@ namespace :db do
 
   desc "Complete reset of local database from production"
   task :refresh_from_production => [ :drop, :create, :pull_prod ]
+
+  desc "Links people records to users via matching emails"
+  task :link_people_to_users => :environment do
+    Person.find_each do |person|
+      person.send(:create_or_associate_user)
+      if person.save
+        p "Linked #{person.name} to user record."
+      end
+    end
+  end
 end

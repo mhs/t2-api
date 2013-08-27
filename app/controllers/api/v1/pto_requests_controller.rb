@@ -18,7 +18,7 @@ class Api::V1::PtoRequestsController < ApplicationController
   def update
     pto_request = Allocation.find(params[:id])
     if pto_request.update_attributes(params[:pto_request])
-      render json: pto_request, serializer: PtoRequestSerializer, status: :updated
+      render json: pto_request, serializer: PtoRequestSerializer, status: :ok
     else
       render json: pto_request.errors, status: :unprocessable_entity
     end
