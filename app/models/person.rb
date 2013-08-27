@@ -20,6 +20,10 @@ class Person < ActiveRecord::Base
 
   after_create :create_or_associate_user
 
+  def self.from_auth_token(token)
+    joins(:user).where("users.authentication_token = ?", token).first
+  end
+
   def self.unassignable_on_date(date, office=nil)
     # Unsellable = ALWAYS overhead (e.g. the CEO)
     # Unassignable = Usually available to be assigned, but out on vacation or something like that
