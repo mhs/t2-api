@@ -47,7 +47,7 @@ namespace :db do
   desc "Links people records to users via matching emails"
   task :link_people_to_users => :environment do
     Person.find_each do |person|
-      person.user = User.find_by_email(person.email)
+      person.send(:create_or_associate_user)
       if person.save
         p "Linked #{person.name} to user record."
       end
