@@ -24,5 +24,10 @@ class Api::V1::PtoRequestsController < ApplicationController
     end
   end
 
+  def destroy
+    pto_request = Allocation.find(params[:id])
+    head :ok if pto_request.destroy
+  end
+
 end
 

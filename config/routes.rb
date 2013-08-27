@@ -12,7 +12,7 @@ T2Api::Application.routes.draw do
       resources :slots, only: [:index, :show]
       resources :allocations, only: [:index, :show, :update, :create, :destroy]
       resources :people, only: [:index, :show] do
-        resources :pto_requests, only: [:index, :create, :update]
+        resources :pto_requests, only: [:index, :create, :update, :destroy]
 
         member do
           get "profile"
