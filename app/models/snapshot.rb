@@ -14,6 +14,8 @@ class Snapshot < ActiveRecord::Base
   belongs_to :office
   scope :from_today, lambda { where(snap_date: Date.today) }
 
+  validates_uniqueness_of :snap_date, scope: :office_id
+
   def self.one_per_day
     snaps = {}
     Snapshot.order("snap_date ASC").all.each do |snap|
@@ -23,7 +25,7 @@ class Snapshot < ActiveRecord::Base
   end
 
   def self.on_date!(date, office_id=nil)
-    snap = new snap_date: date, office_id: office_id
+    snap = where(snap_date: date, office_id: office_id).first_or_initialize
     snap.capture_data
     snap.save!
     snap

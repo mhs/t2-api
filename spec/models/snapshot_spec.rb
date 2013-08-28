@@ -1,6 +1,18 @@
 require 'spec_helper'
 
 describe Snapshot do
+  describe 'Validations' do
+    it 'should not allow two snapshots for given date and office' do
+      Snapshot.create!(snap_date: Date.today, office_id: 1)
+      lambda do
+        Snapshot.create!(snap_date: Date.today, office_id: 1)
+      end.should raise_error(ActiveRecord::RecordInvalid)
+      lambda do
+        Snapshot.create!(snap_date: Date.tomorrow, office_id: 1)
+      end.should_not raise_error(ActiveRecord::RecordInvalid)
+    end
+  end
+
   describe '.one_per_day' do
     it 'is empty if there are no snapshots' do
       Snapshot.one_per_day.should be_empty
@@ -20,9 +32,9 @@ describe Snapshot do
 
   describe '.on_date!' do
     let(:snapshot) {Snapshot.on_date!(Date.today)}
+    let(:employee) {FactoryGirl.create(:person, :current)}
 
     before(:each) do
-      employee = FactoryGirl.create(:person, :current)
       FactoryGirl.create(:allocation, :active, :billable, person: employee)
     end
 
@@ -51,6 +63,28 @@ describe Snapshot do
 
     it 'defaults the office to the entire company' do
       snapshot.office.should be_nil
+    end
+
+    describe 'Updating Snapshots' do
+      before do
+        FactoryGirl.create(:allocation, :active, :billable)
+      end
+
+      it 'should not create a new snapshot when exists a snapshot for the given day' do
+        snapshot
+
+        lambda do
+          Snapshot.on_date!(Date.today)
+        end.should_not change(Snapshot, :count).by(1)
+      end
+
+      it 'should update existent snapshot' do
+        snapshot.id.should eql(Snapshot.on_date!(Date.today).id)
+      end
+
+      it 'should update captured data' do
+        Snapshot.on_date!(Date.today).billing_ids.count.should eql(2)
+      end
     end
   end
 
