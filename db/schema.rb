@@ -116,6 +116,21 @@ ActiveRecord::Schema.define(:version => 20130823182509) do
     t.datetime "updated_at", :null => false
   end
 
+  create_table "snapshots", :force => true do |t|
+    t.text     "utilization"
+    t.date     "snap_date"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+    t.integer  "office_id"
+    t.text     "staff_ids"
+    t.text     "overhead_ids"
+    t.text     "billable_ids"
+    t.text     "unassignable_ids"
+    t.text     "assignable_ids"
+    t.text     "billing_ids"
+    t.text     "non_billing_ids"
+  end
+
   create_table "t2_applications", :force => true do |t|
     t.string   "url"
     t.string   "icon"
