@@ -7,32 +7,11 @@
 
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
+  <base target="_parent" />
 </head>
 <body>
 
-<nav class="primary">
-  <% t2_applications.each do |application| %>
-    <a href="<%= add_query_param(application.url, "authentication_token", current_user.authentication_token) %>" title="<%= application.title %>" target="main_window">
-      <span class="icon"><%= application.icon %></span>
-      <strong><%= application.title.downcase %></strong>
-    </a>
-  <% end %>
-
-  <a href="http://neo.com" class="logo" title="The Lean Innovation Company">
-    neo
-  </a>
-  <a class="settings" title="Settings" {{ action userSettings on="click" }}>
-    <span class="icon">s</span>
-    <strong>settings</strong>
-  </a>
-  <a href="/users/sign_out" class="exit" title="Logout"><span class="icon">q</span>
-  <strong>sign out</strong>
-  </a>
-</nav>
-
-<div class="window">
   <%= yield %>
-</div>
 
 </body>
 </html>

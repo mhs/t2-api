@@ -62,8 +62,9 @@ The navigation and authentication flow works like this.
 4. Each application grabs that token and shoves it into an HTTP header named 'Authorization' with each call it
    makes. Optionally the client app can also authenticate it's API calls by passing it as a query param named *authentication_token*.
 
-Note that in step 3, the application is called from within a frame. The other frame in the frame set is the navigation
-strip provided by this application.
+The individual applications can render the navigation menu provided by the API application by rending an iframe with a source
+pointing to the root url of the API app. The iframe and content area will of course need to be styled appropriately to make it
+look reasonable. See one of the already implemented apps for further details.
 
 In cases where a T2 application is called directly (e.g. navigating to http://t2-utilization.herokuapp.com directly
 in your browser), the app will be unable to use the API layer until it authenticates. In this case, the app should
