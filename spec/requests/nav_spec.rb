@@ -1,4 +1,6 @@
 require 'spec_helper'
+include Warden::Test::Helpers
+Warden.test_mode!
 
 describe "Navigation", type: :feature do
   let!(:application2) { FactoryGirl.create(:t2_application, title: "Second App", position: 2) }
@@ -6,10 +8,10 @@ describe "Navigation", type: :feature do
   let(:user) { FactoryGirl.create(:user) }
 
   before do
-    mock_login(user)
+    login_as(user, scope: :user)
     visit root_path
-    click_link "Sign in with Google"
   end
+
   subject { page }
 
   it { should have_selector("a[title='#{application1.title}']") }
