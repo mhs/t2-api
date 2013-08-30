@@ -9,11 +9,11 @@
   <a href="http://neo.com" class="logo" title="The Lean Innovation Company">
     neo
   </a>
-  <a class="settings" title="Settings" {{ action userSettings on="click" }}>
+  <%= link_to settings_app_url, class: "settings", target: "_parent" do %>
     <span class="icon">s</span>
     <strong>settings</strong>
-  </a>
-  <a href="/users/sign_out" class="exit" title="Logout"><span class="icon">q</span>
+  <% end %>
+  <a href="/users/sign_out" target="_parent" class="exit" title="Logout"><span class="icon">q</span>
   <strong>sign out</strong>
   </a>
 </nav>

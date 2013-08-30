@@ -5,8 +5,14 @@ class Api::V1::UsersController < ApplicationController
     render json: user
   end
 
-  def edit
-    @user = current_user
+  def update
+    user = User.find(params[:id])
+    if user.update_attributes(params[:user])
+      render json: user, status: :ok
+    else
+      render json: user.errors, status: unprocessable_entity
+    end
   end
+
 end
 
