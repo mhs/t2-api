@@ -17,9 +17,11 @@ class ApplicationController < ActionController::Base
   private
 
   def after_login_url
-    session[:return_url].present? ?
-        view_context.add_query_param(session[:return_url], "authentication_token", user.authentication_token) :
-        view_context.default_application.url
+    url = session[:return_url].present? ?
+                                session[:return_url] :
+                                view_context.default_application.url
+
+    view_context.add_query_param(url, "authentication_token", current_user.authentication_token)
   end
 
   def get_auth_token
