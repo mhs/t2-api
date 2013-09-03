@@ -42,6 +42,13 @@ class User < ActiveRecord::Base
     month_first? ? :month_first_short : :day_first_short
   end
 
+  def date_formats
+    [
+      {key: :month_first, value: "Month First"},
+      {key: :day_first, value: "Day First"}
+    ]
+  end
+
   private
   def month_first?
     date_format == 'month_first'
