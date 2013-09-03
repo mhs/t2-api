@@ -9,7 +9,7 @@ module ApplicationHelper
   end
 
   def t2_applications
-    T2Application.order('position ASC').all
+    T2Application.order('position ASC').all.reject { |app| app.title.downcase == "settings" }
   end
 
   def default_application
