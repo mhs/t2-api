@@ -1,11 +1,11 @@
 Current staff count is 85 of which 63 are billable and 22 are not
-Of the 63 billable, 61 are assignable and  2 are not
-Of the 61 assignable employees, 46 are billing today
+Of the 63 billable, 59 are assignable and  4 are not
+Of the 59 assignable employees, 49 are billing today
 
 
 Daily utilization is billing as a percentage of assignable
 That is, non-billable people and those out on vacation are omitted from the calculation
-For today, that is 46 / 61 = 75.4%
+For today, that is 49 / 59 = 83.1%
 
 
 
@@ -35,49 +35,46 @@ Swayam Narain
 Tami Carpenter
 
 
-Unassignable (vacation, etc.) - 2
+Unassignable (vacation, etc.) - 4
 ----------------------------------------
-Alfonso Cora
-Mark Connell
-
-
-Working, but not billing - 17
---------------------------------
-Alvaro Gil
-Daniel Cadenas
-Delisa Mason
+Daniel Grieve
 Diego Garcia
+Marcelo Nieves
+Matt Jones
+
+
+Working, but not billing - 12
+--------------------------------
+Alan Yeo
+Alvaro Gil
+Carin Meier
+Dave Anderson
 Federico Baña
 Gabe
-Jeff Gothelf
-Jono Mallanyk
 Lauren Woodrick
-María Pérez
 Mike Danko
-Mohan Krishnan
 Scott Walker
 Stuart Nelson
 Tomek Maszkowski
-Tommy Sullivan
 Winston Teo
 
 
-Billing today - 46
+Billing today - 49
 ---------------------
 Aaron Christy
 Abhaya Shenoy
 Alan Gardner
 Alex Burkhart
 Alex Kim
+Alfonso Cora
 Ally Reeves
 Aly Fluckey
 Anil Podduturi
 Bruno Aguirre
-Carin Meier
 Chandu Tennety
+Corey Innis
 Dan Williams
-Daniel Grieve
-Dave Anderson
+Daniel Cadenas
 Derek Briggs
 Doug Rohrer
 Felix Flores
@@ -87,19 +84,21 @@ Giff Constable
 Gina Winkler
 Gustavo Armagno
 Jaime Dávila
+Jeff Gothelf
 Jerry Nummi
 John Andrews
 John Colvin
 Jonathan Irwin
+Jono Mallanyk
 Josh Seiden
 Lucía Escanellas
 Luke Chamberlin
-Marcelo Nieves
-Matt Jones
+Mark Connell
+María Pérez
 Mike Doel
 Mike Mazur
+Mohan Krishnan
 Paul Henrich
-Paul Wilson
 Peter Aitken
 Raven Keller
 Scott Barron
@@ -107,6 +106,7 @@ Scott Burwinkel
 Sebastian Heit
 Swayam Narain
 Tim Lombardo
+Tommy Sullivan
 Tony Schneider
 Wei Lu
 Zi (Huong Vu)

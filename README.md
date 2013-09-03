@@ -28,25 +28,51 @@ vision that will work best for Neo.
 
 
 ## Current status
+We now actively developing several different repositories/apps:
 
-This API layer was extracted from the first attempt to build T2.  It is not yet ready to be the authoritative
-source of data. Instead, we have a rake task to copy the production data from the [current T2 heroku app](https://t2.neo.com)
-into here.  Once we have an allocation tool built off this version and a daily utilization reporting tool built off this,
-we'll be ready to retire the [existing T2 repository](https://github.com/neo/T2) and promote this app/repo as the authoritative source of data.
-[A new allocation tool](https://github.com/neo/t2-allocation) is in progress, as is a [new daily utilization tool.](https://github.com/neo/t2-utilization).
-These are ember.js applications contained in separate repositories from this API layer.  In addition, we are building
-[a PTO tool](https://github.com/neo/t2-pto) that uses this API for scheduling paid time off by employees. That is an angular.js app.
+1. This repository, which is deployed to
+   http://t2api.herokuapp.com is to own the data layer and also add in
+   authentication and simple navigation features (i.e. it is the the thing that
+   draws the left navbar in an iframe for other apps). When we're all done with
+   the transition, it will be this that answers to t2.neo.com. When you go
+   there, you'll be authenticated (using google OAuth) and then that app will
+   redirect you to your preferred T2 application. Client Principals may prefer
+   to see the allocation tool while Daniel may prefer to start off seeing the
+   reporting tool.  Each t2 styled application works basically the same way.
+   It's a client-side only app that is passed an authentication token on
+   invocation. That token is passed in AJAX calls back tot he API when fetching
+   data. Also, the t2 app is expected to setup an iframe on the left side of
+   the page and fill it with t2api.herokuapp.com/navbar. The API will fill that
+   navbar with links to the available T2 applications you can use.
 
+2. https://github.com/neo/t2-allocation is the new repo for taking over the
+   allocation portion of the old T2. It's not yet deployed to heroku (I'm
+   hoping to make that happen in the next day or two). It's an ember app.
+   It's the thing that needs the most love
+   and is probably on the critical path to making the transition away from
+   neo/T2 happen. If people are on the bench and want to contribute, this would
+   be a great spot - especially if they already know ember.js. But if they
+   don't know it, they're probably best advised to start with some ember
+   tutorials or helping somewhere else because this is actually a fairly
+   complicated bit of code.
 
-# What This Is Responsible For
+3. https://github.com/neo/t2-utilization is a new repo for utilization
+   reporting. It's deployed to http://t2-utilization.herokuapp.com. It's an ember app,
+   and one that is substantially simpler than t2-allocation. If there are
+   people who are looking to learn ember, this would be a good place to
+   contribute.
 
-As mentioned above, the T2 ecosystem is made up of several diferent applications/repositories. This one is
-responsible for the following:
+4. https://github.com/neo/t2-pto is a new repo for entering vacation and other
+   paid time off. It's an angular application that is brand new. Scott Walker
+   in the Columbus office has been building it. If you have someone who is
+   comfortable with angular, this could be a good place to contribute.  It is
+   deployed to http://t2-pto.herokuapp.com.
 
-- RESTful API that can be used to build new applications on allocation, project, office, person, etc. data
-- Authentication for this and other related applications (more below)
-- Navigation - the primary view for this app is a page with a nav strip in one frame and another app in the other, larger frame.
-  This app knows the set of T2 apps a user can access and provides the links for them.
+5. https://github.com/neo/t2-user-preferences is a new rep for maintaining
+   user preferences for T2 application.  This includes your default T2 application,
+   preferred date format, etd.. It's an angular app.  It is deployed as
+   http://t2-user-preferences.herokuapp.com
+
 
 ## Authentication and Navigation Flow
 
@@ -56,15 +82,13 @@ The navigation and authentication flow works like this.
 
 1. A user begins by navigating to the root page for this application (eventually http://t2.neo.com).
 2. If the user is not already authenticated, they get redirected to /sign_in which takes them through Google OAuth.
-3. After Google OAuth completes, the user is directed (or redirected) to one of the T2 applications.  The application
+3. After Google OAuth completes, the user is directed (or redirected) to their default T2 application.  The application
    is passed a query string parameter named *authentication_token* that contains an authentication token to use when talking
    to the API.
 4. Each application grabs that token and shoves it into an HTTP header named 'Authorization' with each call it
    makes. Optionally the client app can also authenticate it's API calls by passing it as a query param named *authentication_token*.
-
-The individual applications can render the navigation menu provided by the API application by rending an iframe with a source
-pointing to the root url of the API app. The iframe and content area will of course need to be styled appropriately to make it
-look reasonable. See one of the already implemented apps for further details.
+5. Each application also draws an iframe and fills it with http://t2api.herokuapp.com/navbar.  This will draw out the set of
+   icons for the left hand side navigation common to all T2 applications.
 
 In cases where a T2 application is called directly (e.g. navigating to http://t2-utilization.herokuapp.com directly
 in your browser), the app will be unable to use the API layer until it authenticates. In this case, the app should
@@ -72,17 +96,32 @@ redirect the user to the /sign_in route for this app and include a *return_url* 
 authentication is completed, the API layer will redirect the user to that URL and included the token parameter
 mentioned above.
 
-[Note that an open issue](https://github.com/neo/t2-api/issues/14) is going to change a bit of how this works.
 
 # Contributing
 
-Have bench time and want to help contribute to T2?  Fantastic.  Here are the rules of the road:
+If you want to contribute, we'd welcome your help.  Getting started is best achieved by:
 
-- Hop into the T2 room in hipchat.  Those of us working on it actively hang out there.
-- Work in a branch and submit a pull request when you have something to contribute.  Don't work in master.
-- Want to contribute but don't know what to work on?  Ask in hipchat.  We will eventually more use of Github
-  issue (though there are already a few you can pick from) once we have reached a stable state.
-- Mike Doel is currently acting as the primary gatekeeper on pull requests - reviewing and merging.
+1. Pile into the T2 room in hipchat where those of us who are working on it
+   hang out and talk through things.  We're trying to make the README files in
+   each of the above repositories good resources to use in getting going, but
+   it can still be a challenge to get all the moving pieces together.
+
+2. Check out the issues in the various repos for things to do. We're using
+   github issues for these rather than Pivotal Tracker, primarily because
+   there's less friction to getting someone going and because it allows the
+   issue to live closer to the code.  If you're working on an issue, assign it
+   to yourself and let us know in hipchat so we don't get multiple people
+   working on the same thing.
+
+3. Work in a branch and use pull requests.  We're trying to follow the model
+   spelled out here http://scottchacon.com/2011/08/31/github-flow.html for
+   this.
+
+4. We're using heroku organizations to house these apps.  Getting access to
+   push/pull is done by adding you to the heroku organization.  I can help you
+   with this if needed.  Ping me in hipchat.
+
+5. Ask for help if you need it.  As I said, there are a lot of moving pieces.
 
 
 # Building and Running Locally
