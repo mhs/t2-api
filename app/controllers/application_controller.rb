@@ -11,8 +11,8 @@ class ApplicationController < ActionController::Base
 
   def stored_location_for(user)
     session[:return_url].present? ?
-        view_context.add_query_param(session[:return_url], "authentication_token", user.authentication_token) : 
-        view_context.default_application_url
+        view_context.add_query_param(session[:return_url], "authentication_token", user.authentication_token) :
+        view_context.default_application.url
   end
 
   private
