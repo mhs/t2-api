@@ -6,6 +6,11 @@ describe Allocation do
     FactoryGirl.build(:allocation, person: nil).should_not be_valid
   end
 
+  it 'should count each day as 8 hours' do
+    allocation = FactoryGirl.create(:allocation, start_date: 2.days.ago, end_date: Time.now)
+    expect(allocation.duration_in_hours).to eq(16)
+  end
+
   it 'should not be valid without a project' do
     FactoryGirl.build(:allocation, project: nil).should_not be_valid
   end

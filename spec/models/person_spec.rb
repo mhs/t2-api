@@ -52,7 +52,6 @@ describe Person do
     xit "does not count weekends against the allowance" do
 
     end
-    xit "only counts 8 hours per day"
   end
 
   it 'calculates the unspent vacation hours' do
