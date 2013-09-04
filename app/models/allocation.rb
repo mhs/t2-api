@@ -35,6 +35,11 @@ class Allocation < ActiveRecord::Base
   delegate :name, to: :project, prefix: true, :allow_nil => true
 
   def duration_in_hours
-    (end_date.to_date - start_date.to_date).to_i * 8
+    days_billed.count * 8
   end
+
+  def days_billed
+    (start_date.to_date..end_date.to_date).select {|day| (1..5).cover? day.wday }
+  end
+  private :days_billed
 end

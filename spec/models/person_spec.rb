@@ -49,32 +49,13 @@ describe Person do
       ])
     end
 
-    xit "does not count weekends against the allowance" do
+    it "does not count weekends against the allowance" do
+      weeklong_vacation = FactoryGirl.create(:allocation, project: vacation, start_date: 1.week.ago, end_date: 1.day.ago)
+      person.allocations << weeklong_vacation
 
+      vacation_allowance = person.unspent_allowance.find {|project| project[:project_id] == weeklong_vacation.project_id }
+      expect(vacation_allowance[:hours_used]).to eq(40)
     end
-  end
-
-  it 'calculates the unspent vacation hours' do
-    proj1 = FactoryGirl.create(:project, :vacation, id: 1)
-    proj2 = FactoryGirl.create(:project, :vacation, id: 2)
-    proj3 = FactoryGirl.create(:project, :vacation, id: 3)
-
-    allocation = FactoryGirl.create(:allocation, project: proj1, start_date: 1.day.ago, end_date: Time.now)
-    allocation2 = FactoryGirl.create(:allocation, project: proj1, start_date: 1.day.ago, end_date: Time.now)
-    allocation3 = FactoryGirl.create(:allocation, project: proj2, start_date: 5.days.ago, end_date: Time.now)
-    allocation4 = FactoryGirl.create(:allocation, project: proj3, start_date: 10.days.ago, end_date: Time.now)
-
-    person = FactoryGirl.create(:person, allocation_ids: [allocation.id, allocation2.id, allocation3.id, allocation4.id])
-
-    pa1 = FactoryGirl.create(:project_allowance, person: person, project: proj1, hours: 160)
-    pa2 = FactoryGirl.create(:project_allowance, person: person, project: proj2, hours: 40)
-    pa3 = FactoryGirl.create(:project_allowance, person: person, project: proj3, hours: 80)
-
-    expect(person.unspent_allowance).to eq([
-      { project_id: 1, hours_used: 16, hours_total: pa1.hours, hours_available: pa1.hours - 16 },
-      { project_id: 2, hours_used: 40, hours_total: pa2.hours, hours_available: pa2.hours - 40 },
-      { project_id: 3, hours_used: 80, hours_total: pa3.hours, hours_available: pa3.hours - 80 }
-    ])
   end
 
   it "does not allow duplicate emails" do
