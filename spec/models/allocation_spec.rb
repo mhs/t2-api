@@ -6,9 +6,17 @@ describe Allocation do
     FactoryGirl.build(:allocation, person: nil).should_not be_valid
   end
 
-  it 'should count each day as 8 hours' do
-    allocation = FactoryGirl.create(:allocation, start_date: 2.days.ago, end_date: Time.now)
-    expect(allocation.duration_in_hours).to eq(16)
+  context 'tallying work days' do
+
+    it 'should count each day as 8 hours' do
+      allocation = FactoryGirl.create(:allocation, start_date: 2.days.ago, end_date: Time.now) # 3 day vacation
+      expect(allocation.duration_in_hours).to eq(24)
+    end
+
+    it 'should only count weekdays' do
+      allocation = FactoryGirl.create(:allocation, start_date: 1.week.ago, end_date: 1.day.ago) # weeklong vacation
+      expect(allocation.duration_in_hours).to eq(40)
+    end
   end
 
   it 'should not be valid without a project' do
@@ -203,9 +211,9 @@ describe Allocation do
   end
 
   describe '.for_person' do
-    let  (:bob) { FactoryGirl.create(:person) }
-    let! (:bob_allocation) { FactoryGirl.create(:allocation, person: bob) }
-    let! (:somoneone_elses_allocation) { FactoryGirl.create(:allocation) }
+    let(:bob) { FactoryGirl.create(:person) }
+    let!(:bob_allocation) { FactoryGirl.create(:allocation, person: bob) }
+    let!(:somoneone_elses_allocation) { FactoryGirl.create(:allocation) }
 
     it 'includes allocations for the specified person' do
       Allocation.for_person(bob).should include(bob_allocation)

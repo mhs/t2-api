@@ -48,14 +48,6 @@ describe Person do
         { project_id: conference.id, hours_used: 0, hours_total: conference_allowance.hours, hours_available: conference_allowance.hours }
       ])
     end
-
-    it "does not count weekends against the allowance" do
-      weeklong_vacation = FactoryGirl.create(:allocation, project: vacation, start_date: 1.week.ago, end_date: 1.day.ago)
-      person.allocations << weeklong_vacation
-
-      vacation_allowance = person.unspent_allowance.find {|project| project[:project_id] == weeklong_vacation.project_id }
-      expect(vacation_allowance[:hours_used]).to eq(40)
-    end
   end
 
   it "does not allow duplicate emails" do
