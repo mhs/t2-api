@@ -8,6 +8,7 @@ class Person < ActiveRecord::Base
   has_many    :allocations
   belongs_to  :office
   belongs_to  :project
+  has_many    :project_allowances, inverse_of: :person
 
   validates :email, uniqueness: true
   validates :user_id, presence: true, on: :update
@@ -40,6 +41,23 @@ class Person < ActiveRecord::Base
 
   def pto_requests
     allocations.this_year.vacation
+  end
+
+  def unspent_allowance
+    used_allowance_in_hours = pto_requests.group_by(&:project_id)
+    used_allowance_in_hours.default = 0
+    used_allowance_in_hours.each_pair {|project_id, allocations| used_allowance_in_hours[project_id] = allocations.map(&:duration_in_hours).inject(0, :+) }
+
+
+    project_allowances.map do |allowance|
+      {
+        project_id: allowance.project_id,
+        hours_total: allowance.hours,
+        hours_available:  allowance.hours - used_allowance_in_hours[allowance.project_id],
+        hours_used: used_allowance_in_hours[allowance.project_id]
+      }
+    end
+
   end
 
   private

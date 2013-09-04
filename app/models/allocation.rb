@@ -33,4 +33,9 @@ class Allocation < ActiveRecord::Base
   scope :by_office, lambda { |office| office ? joins(:office).where("people.office_id" => office.id) : where(false) }
 
   delegate :name, to: :project, prefix: true, :allow_nil => true
+
+  # TODO: test this 
+  def duration_in_hours
+    (end_date.to_date - start_date.to_date).to_i * 8
+  end
 end
