@@ -18,6 +18,7 @@ module ApplicationHelper
 
   def settings_app_url
     settings_app = T2Application.where(title: 'Settings').first
-    add_query_param(settings_app.url, "authentication_token", current_user.authentication_token)
+    settings_app_url = settings_app ? settings_app.url : "#"
+    add_query_param(settings_app_url, "authentication_token", current_user.authentication_token)
   end
 end
