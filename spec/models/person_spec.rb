@@ -15,41 +15,6 @@ describe Person do
     Person.only_deleted.should_not be_empty
   end
 
-  context "calculating remaining hours allowance" do
-    let!(:vacation)   { FactoryGirl.create(:project, :vacation) }
-    let!(:conference) { FactoryGirl.create(:project, :vacation) }
-    let!(:person)     { FactoryGirl.create(:person) }
-    let!(:vacation_allowance) { FactoryGirl.create(:project_allowance, person: person, project: vacation, hours: 160) }
-    let!(:conference_allowance) { FactoryGirl.create(:project_allowance, person: person, project: conference, hours: 40) }
-    let(:vacation_request) { FactoryGirl.create(:allocation, project: vacation, start_date: 1.day.ago, end_date: Date.today) }
-
-    it "counts a pto request against the hours available" do
-      person.allocations << vacation_request
-
-      expect(person.unspent_allowance).to eq([
-        { project_id: vacation.id, hours_used: vacation_request.duration_in_hours, hours_total: vacation_allowance.hours, hours_available: vacation_allowance.hours - vacation_request.duration_in_hours },
-        { project_id: conference.id, hours_used: 0, hours_total: conference_allowance.hours, hours_available: conference_allowance.hours }
-      ])
-    end
-
-    it "returns projects without any hours used" do
-      expect(person.unspent_allowance).to eq([
-        { project_id: vacation.id, hours_used: 0, hours_total: vacation_allowance.hours, hours_available: vacation_allowance.hours },
-        { project_id: conference.id, hours_used: 0, hours_total: conference_allowance.hours, hours_available: conference_allowance.hours }
-      ])
-    end
-
-    it "counts multiple pto requests against the hours available" do
-      vacation_request2 = FactoryGirl.create(:allocation, project: vacation, start_date: 1.day.ago, end_date: Date.today)
-      person.allocations << vacation_request << vacation_request2
-
-      expect(person.unspent_allowance).to eq([
-        { project_id: vacation.id, hours_used: vacation_request.duration_in_hours*2, hours_total: vacation_allowance.hours, hours_available: vacation_allowance.hours - vacation_request.duration_in_hours*2 },
-        { project_id: conference.id, hours_used: 0, hours_total: conference_allowance.hours, hours_available: conference_allowance.hours }
-      ])
-    end
-  end
-
   it "does not allow duplicate emails" do
     person = FactoryGirl.create(:person, email: "joe@example.com")
     person2 = FactoryGirl.build(:person, email: "joe@example.com")
