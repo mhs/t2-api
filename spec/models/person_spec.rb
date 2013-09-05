@@ -15,6 +15,34 @@ describe Person do
     Person.only_deleted.should_not be_empty
   end
 
+  context 'creating new project allowances' do
+    let(:vacation) { FactoryGirl.create(:project, :vacation) }
+    let(:office)   { FactoryGirl.create(:office) }
+
+    before do
+      office.project_offices.create(allowance: 160) do |po|
+        po.project = vacation
+      end
+    end
+
+    it 'creates an allowance for all projects person currently lacks an allowance for' do
+       expect {
+         FactoryGirl.create(:person, office: office)
+       }.to change(ProjectAllowance, :count).by(1)
+    end
+
+    it 'doesnt overwrite existing allowances' do
+      person = FactoryGirl.create(:person, office: office)
+      person.project_allowances.first.update_attribute(:hours, 40)
+
+      expect {
+        person.update_attributes({name: Time.now})
+      }.to_not change(ProjectAllowance, :count)
+
+      expect(person.project_allowances.first.hours).to eq(40)
+    end
+  end
+
   it "does not allow duplicate emails" do
     person = FactoryGirl.create(:person, email: "joe@example.com")
     person2 = FactoryGirl.build(:person, email: "joe@example.com")

@@ -21,7 +21,7 @@ class Person < ActiveRecord::Base
   scope :billable, where(unsellable: false)
   scope :by_office, lambda {|office| office ? where(office_id: office.id) : where(false) }
 
-  after_create :create_or_associate_user
+  after_create :create_or_associate_user, :create_missing_project_allowances
 
   def self.from_auth_token(token)
     joins(:user).where("users.authentication_token = ?", token).first
@@ -47,7 +47,18 @@ class Person < ActiveRecord::Base
     pto_requests.where(project_id: project_id).map(&:duration_in_hours).inject(0, :+)
   end
 
+  def create_missing_project_allowances
+    ids = project_allowances.map(&:id).tap { |ids| ids << 0 if ids.empty? }
+    office.project_offices.has_allowance.where("id NOT IN (?)", ids).each do |project_office|
+      project_allowances.create(
+        hours: project_office.allowance,
+        project_id: project_office.project_id
+      )
+    end
+  end
+
   private
+
   def create_or_associate_user
     self.user = User.find_or_create_by_email!(email) do |u|
       u.name = name
