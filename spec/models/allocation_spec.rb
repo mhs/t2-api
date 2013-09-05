@@ -9,7 +9,7 @@ describe Allocation do
   context 'tallying work days' do
 
     it 'should count each day as 8 hours' do
-      allocation = FactoryGirl.create(:allocation, start_date: 2.days.ago, end_date: Time.now) # 3 day vacation
+      allocation = FactoryGirl.create(:allocation, start_date: 3.days.ago, end_date: 1.day.ago) # 3 day vacation
       expect(allocation.duration_in_hours).to eq(24)
     end
 
