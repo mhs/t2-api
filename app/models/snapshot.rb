@@ -12,7 +12,8 @@ class Snapshot < ActiveRecord::Base
 
   attr_accessible :snap_date, :utilization, :office_id
   belongs_to :office
-  scope :from_today, lambda { where(snap_date: Date.today) }
+  scope :by_date, lambda {|date| where(snap_date: date) }
+  scope :by_office_id, lambda {|office_id| office_id ? where(office_id: office_id) : where(false) }
 
   validates_uniqueness_of :snap_date, scope: :office_id
 
@@ -22,6 +23,10 @@ class Snapshot < ActiveRecord::Base
       snaps[snap.snap_date] = snap
     end
     snaps.values
+  end
+
+  def self.on_date(date, office_id=nil)
+    by_date(date).by_office_id(office_id).first
   end
 
   def self.on_date!(date, office_id=nil)
@@ -36,7 +41,7 @@ class Snapshot < ActiveRecord::Base
   end
 
   def self.today
-    from_today.order("created_at ASC").last
+    by_date(Date.today).order("created_at ASC").last
   end
 
   %w{ assignable billing non_billing overhead billable unassignable staff }.each do |method_name|

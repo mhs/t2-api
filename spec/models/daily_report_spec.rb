@@ -18,5 +18,9 @@ describe DailyReport do
       daily_report.snapshots.should include(@snapshot)
       daily_report.report_date.should eql(Date.today)
     end
+
+    it 'should not update snapshots' do
+      daily_report.snapshots.first.updated_at.to_f.should eql(@snapshot.updated_at.to_f)
+    end
   end
 end

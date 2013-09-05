@@ -14,7 +14,7 @@ class DailyReport
     daily_report.snapshots = []
 
     Office.all.each do |office|
-      daily_report.snapshots << Snapshot.on_date!(date, office)
+      daily_report.snapshots << Snapshot.on_date(date, office.id)
     end
 
     daily_report
