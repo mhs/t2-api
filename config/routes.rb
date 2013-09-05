@@ -21,6 +21,11 @@ T2Api::Application.routes.draw do
       resources :offices, only: [:index, :show]
       resources :snapshots, only: [:index, :show]
       resources :users, only: [:show]
+      resources :daily_reports, only: [] do
+        collection do
+          get ":date" => :show
+        end
+      end
     end
   end
 
