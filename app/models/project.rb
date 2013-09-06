@@ -12,4 +12,7 @@ class Project < ActiveRecord::Base
 
   scope :assignable, where(vacation: true)
 
+  def allowance_for_office(office_id)
+    project_offices.where(office_id: office_id).first.try(:allowance)
+  end
 end

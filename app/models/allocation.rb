@@ -11,6 +11,8 @@ class Allocation < ActiveRecord::Base
   validates :person_id, :project_id, :start_date, :end_date, presence: true
   validates_date :end_date, on_or_after: :start_date
 
+  validate :does_not_exceed_project_allowance
+
   scope :current, includes(:project).where("projects.deleted_at is NULL")
   scope :between_date_range, lambda { |start_date, end_date|
     where("allocations.start_date >= ?", start_date.to_date)
@@ -35,16 +37,28 @@ class Allocation < ActiveRecord::Base
   delegate :name, to: :project, prefix: true, :allow_nil => true
 
   def duration_in_hours
-    duration_in_days.count * 8
+    duration_in_days * 8
+  end
+
+  private
+
+  def does_not_exceed_project_allowance
+    return unless person && project
+    errors.add(:base, "can't exceed project allowance") if AllowanceCalculator.new(person, project).exceeds_allowance? duration_in_hours
   end
 
   def duration_in_days
-    (start_date.to_date..end_date.to_date).select {|day| is_weekday? day }
+    weekdays.count
   end
-  private :duration_in_days
+
+  def weekdays
+    (start_date && end_date) ?
+      (start_date.to_date..end_date.to_date).select {|day| is_weekday? day } :
+      []
+  end
 
   def is_weekday? day
     (1..5).cover? day.wday
   end
-  private :is_weekday?
+
 end

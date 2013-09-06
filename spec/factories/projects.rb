@@ -7,7 +7,6 @@ FactoryGirl.define do
     notes    { Faker::HipsterIpsum.sentence }
     billable { [true, false].sample }
     binding  { [true, false].sample }
-    offices  { [ FactoryGirl.build(:office) ] }
 
     trait :billable do
       name  "Nexia"

@@ -7,11 +7,11 @@ class ProjectAllowance < ActiveRecord::Base
   validates   :person_id, :project_id, presence: true
 
   def available
-    hours - person.hours_allocated_to(project_id)
+    hours - used
   end
 
   def used
-    person.hours_allocated_to(project_id)
+    AllowanceCalculator.new(person, project).hours_spent
   end
 end
 
