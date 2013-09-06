@@ -7,7 +7,6 @@ describe Allocation do
   end
 
   context 'tallying work days' do
-
     it 'should count each day as 8 hours' do
       allocation = FactoryGirl.create(:allocation, start_date: Date.parse("03-09-2013"), end_date: Date.parse("05-09-2013")) # 3 day vacation
       expect(allocation.duration_in_hours).to eq(24)
@@ -33,6 +32,15 @@ describe Allocation do
 
   it 'should not be valid with an end date before the start date' do
     FactoryGirl.build(:allocation, start_date: Date.today, end_date: 2.days.ago).should_not be_valid
+  end
+
+  it 'should not let you make an allocation that exceeds the allowances total hours' do
+    person = FactoryGirl.create(:person)
+    project = FactoryGirl.create(:project)
+    proj_office = FactoryGirl.create(:project_office, allowance: 160, project: project, office: person.office)
+
+    allocation = FactoryGirl.build(:allocation, start_date: Date.parse("03-06-2013"), end_date: Date.parse("05-09-2013"), person: person, project: project)
+    expect(allocation).to_not be_valid
   end
 
   describe "by_office Scope" do

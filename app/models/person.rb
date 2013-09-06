@@ -43,8 +43,8 @@ class Person < ActiveRecord::Base
     allocations.this_year.vacation
   end
 
-  def hours_allocated_to(project_id)
-    pto_requests.where(project_id: project_id).map(&:duration_in_hours).inject(0, :+)
+  def allocations_for_project(project_id)
+    allocations.this_year.where(project_id: project_id)
   end
 
   def create_missing_project_allowances
