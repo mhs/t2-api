@@ -1,15 +1,18 @@
-Current staff count is 88 of which 66 are billable and 22 are not
-Of the 66 billable, 62 are assignable and  4 are not
-Of the 62 assignable employees, 52 are billing today
+Running `rake utilization:today` attached to terminal... up, run.2777
+DEPRECATION WARNING: You have Rails 2.3-style plugins in vendor/plugins! Support for these plugins will be removed in Rails 4.0. Move them out and bundle them in your Gemfile, or fold them in to your app as lib/myplugin/* and config/initializers/myplugin.rb. See the release notes for more on this: http://weblog.rubyonrails.org/2012/1/4/rails-3-2-0-rc2-has-been-released. (called from <top (required)> at /app/Rakefile:7)
+DEPRECATION WARNING: You have Rails 2.3-style plugins in vendor/plugins! Support for these plugins will be removed in Rails 4.0. Move them out and bundle them in your Gemfile, or fold them in to your app as lib/myplugin/* and config/initializers/myplugin.rb. See the release notes for more on this: http://weblog.rubyonrails.org/2012/1/4/rails-3-2-0-rc2-has-been-released. (called from <top (required)> at /app/Rakefile:7)
+Current staff count is 89 of which 66 are billable and 23 are not
+Of the 66 billable, 65 are assignable and  1 are not
+Of the 65 assignable employees, 52 are billing today
 
 
 Daily utilization is billing as a percentage of assignable
 That is, non-billable people and those out on vacation are omitted from the calculation
-For today, that is 52 / 62 = 83.9%
+For today, that is 52 / 65 = 80.0%
 
 
 
-Non billable staff in T2 - 22
+Non billable staff in T2 - 23
 --------------------------------------
 Aaron Baker
 Andrew Robinson
@@ -27,6 +30,7 @@ Ian McFarland
 Jim Weirich
 Juanita Sabapathy
 Ken Barker
+Kris Hedges
 Paul Wilson
 Peter Shanley
 Rika Nakazawa
@@ -35,34 +39,33 @@ Swayam Narain
 Tami Carpenter
 
 
-Unassignable (vacation, etc.) - 4
+Unassignable (vacation, etc.) - 1
 ----------------------------------------
-Daniel Grieve
-Marcelo Nieves
 Matt Jones
-Scott Barron
 
 
-Working, but not billing - 11
+Working, but not billing - 14
 --------------------------------
+Alan Gardner
 Alan Yeo
 Alvaro Gil
 David Bland
 Federico Baña
+Gabe
+Jono Mallanyk
 Lauren Woodrick
 Mike Danko
 Rizwan Reza
 Scott Walker
 Stuart Nelson
 Tomek Maszkowski
-Zi (Huong Vu)
+Winston Teo
 
 
 Billing today - 52
 ---------------------
 Aaron Christy
 Abhaya Shenoy
-Alan Gardner
 Alex Burkhart
 Alex Kim
 Alfonso Cora
@@ -75,13 +78,13 @@ Chandu Tennety
 Corey Innis
 Dan Williams
 Daniel Cadenas
+Daniel Grieve
 Dave Anderson
 Derek Briggs
 Diego Garcia
 Doug Rohrer
 Felix Flores
 Fernando Briano
-Gabe
 Geoff Lane
 Giff Constable
 Gina Winkler
@@ -92,10 +95,10 @@ Jerry Nummi
 John Andrews
 John Colvin
 Jonathan Irwin
-Jono Mallanyk
 Josh Seiden
 Lucía Escanellas
 Luke Chamberlin
+Marcelo Nieves
 Mark Connell
 María Pérez
 Mike Doel
@@ -104,6 +107,7 @@ Mohan Krishnan
 Paul Henrich
 Peter Aitken
 Raven Keller
+Scott Barron
 Scott Burwinkel
 Sebastian Heit
 Swayam Narain
@@ -111,4 +115,4 @@ Tim Lombardo
 Tommy Sullivan
 Tony Schneider
 Wei Lu
-Winston Teo
+Zi (Huong Vu)

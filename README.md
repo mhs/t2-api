@@ -121,7 +121,12 @@ If you want to contribute, we'd welcome your help.  Getting started is best achi
    push/pull is done by adding you to the heroku organization.  I can help you
    with this if needed.  Ping me in hipchat.
 
-5. Ask for help if you need it.  As I said, there are a lot of moving pieces.
+5. If you want to build a new T2-style application, consider using the
+   [t2-angular-template](https://github.com/neo/t2-angular-template) that has been
+   extracted from some of the other apps. It provides a starting project, including
+   authentication, to help you get going quickly.
+
+6. Ask for help if you need it.  As I said, there are a lot of moving pieces.
 
 
 # Building and Running Locally
