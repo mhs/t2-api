@@ -36,7 +36,9 @@ class Person < ActiveRecord::Base
 
   def self.billing_on_date(date, office=nil)
     on_vacation = unassignable_on_date(date, office)
-    Allocation.by_office(office).on_date(date).billable.assignable.map(&:person).reject{|p| on_vacation.include?(p)}.uniq
+    billable_allocations = Allocation.by_office(office).on_date(date).billable.assignable
+    non_billable_allocations_that_still_count = Allocation.by_office(office).on_date(date).unbillable.bound.billable_projects
+    (billable_allocations + non_billable_allocations_that_still_count).map(&:person).reject{|p| on_vacation.include?(p)}.uniq
   end
 
   def pto_requests

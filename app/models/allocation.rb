@@ -29,6 +29,9 @@ class Allocation < ActiveRecord::Base
   scope :assignable, current.includes(:project).where(:projects => { vacation: false })
   scope :unassignable, current.includes(:project).where(:projects => { vacation: true })
   scope :billable, where(billable: true)
+  scope :unbillable, where(billable: false)
+  scope :bound, where(binding: true)
+  scope :billable_projects, current.includes(:project).where(:projects => { billable: true })
   scope :with_start_date, lambda { |d| where("allocations.start_date <= ?", d.to_date + TIME_WINDOW.weeks).where("allocations.end_date >= ?", d.to_date).current }
   scope :vacation, current.where(:projects => { vacation: true })
   scope :for_person, lambda { |person_or_id| joins(:person).where("people.id = ?", person_or_id.is_a?(Fixnum) ? person_or_id : person_or_id.id) }

@@ -14,6 +14,13 @@ FactoryGirl.define do
       binding true
     end
 
+    trait :unbillable do
+      name  "T2"
+      billable false
+      binding false
+    end
+
+
     trait :vacation do
       vacation true
     end
