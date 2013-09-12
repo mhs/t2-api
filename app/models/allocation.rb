@@ -37,6 +37,10 @@ class Allocation < ActiveRecord::Base
   scope :for_person, lambda { |person_or_id| joins(:person).where("people.id = ?", person_or_id.is_a?(Fixnum) ? person_or_id : person_or_id.id) }
   scope :by_office, lambda { |office| office ? joins(:office).where("people.office_id" => office.id) : where(false) }
 
+  scope :unbillable_for_billable_projects, -> { unbillable.bound.billable_projects }
+  scope :billable_and_assignable, -> { billable.assignable }
+  scope :by_office_and_date, ->(office, date) { by_office(office).on_date(date) }
+
   delegate :name, to: :project, prefix: true, :allow_nil => true
 
   def duration_in_hours
