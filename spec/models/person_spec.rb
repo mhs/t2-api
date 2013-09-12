@@ -213,6 +213,7 @@ describe Person do
   describe '.billing_on_date with -today- as value' do
     let(:date) { Date.today }
     let(:billable_project) { FactoryGirl.create(:project, :billable) }
+    let(:unbillable_project) { FactoryGirl.create(:project, :unbillable) }
     let(:employee) { FactoryGirl.create(:person) }
 
     it 'includes someone allocated to a billable project today' do
@@ -256,6 +257,16 @@ describe Person do
       overhead_employee = FactoryGirl.create(:person, unsellable: true)
       FactoryGirl.create(:allocation, person: overhead_employee, project: billable_project, start_date: 1.week.ago, end_date: Date.tomorrow, billable: true)
       Person.billing_on_date(date).should include(overhead_employee)
+    end
+
+    it 'includes someone who is marked as unbillable so long as the project is billable and they are not available' do
+      FactoryGirl.create(:allocation, person: employee, project: billable_project, start_date: 1.week.ago, end_date: Date.tomorrow, billable: false, binding: true)
+      Person.billing_on_date(date).should include(employee)
+    end
+
+    it 'does not include someone who is marked as unbillable/unavailable if the project itself is not billable' do
+      FactoryGirl.create(:allocation, person: employee, project: unbillable_project, start_date: 1.week.ago, end_date: Date.tomorrow, billable: false, binding: true)
+      Person.billing_on_date(date).should_not include(employee)
     end
 
     it 'should be able to filter by office' do
