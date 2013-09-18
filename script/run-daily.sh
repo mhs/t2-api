@@ -7,5 +7,6 @@ rm doc/daily-e
 cat doc/daily | pbcopy
 heroku run rake db:migrate:up VERSION=20130821193648 -a t2api
 heroku run rake db:migrate:up VERSION=20130823175015 -a t2api
+heroku run rake db:migrate:up VERSION=20130904145751 -a t2api
 heroku run rake db:link_people_to_users -a t2api
 git diff
