@@ -42,7 +42,7 @@ namespace :db do
   task :refresh => [ :drop, :create, :pull_staging ]
 
   desc "Complete reset of local database from production"
-  task :refresh_from_production => [ :drop, :create, :pull_prod ]
+  task :refresh_from_production => [ :drop, :create, :pull_prod, :seed ]
 
   desc "Links people records to users via matching emails"
   task :link_people_to_users => :environment do
