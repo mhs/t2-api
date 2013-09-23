@@ -15,12 +15,25 @@ namespace :db do
   end
 
   desc "Copy database instance from t2.herokuapp.com to t2api-staging.herokuapp.com"
-  task :transfer_staging_db do
+  task :transfer_staging_db_from_t2 do
     puts "creating backup of t2-production..."
     sysputs "heroku pgbackups:capture -a t2-production --expire"
     puts "creating backup of t2api-staging..."
     sysputs "heroku pgbackups:capture -a t2api-staging --expire"
     restore_url = `heroku pgbackups:url -a t2-production`
+    puts "copying data..."
+    sysputs "heroku pgbackups:restore HEROKU_POSTGRESQL_ORANGE -a t2api-staging --confirm t2api-staging '#{restore_url}'"
+    puts "obscuring project names..."
+    sysputs "heroku run rake obscure_projects -a t2api-staging"
+  end
+
+  desc "Copy database instance from t2api.herokuapp.com to t2api-staging.herokuapp.com"
+  task :transfer_staging_db_from_prod do
+    puts "creating backup of t2api..."
+    sysputs "heroku pgbackups:capture -a t2api --expire"
+    puts "creating backup of t2api-staging..."
+    sysputs "heroku pgbackups:capture -a t2api-staging --expire"
+    restore_url = `heroku pgbackups:url -a t2api`
     puts "copying data..."
     sysputs "heroku pgbackups:restore HEROKU_POSTGRESQL_ORANGE -a t2api-staging --confirm t2api-staging '#{restore_url}'"
     puts "obscuring project names..."
