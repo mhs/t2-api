@@ -14,4 +14,10 @@ namespace :applications do
       T2Application.create(attrs.merge(position: index))
     end
   end
+
+  desc 'Set the default T2 application for everyone'
+  task :set_default_for_all => :environment do
+    util = T2Application.where(title: 'Utilization').first
+    User.find_each { |u| u.t2_application_id = util.id ; u.save }
+  end
 end
