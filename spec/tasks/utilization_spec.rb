@@ -33,18 +33,17 @@ describe 'Utilization Rake Tasks' do
       Rake.application.rake_require "tasks/utilization/three_weeks"
     end
 
-    it 'should call Snapshot#on_date! with and without office_id several times' do
-      Snapshot.should_receive(:on_date!).with(kind_of(Date)).any_number_of_times.ordered
-      Snapshot.should_receive(:on_date!).with(kind_of(Date), kind_of(Numeric)).any_number_of_times.ordered
+    it 'should call Snapshot#on_date! several times' do
+      days_count = 0
+      with_week_days { days_count += 1 }
+      Snapshot.should_receive(:on_date!).with(any_args).exactly(days_count + days_count * Office.count).ordered
       Rake::Task['utilization:three_weeks'].invoke
     end
 
     it 'should not call Snapshot#on_date! on weekends' do
-      ((Date.today)..(21.days.from_now.to_date)).select do |date|
-        if date.saturday? || date.sunday?
-          Snapshot.should_not_receive(:on_date!).with(date).any_number_of_times.ordered
-          Snapshot.should_not_receive(:on_date!).with(date, kind_of(Numeric)).any_number_of_times.ordered
-        end
+      with_week_days do |date|
+        date.should_not be_saturday
+        date.should_not be_sunday
       end
     end
   end

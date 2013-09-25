@@ -4,12 +4,12 @@ describe Snapshot do
   describe 'Validations' do
     it 'should not allow two snapshots for given date and office' do
       Snapshot.create!(snap_date: Date.today, office_id: 1)
-      lambda do
+      expect do
         Snapshot.create!(snap_date: Date.today, office_id: 1)
-      end.should raise_error(ActiveRecord::RecordInvalid)
-      lambda do
+      end.to raise_error(ActiveRecord::RecordInvalid)
+      expect do
         Snapshot.create!(snap_date: Date.tomorrow, office_id: 1)
-      end.should_not raise_error(ActiveRecord::RecordInvalid)
+      end.not_to raise_error
     end
   end
 
