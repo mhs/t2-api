@@ -57,8 +57,8 @@ class Snapshot < ActiveRecord::Base
     self.staff_ids        = Person.by_office(office).employed_on_date(snap_date).map(&:id)
     self.overhead_ids     = Person.by_office(office).overhead.employed_on_date(snap_date).map(&:id)
     self.billable_ids     = Person.by_office(office).billable.employed_on_date(snap_date).map(&:id)
-    self.unassignable_ids = Person.by_office(office).unassignable_on_date(snap_date).map(&:id)
-    self.billing_ids      = Person.by_office(office).billing_on_date(snap_date).map(&:id)
+    self.unassignable_ids = Person.unassignable_on_date(snap_date, office).map(&:id)
+    self.billing_ids      = Person.billing_on_date(snap_date, office).map(&:id)
     self.assignable_ids   = billable_ids - unassignable_ids
     self.non_billing_ids  = assignable_ids - billing_ids
     self.utilization      = sprintf "%.1f", (100.0 * billing_ids.size) / assignable_ids.size
