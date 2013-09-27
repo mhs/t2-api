@@ -10,6 +10,7 @@ test: &test
   adapter: postgresql
   database: t2api_test
   host: localhost
+  min_messages: WARNING
 
 production:
   adapter: postgresql
