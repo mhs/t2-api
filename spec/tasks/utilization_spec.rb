@@ -1,12 +1,6 @@
 require 'spec_helper'
 require 'rake'
 
-require './lib/tasks/utilization/output'
-module UtilizationOutput
-  def puts_names_for(list); end;
-  def utilization_puts(x = ''); end;
-end
-
 describe 'Utilization Rake Tasks' do
   before do
     FactoryGirl.create(:person)
