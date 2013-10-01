@@ -1,6 +1,6 @@
 class OfficeUtilizationTemplate
   def initialize(snapshots)
-    @snapshots = snapshots
+    @snapshots = snapshots.sort_by {|s| s.office.name}
   end
 end
 
