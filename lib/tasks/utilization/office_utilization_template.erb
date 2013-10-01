@@ -1,6 +1,6 @@
 Per Office Utilization Report
 =============================
-
 <% @snapshots.each do |snapshot| %>
 <%= snapshot.office.name %> - <%= snapshot.billing.size %> / <%= snapshot.assignable.size %> = <%= snapshot.utilization %>%
 <% end %>
+

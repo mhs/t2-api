@@ -1,32 +1,11 @@
 
-
 Global Utilization Report
 =========================
-
 Current staff count is <%= @snapshot.staff_ids.size %> of which <%= @snapshot.billable.size %> are billable and <%= @snapshot.overhead.size %> are not
 Of the <%= @snapshot.billable.size %> billable, <%= @snapshot.assignable.size %> are assignable and  <%= @snapshot.unassignable.size %> are not
 Of the <%= @snapshot.assignable.size %> assignable employees, <%= @snapshot.billing.size %> are billing today
 
-
 Daily utilization is billing as a percentage of assignable
 That is, non-billable people and those out on vacation are omitted from the calculation
 For today, that is <%= @snapshot.billing.size %> / <%= @snapshot.assignable.size %> = <%= @snapshot.utilization %>%
-
-
-
-Non billable staff in T2 - <%= @snapshot.overhead.size %>
---------------------------------------
-<%= names_for @snapshot.overhead %>
-
-Unassignable (vacation, etc.) - <%= @snapshot.unassignable.size %>
-----------------------------------------
-<%= names_for @snapshot.unassignable %>
-
-Working, but not billing - <%= @snapshot.non_billing.size %>
---------------------------------
-<%= names_for @snapshot.non_billing %>
-
-Billing today - <%= @snapshot.billing.size %>
----------------------
-<%= names_for @snapshot.billing %>
 

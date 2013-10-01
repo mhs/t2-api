@@ -1,0 +1,17 @@
+
+Non billable staff in T2 - <%= @snapshot.overhead.size %>
+--------------------------------------
+<%= names_for @snapshot.overhead %>
+
+Unassignable (vacation, etc.) - <%= @snapshot.unassignable.size %>
+----------------------------------------
+<%= names_for @snapshot.unassignable %>
+
+Working, but not billing - <%= @snapshot.non_billing.size %>
+--------------------------------
+<%= names_for @snapshot.non_billing %>
+
+Billing today - <%= @snapshot.billing.size %>
+---------------------
+<%= names_for @snapshot.billing %>
+

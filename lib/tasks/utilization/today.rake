@@ -1,4 +1,5 @@
 require File.expand_path(File.dirname(__FILE__) + '/global_utilization_template.rb')
+require File.expand_path(File.dirname(__FILE__) + '/utilization_body_template.rb')
 require File.expand_path(File.dirname(__FILE__) + '/office_utilization_template.rb')
 
 namespace :utilization do
@@ -14,7 +15,8 @@ namespace :utilization do
     end
 
     # Global Utilization
-    puts_if_no_test GlobalUtilizationTemplate.new(Snapshot.today!).render()
+    today_snapshot = Snapshot.today!
+    puts_if_no_test GlobalUtilizationTemplate.new(today_snapshot).render()
 
     # Per Office Utilization
     snapshots = []
@@ -26,5 +28,8 @@ namespace :utilization do
     end
 
     puts_if_no_test OfficeUtilizationTemplate.new(snapshots).render()
+
+    # Body that includes actual people list
+    puts_if_no_test UtilizationBodyTemplate.new(today_snapshot).render()
   end
 end
