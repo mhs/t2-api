@@ -88,6 +88,16 @@ describe Snapshot do
     end
   end
 
+  describe '.calculate_utilization' do
+    let(:snapshot) { Snapshot.new }
+
+    it 'should return 0 if there is no assignable people' do
+      snapshot.billing_ids = [1,2,3]
+      snapshot.assignable_ids = []
+      snapshot.calculate_utilization.should eql(0.0)
+    end
+  end
+
   describe '.today!' do
     it "should call .on_date with today's date" do
       Snapshot.should_receive(:on_date!).with(Date.today)

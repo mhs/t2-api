@@ -61,7 +61,14 @@ class Snapshot < ActiveRecord::Base
     self.billing_ids      = Person.billing_on_date(snap_date, office).map(&:id)
     self.assignable_ids   = billable_ids - unassignable_ids
     self.non_billing_ids  = assignable_ids - billing_ids
-    self.utilization      = sprintf "%.1f", (100.0 * billing_ids.size) / assignable_ids.size
+    self.utilization      = calculate_utilization
   end
 
+  def calculate_utilization
+    if assignable_ids.empty?
+      0.0
+    else
+      sprintf "%.1f", (100.0 * billing_ids.size) / assignable_ids.size
+    end
+  end
 end
