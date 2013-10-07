@@ -1,16 +1,10 @@
-def with_week_days(&block)
-  date_range = ((Date.today)..(21.days.from_now.to_date))
-
-  date_range.to_a.each do |date|
-    unless date.saturday? || date.sunday?
-      yield date
-    end
-  end
-end
+require File.expand_path(File.dirname(__FILE__) + '/utilization_helper.rb')
 
 namespace :utilization do
   desc "Spit out a report on utilization for Daniel along Three Weeks in the Future global and per-office"
   task :three_weeks => :environment do
+
+    include UtilizationHelper
 
     with_week_days do |date|
       Snapshot.on_date!(date)
