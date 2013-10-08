@@ -39,7 +39,7 @@ class Person < ActiveRecord::Base
     allocations = Allocation.by_office_and_date(office, date).includes(:person)
     billable_allocations = allocations.billable_and_assignable
     non_billable_allocations_that_still_count = allocations.unbillable_for_billable_projects
-    relevant_people = (billable_allocations + non_billable_allocations_that_still_count).map(&:person).uniq
+    relevant_people = (billable_allocations + non_billable_allocations_that_still_count).map(&:person).uniq.compact
     relevant_people - on_vacation
   end
 
