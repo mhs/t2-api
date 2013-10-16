@@ -6,7 +6,6 @@ FactoryGirl.define do
     notes   { Faker::HipsterIpsum.sentence }
     github  { "http://github.com/neo" }
     twitter { "https://twitter.com/neo_innovation" }
-    website { "https://google.com" }
     title   { Faker::HipsterIpsum.sentence }
     bio     { Faker::HipsterIpsum.sentence }
   end

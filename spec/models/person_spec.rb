@@ -1,6 +1,18 @@
 require 'spec_helper'
 
 describe Person do
+
+  describe 'Validations' do
+    it 'should not allow invalid urls in website' do
+      subject.website = 'invalid one'
+      subject.valid?
+      subject.errors[:website].should_not be_empty
+      subject.website = 'http://google.com'
+      subject.valid?
+      subject.errors[:website].should be_empty
+    end
+  end
+
   it 'acts as paranoid' do
     Person.count.should eql(0)
     Person.only_deleted.should be_empty
