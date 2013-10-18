@@ -8,6 +8,7 @@ namespace :applications do
       {url: "http://t2-utilization.herokuapp.com",      icon: "h", title: "Utilization"},
       {url: "http://brockman.herokuapp.com",            icon: "b", title: "Pipeline"},
       {url: "http://t2-pto.herokuapp.com",              icon: "p", title: "PTO"},
+      {url: "http://t2-people.herokuapp.com",           icon: "u", title: "Profile"},
       {url: "http://t2-user-preferences.herokuapp.com", icon: "s", title: "Settings"}
     ]
     applications_attributes.each_with_index do |attrs, index|
