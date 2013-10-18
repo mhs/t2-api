@@ -2,7 +2,8 @@ class Person < ActiveRecord::Base
   acts_as_paranoid
   acts_as_taggable_on :skills
 
-  attr_accessible :name, :notes, :email, :unsellable, :office, :office_id, :start_date, :end_date
+  attr_accessible :name, :notes, :email, :unsellable, :office, :office_id, :start_date, :end_date,
+                  :github, :twitter, :website, :title, :bio
 
   belongs_to  :user, inverse_of: :person
   has_many    :allocations
