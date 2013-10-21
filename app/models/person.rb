@@ -3,7 +3,7 @@ class Person < ActiveRecord::Base
   acts_as_taggable_on :skills
 
   attr_accessible :name, :notes, :email, :unsellable, :office, :office_id, :start_date, :end_date,
-                  :github, :twitter, :website, :title, :bio
+                  :github, :twitter, :website, :title, :bio, :skill_list
 
   belongs_to  :user, inverse_of: :person
   has_many    :allocations

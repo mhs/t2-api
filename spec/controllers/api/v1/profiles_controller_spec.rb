@@ -4,6 +4,11 @@ describe Api::V1::ProfilesController do
 
   describe 'Updating Person Profile' do
 
+    def update(person_attributes={})
+      put :update, person: person_attributes
+      @serialized_person = JSON.parse(response.body)["person"]
+    end
+
     let(:person) { FactoryGirl.create(:person) }
 
     before do
@@ -11,22 +16,26 @@ describe Api::V1::ProfilesController do
     end
 
     describe 'When succeed' do
-      before do
-        put :update, person: {website: 'http://mypersonalwebsite.com'}
-      end
 
       it 'should respond with status 200' do
+        update
         response.status.should eql(200)
       end
 
-      it 'should update person website' do
-        JSON.parse(response.body)["person"]["website"].should eql("http://mypersonalwebsite.com")
+      it 'should update person attributes' do
+        update(website: "http://mypersonalwebsite.com")
+        @serialized_person["website"].should eql("http://mypersonalwebsite.com")
+      end
+
+      it 'should be able to update skill list passing a comma separated string' do
+        update(skill_list: "javascript, ruby, python")
+        @serialized_person["skill_list"].should eql(["javascript", "ruby", "python"])
       end
     end
 
     describe 'When fails' do
       before do
-        put :update, person: {website: 'invalid website'}
+        update(website: 'invalid website')
       end
 
       it 'should respond with status 400' do
@@ -34,7 +43,7 @@ describe Api::V1::ProfilesController do
       end
 
       it 'should add error fields on the response' do
-        JSON.parse(response.body)["person"]["errors"]["website"].should_not be_nil
+        @serialized_person["errors"]["website"].should_not be_nil
       end
     end
   end
