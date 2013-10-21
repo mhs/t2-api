@@ -90,12 +90,14 @@ describe Person do
     end
 
     it 'should create a new user if one doesnt exist' do
-      expect {
+      person = nil
 
+      expect {
         person = FactoryGirl.create(:person, email: email)
         expect(person.user.email).to eq(email)
-
       }.to change(User, :count).by(1)
+
+      person.reload.user_id.should_not be_nil
     end
   end
 

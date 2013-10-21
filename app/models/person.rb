@@ -69,5 +69,7 @@ class Person < ActiveRecord::Base
     self.user = User.find_or_create_by_email!(email) do |u|
       u.name = name
     end
+
+    save
   end
 end
