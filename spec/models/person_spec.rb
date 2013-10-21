@@ -1,6 +1,18 @@
 require 'spec_helper'
 
 describe Person do
+
+  describe 'Validations' do
+    it 'should not allow invalid urls in website' do
+      subject.website = 'invalid one'
+      subject.valid?
+      subject.errors[:website].should_not be_empty
+      subject.website = 'http://google.com'
+      subject.valid?
+      subject.errors[:website].should be_empty
+    end
+  end
+
   it 'acts as paranoid' do
     Person.count.should eql(0)
     Person.only_deleted.should be_empty
@@ -78,12 +90,14 @@ describe Person do
     end
 
     it 'should create a new user if one doesnt exist' do
-      expect {
+      person = nil
 
+      expect {
         person = FactoryGirl.create(:person, email: email)
         expect(person.user.email).to eq(email)
-
       }.to change(User, :count).by(1)
+
+      person.reload.user_id.should_not be_nil
     end
   end
 

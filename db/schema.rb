@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130904145751) do
+ActiveRecord::Schema.define(:version => 20131015175419) do
 
   create_table "allocations", :force => true do |t|
     t.date     "start_date"
@@ -78,6 +78,11 @@ ActiveRecord::Schema.define(:version => 20130904145751) do
     t.date     "start_date"
     t.date     "end_date"
     t.integer  "user_id"
+    t.string   "github"
+    t.string   "twitter"
+    t.string   "website"
+    t.string   "title"
+    t.text     "bio"
   end
 
   add_index "people", ["end_date"], :name => "index_people_on_end_date"

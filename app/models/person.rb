@@ -2,7 +2,8 @@ class Person < ActiveRecord::Base
   acts_as_paranoid
   acts_as_taggable_on :skills
 
-  attr_accessible :name, :notes, :email, :unsellable, :office, :office_id, :start_date, :end_date
+  attr_accessible :name, :notes, :email, :unsellable, :office, :office_id, :start_date, :end_date,
+                  :github, :twitter, :website, :title, :bio, :skill_list
 
   belongs_to  :user, inverse_of: :person
   has_many    :allocations
@@ -12,6 +13,7 @@ class Person < ActiveRecord::Base
 
   validates :email, uniqueness: true
   validates :user_id, presence: true, on: :update
+  validates :website, url: true, allow_blank: true
 
   scope :employed_on_date, lambda { |d|
     where("start_date is NULL or start_date < ?",d)
@@ -67,5 +69,7 @@ class Person < ActiveRecord::Base
     self.user = User.find_or_create_by_email!(email) do |u|
       u.name = name
     end
+
+    save
   end
 end
