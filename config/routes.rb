@@ -9,6 +9,7 @@ T2Api::Application.routes.draw do
   namespace :api, :defaults => {:format => :json} do
     namespace :v1 do
       resource :profile
+      resources :skills, only: [:index]
       resources :projects, only: [:index, :show, :update, :create, :destroy]
       resources :slots, only: [:index, :show]
       resources :allocations, only: [:index, :show, :update, :create, :destroy]
