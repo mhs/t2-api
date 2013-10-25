@@ -176,7 +176,7 @@ To get this, you'll need to be added to the t2api heroku application.  Ask for t
 have been setup as a collaborator, you can run:
 
 ```
-./git_remotes_setup.sh
+./.git_remotes_setup.sh
 rake db:refresh
 rake db:seed
 ```
