@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/utilization_helper.rb')
+require File.expand_path(File.dirname(__FILE__) + '/../../utilization_helper')
 
 namespace :utilization do
   desc "Spit out a report on utilization for Daniel along Three Weeks in the Future global and per-office"

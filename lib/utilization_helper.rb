@@ -9,6 +9,17 @@ module UtilizationHelper
     end
   end
 
+  def week_days(month=nil)
+    month ||= Date.today
+    (month.beginning_of_month..month.end_of_month).reject do |date|
+      date.saturday? || date.sunday?
+    end
+  end
+
+  def with_week_days_in(month=nil, &block)
+    week_days(month).each(&block)
+  end
+
   # FIXME: Output should not be displayed under Test env.
   # There should be a beetter way to do this :)
   def puts_if_no_test(content)
