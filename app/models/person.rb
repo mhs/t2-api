@@ -13,7 +13,6 @@ class Person < ActiveRecord::Base
 
   validates :email, uniqueness: true
   validates :user_id, presence: true, on: :update
-  validates :website, url: true, allow_blank: true
 
   scope :employed_on_date, lambda { |d|
     where("start_date is NULL or start_date < ?",d)
