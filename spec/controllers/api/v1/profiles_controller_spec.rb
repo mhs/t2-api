@@ -33,18 +33,19 @@ describe Api::V1::ProfilesController do
       end
     end
 
-    describe 'When fails' do
-      before do
-        update(website: 'invalid website')
-      end
+    # TODO: uncomment this when there are validations that can fail
+    # describe 'When fails' do
+    #   before do
+    #     update(website: 'invalid website')
+    #   end
 
-      it 'should respond with status 400' do
-        response.status.should eql(400)
-      end
+    #   it 'should respond with status 400' do
+    #     response.status.should eql(400)
+    #   end
 
-      it 'should add error fields on the response' do
-        @serialized_person["errors"]["website"].should_not be_nil
-      end
-    end
+    #   it 'should add error fields on the response' do
+    #     @serialized_person["errors"]["website"].should_not be_nil
+    #   end
+    # end
   end
 end
