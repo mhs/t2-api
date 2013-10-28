@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131015175419) do
+ActiveRecord::Schema.define(:version => 20131028183441) do
 
   create_table "allocations", :force => true do |t|
     t.date     "start_date"
@@ -56,6 +56,18 @@ ActiveRecord::Schema.define(:version => 20131015175419) do
   end
 
   add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
+
+  create_table "monthly_snapshots", :force => true do |t|
+    t.integer  "office_id"
+    t.date     "snap_date"
+    t.integer  "assignable_days"
+    t.integer  "billing_days"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  add_index "monthly_snapshots", ["office_id"], :name => "index_monthly_snapshots_on_office_id"
+  add_index "monthly_snapshots", ["snap_date"], :name => "index_monthly_snapshots_on_snap_date"
 
   create_table "offices", :force => true do |t|
     t.string   "name"
