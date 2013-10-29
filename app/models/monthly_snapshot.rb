@@ -21,6 +21,15 @@ class MonthlySnapshot < ActiveRecord::Base
     end
   end
 
+  def self.one_per_month
+    snaps = {}
+    MonthlySnapshot.order("snap_date ASC").where(office_id: nil).all.each do |snap|
+      snaps[snap.snap_date] = snap
+    end
+    snaps.values
+  end
+
+
   def self.today!(office_id=nil)
     on_date!(Date.today, office_id)
   end
