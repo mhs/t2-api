@@ -9,7 +9,6 @@ heroku run rake db:migrate:up VERSION=20130821193648 -a t2api
 heroku run rake db:migrate:up VERSION=20130823175015 -a t2api
 heroku run rake db:migrate:up VERSION=20130904145751 -a t2api
 heroku run rake db:migrate:up VERSION=20131015175419 -a t2api
-heroku run rake db:migrate:up VERSION=20131028183441 -a t2api
 heroku run rake db:link_people_to_users -a t2api
 heroku run rake db:clean_users_and_people -a t2api
 heroku run rake applications:set_default_for_all -a t2api
