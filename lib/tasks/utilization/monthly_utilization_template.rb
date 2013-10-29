@@ -1,8 +1,8 @@
 class MonthlyUtilizationTemplate
-  def initialize(summary_snapshot, monthly_snapshots)
+  def initialize(summary_snapshot, monthly_snapshots, title="Monthly Utilization Report")
     @summary_snapshot = summary_snapshot
     @monthly_snapshots = monthly_snapshots.sort_by {|s| s.office.name}
-    @report_title = "Monthly Utilization Report - #{@summary_snapshot.snap_date.strftime("%B %Y")}"
+    @report_title =  "#{title} - #{@summary_snapshot.snap_date.strftime("%B %Y")}"
   end
 
   def format_row(title, snapshot)
