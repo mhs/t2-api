@@ -38,9 +38,10 @@ namespace :utilization do
     puts_if_no_test MonthlyUtilizationTemplate.new(summary_snapshot, monthly_snapshots).render()
 
     # projected monthly utilization
-    #summary_snapshot = MonthlySnapshot.next_month!
-    #monthly_snapshots = offices.map { |office| MonthlySnapshot.next_month!(office) }
-    #puts_if_no_test ProjectedMonthlyUtilizationTemplate.new(summary_snapshot, monthly_snapshots).render()
+    summary_snapshot = MonthlySnapshot.next_month!
+    monthly_snapshots = offices.map { |office| MonthlySnapshot.next_month!(office) }
+    t = "Projected Monthly Utilization Report"
+    puts_if_no_test MonthlyUtilizationTemplate.new(summary_snapshot, monthly_snapshots, t).render()
 
     # Body that includes actual people list
     puts_if_no_test UtilizationBodyTemplate.new(today_snapshot).render()
