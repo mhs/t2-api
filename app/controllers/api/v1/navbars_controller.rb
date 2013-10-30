@@ -1,7 +1,8 @@
 class Api::V1::NavbarsController < ApplicationController
 
   def show
-    apps = T2Application.order('position ASC').all
-    render json: apps, each_serializer: NavbarSerializer, root: false
+    navbar = Navbar.new(T2Application.all)
+
+    render json: navbar, root: false
   end
 end
