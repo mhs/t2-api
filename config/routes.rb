@@ -8,6 +8,7 @@ T2Api::Application.routes.draw do
   # allows for the url in form of 'api.neo.com/v1/clients'
   namespace :api, :defaults => {:format => :json} do
     namespace :v1 do
+      resource :navbar, only: [:show]
       resource :profile
       resources :skills, only: [:index]
       resources :projects, only: [:index, :show, :update, :create, :destroy]
