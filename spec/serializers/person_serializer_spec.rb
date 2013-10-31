@@ -1,15 +1,14 @@
 require 'spec_helper'
 
 describe PersonSerializer do
-  let(:person) { FactoryGirl.create(:person) }
+  let(:tags) { %w(ios android) }
+
+  let(:person) { FactoryGirl.create(:person, skill_list: tags) }
 
   let(:person_serialized) { PersonSerializer.new(person) }
 
-  let(:tags) { %w(ios android) }
-
   before do
-    person.skill_list = tags
-    person.save!
+    10.times { FactoryGirl.create(:person, skill_list: tags) }
   end
 
   it "should serialize skill tags" do
@@ -29,5 +28,9 @@ describe PersonSerializer do
     person_serialized.website.should eql(person.website)
     person_serialized.title.should eql(person.title)
     person_serialized.bio.should eql(person.bio)
+  end
+
+  it "should include similar people" do
+    person_serialized.similar_people.count.should eql(5)
   end
 end
