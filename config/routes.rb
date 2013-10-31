@@ -18,6 +18,7 @@ T2Api::Application.routes.draw do
 
         member do
           get "profile"
+          get "similar"
         end
       end
       resources :offices, only: [:index, :show]

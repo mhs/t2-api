@@ -302,4 +302,27 @@ describe Person do
       employee.pto_requests.should_not include(vacation_alloc_last_year)
     end
   end
+
+  describe "#similar_people" do
+    let(:person) { FactoryGirl.create(:person, skill_list: ["ruby", "javascript", "android"]) }
+
+    before do
+      @joe = FactoryGirl.create(:person, skill_list: ["android"])
+      @ben = FactoryGirl.create(:person, skill_list: ["ios", "ruby", "javascript"])
+      @bob = FactoryGirl.create(:person, skill_list: ["ios", "php"])
+    end
+
+    it "should return a list of people with similar tags" do
+      person.similar_people.should include(@joe, @ben)
+      person.similar_people.should_not include(@bob)
+    end
+
+    it "should order by most relevant people" do
+      person.similar_people.should eql([@ben, @joe])
+    end
+
+    it "should return a maximun of 1 results" do
+      person.similar_people(1).should eql([@ben])
+    end
+  end
 end
