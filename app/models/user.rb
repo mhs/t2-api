@@ -34,6 +34,11 @@ class User < ActiveRecord::Base
     user
   end
 
+  def clear_authentication_token!
+    self.authentication_token = nil
+    self.save
+  end
+
   def long_date_format
     month_first? ? :month_first_long : :day_first_long
   end
