@@ -62,6 +62,28 @@ class Person < ActiveRecord::Base
     end
   end
 
+  def similar_people(limit=nil)
+    skilled_people_hash = {}
+
+    self.skill_list.each do |skill|
+      Person.tagged_with(skill).each do |person|
+        next if person == self
+        skilled_people_hash[person.id] = {
+          count: (skilled_people_hash.fetch(person.id, {}).fetch(:count, 0) + 1),
+          person: person
+        }
+      end
+    end
+
+    values = skilled_people_hash.values.sort_by! do |obj|
+      obj[:count]
+    end.reverse
+
+    values[0..(limit.to_i-1)].map do |obj|
+      obj[:person]
+    end
+  end
+
   private
 
   def create_or_associate_user
