@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131028183441) do
+ActiveRecord::Schema.define(:version => 20131101135609) do
 
   create_table "allocations", :force => true do |t|
     t.date     "start_date"
@@ -83,10 +83,10 @@ ActiveRecord::Schema.define(:version => 20131028183441) do
     t.integer  "office_id"
     t.string   "email"
     t.text     "notes"
-    t.datetime "created_at",                    :null => false
-    t.datetime "updated_at",                    :null => false
+    t.datetime "created_at",                             :null => false
+    t.datetime "updated_at",                             :null => false
     t.time     "deleted_at"
-    t.boolean  "unsellable", :default => false, :null => false
+    t.boolean  "unsellable",          :default => false, :null => false
     t.date     "start_date"
     t.date     "end_date"
     t.integer  "user_id"
@@ -95,6 +95,10 @@ ActiveRecord::Schema.define(:version => 20131028183441) do
     t.string   "website"
     t.string   "title"
     t.text     "bio"
+    t.string   "avatar_file_name"
+    t.string   "avatar_content_type"
+    t.integer  "avatar_file_size"
+    t.datetime "avatar_updated_at"
   end
 
   add_index "people", ["end_date"], :name => "index_people_on_end_date"

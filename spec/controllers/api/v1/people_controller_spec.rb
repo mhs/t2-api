@@ -23,7 +23,7 @@ describe Api::V1::PeopleController do
         get :similar, id: person.id
 
         serialized_response.size.should eql(3)
-        serialized_response.first.keys.should =~ %w(email name id office_name)
+        serialized_response.first.keys.should =~ %w(email name id office_name avatar)
       end
 
       it 'should be able to limit results' do
