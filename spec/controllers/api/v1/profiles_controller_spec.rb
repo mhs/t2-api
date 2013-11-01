@@ -31,6 +31,14 @@ describe Api::V1::ProfilesController do
         update(skill_list: "javascript, ruby, python")
         @serialized_person["skill_list"].should eql(["javascript", "ruby", "python"])
       end
+
+      it 'should be able to update avatar' do
+        update(avatar: fixture_file_upload("/images/neo.png"))
+        @serialized_person["avatar"].should be_kind_of(Hash)
+        @serialized_person["avatar"]["thumb"].should_not be_empty
+        @serialized_person["avatar"]["small"].should_not be_empty
+        @serialized_person["avatar"]["medium"].should_not be_empty
+      end
     end
 
     # TODO: uncomment this when there are validations that can fail

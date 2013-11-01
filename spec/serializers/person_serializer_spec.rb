@@ -33,4 +33,9 @@ describe PersonSerializer do
   it "should include similar people" do
     person_serialized.similar_people.count.should eql(5)
   end
+
+  it "should serialize avatars" do
+    person_serialized.avatar.should be_kind_of(Hash)
+    person_serialized.avatar.keys.should =~ [:thumb, :small, :medium]
+  end
 end
