@@ -14,6 +14,7 @@ gem 'omniauth-google-oauth2'
 gem 'haml'
 gem 'acts-as-taggable-on'
 gem 'paperclip', "~> 3.0"
+gem 'aws-sdk'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'

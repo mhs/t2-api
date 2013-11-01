@@ -5,8 +5,9 @@ class Person < ActiveRecord::Base
   attr_accessible :name, :notes, :email, :unsellable, :office, :office_id, :start_date, :end_date,
                   :github, :twitter, :website, :title, :bio, :skill_list, :avatar
 
-  has_attached_file :avatar, styles: { medium: "300x300>", small: "100x100>", thumb: "50x50>" },
-                      :default_url => "/images/neo.png"
+  has_attached_file :avatar,
+                      styles: { medium: "300x300>", small: "100x100>", thumb: "50x50>" },
+                      default_url: "https://t2-data.s3.amazonaws.com/neo.jpeg"
 
   belongs_to  :user, inverse_of: :person
   has_many    :allocations
