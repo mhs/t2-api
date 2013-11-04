@@ -177,8 +177,7 @@ have been setup as a collaborator, you can run:
 
 ```
 ./.git_remotes_setup.sh
-rake db:refresh
-rake db:seed
+rake db:refresh_from_production
 ```
 
 to pull down the latest development database.  Note that you do end up running "rake db:seed" above. This is
