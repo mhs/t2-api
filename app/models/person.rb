@@ -22,6 +22,14 @@ class Person < ActiveRecord::Base
     where("start_date is NULL or start_date < ?",d)
     .where("end_date is NULL or end_date > ?", d)
   }
+
+  scope :employed_between, -> start_date, end_date do
+    where(
+      "(people.start_date IS NULL OR people.start_date <= :end_date) AND (people.end_date IS NULL OR people.end_date >= :start_date)",
+      {start_date: start_date, end_date: end_date}
+    )
+  end
+
   scope :overhead, where(unsellable: true)
   scope :billable, where(unsellable: false)
   scope :by_office, lambda {|office| office ? where(office_id: office.id) : where(false) }
@@ -87,6 +95,18 @@ class Person < ActiveRecord::Base
       obj[:person]
     end
   end
+
+  def availabilities_for(start_date, end_date)
+    min_start_date = self.start_date.nil? ? start_date : [self.start_date,start_date].max
+    max_end_date = self.end_date.nil? ? end_date : [self.end_date,end_date].min
+
+    allocations_within_range = allocations.bound.within(start_date, end_date)
+    initial_availability = Availability.new(person_id: id, start_date: min_start_date, end_date: max_end_date)
+
+    AvailabilityCalculator.new(allocations_within_range, initial_availability).availabilities
+  end
+
+
 
   private
 
