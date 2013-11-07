@@ -27,6 +27,7 @@ T2Api::Application.routes.draw do
       resources :monthly_snapshots, only: [:index, :show]
       resources :users, only: [:show, :update]
       resources :t2_applications, only: :index
+      resources :availabilities, only: :index
       resources :daily_reports, only: [] do
         collection do
           get ":date" => :show

@@ -14,18 +14,27 @@ class Allocation < ActiveRecord::Base
   validate :does_not_exceed_project_allowance
 
   scope :current, includes(:project).where("projects.deleted_at is NULL")
-  scope :between_date_range, lambda { |start_date, end_date|
+  def self.between(start_date, end_date)
     where("allocations.start_date >= ?", start_date.to_date)
     .where("allocations.end_date <= ?", end_date.to_date)
-  }
-  scope :for_date, lambda {|d|
+  end
+
+  def self.within(start_date, end_date)
+    # NOTE: this is subtly different from between, which excludes allocations that
+    #       start before start_date or end after end_date.
+    where("allocations.start_date <= ?", end_date.to_date)
+    .where("allocations.end_date >= ?", start_date.to_date)
+  end
+
+  def self.for_date(d)
     joins(:project)
     .where("projects.id IS NOT NULL")
     .where("allocations.start_date <= ?", d.to_date)
     .where("allocations.end_date >= ?", d.to_date)
-  }
+  end
+
   scope :on_date, lambda { |d| for_date(d).current }
-  scope :this_year, lambda { between_date_range(Date.today.beginning_of_year, Date.today.end_of_year).current }
+  scope :this_year, lambda { between(Date.today.beginning_of_year, Date.today.end_of_year).current }
   scope :assignable, current.includes(:project).where(:projects => { vacation: false })
   scope :unassignable, current.includes(:project).where(:projects => { vacation: true })
   scope :billable, where(billable: true)

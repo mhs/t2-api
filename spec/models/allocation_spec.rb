@@ -152,28 +152,28 @@ describe Allocation do
     it { should_not include allocation_after }
   end
 
-  describe '.between_date_range' do
+  describe '.between' do
     let(:start_date) {1.month.ago}
     let(:end_date) {1.month.from_now}
 
     it 'includes allocations falling on the range boundaries' do
       allocation = FactoryGirl.create(:allocation, start_date: start_date, end_date: end_date)
-      Allocation.between_date_range(start_date, end_date).should include(allocation)
+      Allocation.between(start_date, end_date).should include(allocation)
     end
 
     it 'includes allocations inside the range boundaries' do
       allocation = FactoryGirl.create(:allocation, start_date: start_date + 1.day, end_date: end_date - 1.day)
-      Allocation.between_date_range(start_date, end_date).should include(allocation)
+      Allocation.between(start_date, end_date).should include(allocation)
     end
 
     it "does not include allocations starting before the range boundary" do
       allocation = FactoryGirl.create(:allocation, start_date: start_date - 1.day, end_date: end_date)
-      Allocation.between_date_range(start_date, end_date).should_not include(allocation)
+      Allocation.between(start_date, end_date).should_not include(allocation)
     end
 
     it "does not include allocations ending after the range boundary" do
       allocation = FactoryGirl.create(:allocation, start_date: start_date, end_date: end_date + 1.day)
-      Allocation.between_date_range(start_date, end_date).should_not include(allocation)
+      Allocation.between(start_date, end_date).should_not include(allocation)
     end
   end
 
