@@ -8,6 +8,10 @@ class Api::V1::ProfilesController < ApplicationController
     render json: @person, status: @person.update_attributes(params[:person]) ? 200 : 400
   end
 
+  def show
+    render json: @person
+  end
+
   private
 
   def fetch_person
