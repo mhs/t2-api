@@ -1,6 +1,6 @@
 class Api::V1::OfficesController < ApplicationController
   def index
-    @offices = Office.all
+    @offices = Office.includes(:projects, :people).all
     render json: @offices
   end
 

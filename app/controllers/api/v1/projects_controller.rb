@@ -1,7 +1,7 @@
 class Api::V1::ProjectsController < ApplicationController
   # GET /projects.json
   def index
-    render json: Project.all
+    render json: Project.includes(:offices, :slots, :allocations).all
   end
 
   # GET /projects/1.json

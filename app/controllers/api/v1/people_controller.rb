@@ -3,7 +3,7 @@ class Api::V1::PeopleController < ApplicationController
   before_filter :fetch_person, only: [:show, :similar]
 
   def index
-    people = Person.all
+    people = Person.includes(:user, :project_allowances, :allocations, :office).all
     render json: people
   end
 
