@@ -3,6 +3,6 @@ class ProjectSerializer < ActiveModel::Serializer
 
   attributes :id, :name, :notes, :billable, :vacation
   has_many :slots
-  has_many :offices
-  has_many :allocations
+  has_many :offices, embed: :ids
+  has_many :allocations, embed: :ids
 end

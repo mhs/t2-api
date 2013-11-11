@@ -8,7 +8,6 @@ class Api::V1::AvailabilitiesController < ApplicationController
       people = Person.where(id: params[:person_id].to_i)
     else
       # TODO: this can be more aggressively filtered for employee start dates
-      #       and non-sellable people
       people = Person.billable
     end
 
