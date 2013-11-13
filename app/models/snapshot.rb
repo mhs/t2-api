@@ -17,9 +17,9 @@ class Snapshot < ActiveRecord::Base
 
   validates_uniqueness_of :snap_date, scope: :office_id
 
-  def self.one_per_day
+  def self.one_per_day(office_id=nil)
     snaps = {}
-    Snapshot.order("snap_date ASC").where(office_id: nil).all.each do |snap|
+    Snapshot.order("snap_date ASC").where(office_id: office_id).all.each do |snap|
       snaps[snap.snap_date] = snap
     end
     snaps.values
