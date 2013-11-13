@@ -24,6 +24,7 @@ T2Api::Application.routes.draw do
       end
       resources :offices, only: [:index, :show]
       resources :snapshots, only: [:index, :show]
+      resources :utilization_counts, only: :index
       resources :monthly_snapshots, only: [:index, :show]
       resources :users, only: [:show, :update]
       resources :t2_applications, only: :index

@@ -36,6 +36,12 @@ class Snapshot < ActiveRecord::Base
     snap
   end
 
+  def self.for_weekdays_between!(start_date, end_date, office_id=nil)
+    dates = Range.new(start_date, end_date)
+    week_dates = dates.reject { |d| d.saturday? || d.sunday? }
+    week_dates.map { |d| on_date! d, office_id }
+  end
+
   def self.today!
     on_date!(Date.today)
   end
