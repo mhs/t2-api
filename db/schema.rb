@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131101135609) do
+ActiveRecord::Schema.define(:version => 20131113160326) do
 
   create_table "allocations", :force => true do |t|
     t.date     "start_date"
@@ -169,6 +169,7 @@ ActiveRecord::Schema.define(:version => 20131101135609) do
     t.integer  "position"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.string   "classes"
   end
 
   create_table "taggings", :force => true do |t|

@@ -1,5 +1,5 @@
 class NavbarItemSerializer < ActiveModel::Serializer
-  attributes :url, :title, :link_text, :icon
+  attributes :url, :title, :link_text, :icon, :classes
 
   def url
     # add current_user's access token to the base URL
