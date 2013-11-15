@@ -46,6 +46,13 @@ class Snapshot < ActiveRecord::Base
     on_date!(Date.today)
   end
 
+  alias_method :old_office, :office
+
+  def office
+   old_office || Office::SummaryOffice.new
+  end
+
+
   def self.today
     by_date(Date.today).order("created_at ASC").last
   end

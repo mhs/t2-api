@@ -11,6 +11,10 @@ class Office < ActiveRecord::Base
       "Overall"
     end
 
+    def id
+      nil
+    end
+
     def slug
       name.downcase
     end
