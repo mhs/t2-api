@@ -6,7 +6,7 @@ class UtilizationSummary
     summary_start_date = params[:summary_start_date] || snap_date - 1.week
     summary_end_date = params[:summary_end_date] || snap_date + 1.week
     @snapshot = Snapshot.on_date!(snap_date, @office_id)
-    context_snapshots = Office.all.map do |office|
+    context_snapshots = Office.where("name NOT IN (?)", ["Headquarters", "Archived"]).map do |office|
       Snapshot.on_date!(snap_date, office.id)
     end
 
