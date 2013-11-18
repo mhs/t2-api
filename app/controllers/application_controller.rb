@@ -21,6 +21,8 @@ class ApplicationController < ActionController::Base
                                 session[:return_url] :
                                 view_context.default_application.url
 
+    # for weird cases (cross-loading from old T2) current_user can get here but not have a token
+    current_user.ensure_authentication_token!
     view_context.add_query_param(url, "authentication_token", current_user.authentication_token)
   end
 
