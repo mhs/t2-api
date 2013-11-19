@@ -1,7 +1,7 @@
 class UtilizationSummary
   attr_reader :id, :office_id, :office_name, :office_slug, :utilization_counts, :snapshot, :by_office_utilizations
   def initialize(params={})
-    @office_id = params[:office_id] || nil
+    @office_id = params[:office_id]
     snap_date = params[:snap_date] || Date.today
     summary_start_date = params[:summary_start_date] || snap_date - 1.week
     summary_end_date = params[:summary_end_date] || snap_date + 1.week
