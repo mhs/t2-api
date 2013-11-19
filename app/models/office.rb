@@ -8,7 +8,7 @@ class Office < ActiveRecord::Base
 
   class SummaryOffice
     def name
-      "Overall"
+      "Overview"
     end
 
     def id
