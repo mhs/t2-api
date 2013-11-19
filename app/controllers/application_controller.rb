@@ -34,4 +34,8 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def with_ids_from_params(relation)
+    return relation unless params[:ids] && params[:ids].is_a?(Array)
+    relation.where(relation.table_name => { id: params[:ids].map(&:to_i) })
+  end
 end
