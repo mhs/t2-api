@@ -105,6 +105,24 @@ namespace :db do
         p "Linked #{person.name} to user record."
       end
     end
-    
+  end
+
+  desc "Remove duplicate snapshots"
+  task :remove_duplicate_snapshots => :environment do
+    puts "Removing duplicate snapshots"
+    all_snaps = Snapshot.order('updated_at DESC').all
+    latest_snaps = all_snaps.each_with_object({}) do |snap, list|
+      key = [snap.snap_date, snap.office_id]
+      list[key] ||= snap
+    end
+    snaps_to_delete = all_snaps - latest_snaps.values
+    snaps_to_delete.each(&:destroy)
+  end
+
+  desc "Restore deleted people attached to snapshots"
+  task :restore_deleted_from_snapshots => :environment do
+    puts "Restoring deleted people attached to snapshots"
+    bad_ids = Snapshot.all.map { |s| s.attributes.slice(*Snapshot.serialized_attributes.keys).values.flatten.uniq }.flatten.sort.uniq - Person.pluck(:id)
+
   end
 end
