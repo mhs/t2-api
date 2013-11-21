@@ -1,6 +1,6 @@
 class Api::V1::OfficesController < ApplicationController
   def index
-    @offices = with_ids_from_params(Office.includes(:projects, :people))
+    @offices = with_ids_from_params(Office.includes(:projects, :people).order(:position))
     render json: @offices
   end
 
