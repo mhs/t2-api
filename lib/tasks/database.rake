@@ -122,7 +122,45 @@ namespace :db do
   desc "Restore deleted people attached to snapshots"
   task :restore_deleted_from_snapshots => :environment do
     puts "Restoring deleted people attached to snapshots"
-    bad_ids = Snapshot.all.map { |s| s.attributes.slice(*Snapshot.serialized_attributes.keys).values.flatten.uniq }.flatten.sort.uniq - Person.pluck(:id)
-
+    Person.transaction do
+      bad_ids = Snapshot.all.map { |s| s.attributes.slice(*Snapshot.serialized_attributes.keys).values.flatten.uniq }.flatten.sort.uniq - Person.pluck(:id)
+      # there are three cases here:
+      #
+      # * people who no longer exist, even with deleted_at set. Remove them from the snapshots.
+      # * people who are duplicates with different emails. Remove dupes from the snapshots.
+      # * people who left the company and were deleted. Restore them.
+      #
+      ids_to_clean = bad_ids - Person.unscoped.pluck(:id)
+      ids_to_check = bad_ids - ids_to_clean
+      people_to_check = Person.unscoped.find(ids_to_check)
+      people_to_restore = []
+      people_to_check.each do |person|
+        if Person.where(name: [person.name, I18n.transliterate(person.name)]).any?
+          puts "Duplicate deleted person #{person.name} (ID=#{person.id})"
+          ids_to_clean << person.id
+        else
+          people_to_restore << person
+        end
+      end
+      people_to_restore.each do |person|
+        puts "Restoring #{person.name} (ID=#{person.id})"
+        person.deleted_at = nil
+        user = User.find_by_email(person.email)
+        user ||= User.find_by_name(person.name)
+        user ||= User.find_by_name(I18n.transliterate(person.name))
+        user ||= User.find_or_create_by_email!(person.email) do |u|
+          u.name = person.name
+        end
+        person.user = user
+        person.save!
+      end
+      Snapshot.all.each do |snapshot|
+        puts "Scrubbing snapshot for #{snapshot.snap_date} (ID=#{snapshot.id})"
+        snapshot.serialized_attributes.keys.each do |attr|
+          snapshot.send("#{attr}=", snapshot.send(attr) - ids_to_clean)
+        end
+        snapshot.save!
+      end
+    end
   end
 end
