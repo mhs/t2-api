@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131113160326) do
+ActiveRecord::Schema.define(:version => 20131120221416) do
 
   create_table "allocations", :force => true do |t|
     t.date     "start_date"
@@ -74,8 +74,8 @@ ActiveRecord::Schema.define(:version => 20131113160326) do
     t.text     "notes"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
-    t.time     "deleted_at"
     t.string   "slug"
+    t.datetime "deleted_at"
   end
 
   create_table "people", :force => true do |t|
@@ -85,7 +85,6 @@ ActiveRecord::Schema.define(:version => 20131113160326) do
     t.text     "notes"
     t.datetime "created_at",                             :null => false
     t.datetime "updated_at",                             :null => false
-    t.time     "deleted_at"
     t.boolean  "unsellable",          :default => false, :null => false
     t.date     "start_date"
     t.date     "end_date"
@@ -99,6 +98,7 @@ ActiveRecord::Schema.define(:version => 20131113160326) do
     t.string   "avatar_content_type"
     t.integer  "avatar_file_size"
     t.datetime "avatar_updated_at"
+    t.datetime "deleted_at"
   end
 
   add_index "people", ["end_date"], :name => "index_people_on_end_date"
@@ -131,9 +131,9 @@ ActiveRecord::Schema.define(:version => 20131113160326) do
     t.datetime "created_at",                             :null => false
     t.datetime "updated_at",                             :null => false
     t.string   "slug"
-    t.time     "deleted_at"
     t.integer  "client_principal_id"
     t.boolean  "vacation",            :default => false
+    t.datetime "deleted_at"
   end
 
   add_index "projects", ["billable"], :name => "index_projects_on_billable"
