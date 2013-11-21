@@ -14,7 +14,7 @@ module ApplicationHelper
   end
 
   def default_application
-    T2Application.find_by_id(current_user.t2_application_id) || T2Application.first
+    T2Application.find_by_id(current_user.t2_application_id) || T2Application.order(:position).first
   end
 
   def settings_app_url
