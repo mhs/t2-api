@@ -16,6 +16,11 @@ module UtilizationHelper
     end
   end
 
+  def week_days_between(start_date, end_date)
+    Range.new(start_date, end_date)
+    .reject { |d| d.saturday? || d.sunday? }
+  end
+
   def with_week_days_in(month=nil, &block)
     week_days(month).each(&block)
   end

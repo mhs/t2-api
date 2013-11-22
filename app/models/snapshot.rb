@@ -1,6 +1,8 @@
+require 'utilization_helper'
 class Snapshot < ActiveRecord::Base
 
   extend Memoist
+  extend UtilizationHelper
 
   serialize :staff_ids
   serialize :overhead_ids
@@ -37,9 +39,7 @@ class Snapshot < ActiveRecord::Base
   end
 
   def self.for_weekdays_between!(start_date, end_date, office_id=nil)
-    dates = Range.new(start_date, end_date)
-    week_dates = dates.reject { |d| d.saturday? || d.sunday? }
-    week_dates.map { |d| on_date! d, office_id }
+    week_days_between(start_date, end_date).map { |d| on_date! d, office_id }
   end
 
   def self.today!
