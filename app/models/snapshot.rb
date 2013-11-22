@@ -68,9 +68,9 @@ class Snapshot < ActiveRecord::Base
 
   def capture_data
     queried_office = office.id ? office : nil
-    self.staff_ids        = Person.by_office(queried_office).employed_on_date(snap_date).map(&:id)
-    self.overhead_ids     = Person.by_office(queried_office).overhead.employed_on_date(snap_date).map(&:id)
-    self.billable_ids     = Person.by_office(queried_office).billable.employed_on_date(snap_date).map(&:id)
+    self.staff_ids        = Person.by_office(queried_office).employed_on_date(snap_date).pluck(:id)
+    self.overhead_ids     = Person.by_office(queried_office).overhead.employed_on_date(snap_date).pluck(:id)
+    self.billable_ids     = Person.by_office(queried_office).billable.employed_on_date(snap_date).pluck(:id)
     self.unassignable_ids = Person.unassignable_on_date(snap_date, queried_office).map(&:id)
     self.billing_ids      = Person.billing_on_date(snap_date, queried_office).map(&:id)
     self.assignable_ids   = billable_ids - unassignable_ids
