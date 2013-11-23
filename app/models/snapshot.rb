@@ -1,6 +1,8 @@
+require 'utilization_helper'
 class Snapshot < ActiveRecord::Base
 
   extend Memoist
+  extend UtilizationHelper
 
   serialize :staff_ids
   serialize :overhead_ids
@@ -17,9 +19,9 @@ class Snapshot < ActiveRecord::Base
 
   validates_uniqueness_of :snap_date, scope: :office_id
 
-  def self.one_per_day
+  def self.one_per_day(office_id=nil)
     snaps = {}
-    Snapshot.order("snap_date ASC").where(office_id: nil).all.each do |snap|
+    Snapshot.order("snap_date ASC").where(office_id: office_id).all.each do |snap|
       snaps[snap.snap_date] = snap
     end
     snaps.values
@@ -36,9 +38,20 @@ class Snapshot < ActiveRecord::Base
     snap
   end
 
+  def self.for_weekdays_between!(start_date, end_date, office_id=nil)
+    week_days_between(start_date, end_date).map { |d| on_date! d, office_id }
+  end
+
   def self.today!
     on_date!(Date.today)
   end
+
+  alias_method :old_office, :office
+
+  def office
+   old_office || Office::SummaryOffice.new
+  end
+
 
   def self.today
     by_date(Date.today).order("created_at ASC").last
@@ -54,11 +67,12 @@ class Snapshot < ActiveRecord::Base
   alias_method :people, :staff
 
   def capture_data
-    self.staff_ids        = Person.by_office(office).employed_on_date(snap_date).map(&:id)
-    self.overhead_ids     = Person.by_office(office).overhead.employed_on_date(snap_date).map(&:id)
-    self.billable_ids     = Person.by_office(office).billable.employed_on_date(snap_date).map(&:id)
-    self.unassignable_ids = Person.unassignable_on_date(snap_date, office).map(&:id)
-    self.billing_ids      = Person.billing_on_date(snap_date, office).map(&:id)
+    queried_office = office.id ? office : nil
+    self.staff_ids        = Person.by_office(queried_office).employed_on_date(snap_date).pluck(:id)
+    self.overhead_ids     = Person.by_office(queried_office).overhead.employed_on_date(snap_date).pluck(:id)
+    self.billable_ids     = Person.by_office(queried_office).billable.employed_on_date(snap_date).pluck(:id)
+    self.unassignable_ids = Person.unassignable_on_date(snap_date, queried_office).map(&:id)
+    self.billing_ids      = Person.billing_on_date(snap_date, queried_office).map(&:id)
     self.assignable_ids   = billable_ids - unassignable_ids
     self.non_billing_ids  = assignable_ids - billing_ids
     self.utilization      = calculate_utilization

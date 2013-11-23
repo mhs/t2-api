@@ -62,7 +62,7 @@ describe Snapshot do
     end
 
     it 'defaults the office to the entire company' do
-      snapshot.office.should be_nil
+      snapshot.office.class.should == Office::SummaryOffice
     end
 
     describe 'Updating Snapshots' do
