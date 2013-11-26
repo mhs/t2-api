@@ -9,6 +9,7 @@ class UtilizationSummary
     context_snapshots = Office.where("name NOT IN (?)", ["Headquarters", "Archived"]).map do |office|
       Snapshot.on_date!(snap_date, office.id)
     end
+    context_snapshots << Snapshot.on_date!(snap_date, nil)
 
     @by_office_utilizations = context_snapshots.map do |snap|
       {name: snap.office.name, utilization: snap.utilization.to_f}
