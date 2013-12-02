@@ -7,7 +7,7 @@ class Person < ActiveRecord::Base
 
   has_attached_file :avatar,
                       styles: { medium: "300x300>", small: "100x100>", thumb: "50x50>" },
-                      default_url: "https://t2-data.s3.amazonaws.com/neo.jpeg"
+                      default_url: "https://t2-data.s3.amazonaws.com/default.png"
 
   belongs_to  :user, inverse_of: :person
   has_many    :allocations
