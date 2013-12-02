@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131121211844) do
+ActiveRecord::Schema.define(:version => 20131202202359) do
 
   create_table "allocations", :force => true do |t|
     t.date     "start_date"
@@ -100,6 +100,7 @@ ActiveRecord::Schema.define(:version => 20131121211844) do
     t.integer  "avatar_file_size"
     t.datetime "avatar_updated_at"
     t.datetime "deleted_at"
+    t.string   "role"
   end
 
   add_index "people", ["end_date"], :name => "index_people_on_end_date"
