@@ -3,7 +3,7 @@ class Person < ActiveRecord::Base
   acts_as_taggable_on :skills
 
   attr_accessible :name, :notes, :email, :unsellable, :office, :office_id, :start_date, :end_date,
-                  :github, :twitter, :website, :title, :bio, :skill_list, :avatar
+                  :github, :twitter, :website, :title, :bio, :skill_list, :avatar, :role
 
   has_attached_file :avatar,
                       styles: { medium: "300x300>", small: "100x100>", thumb: "50x50>" },
