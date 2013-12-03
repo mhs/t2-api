@@ -23,60 +23,68 @@ ways. We dont' want a monolithic beast with all features in one spot. As just on
 with billing/invoicing.
 
 The [first effort to build (and then rebuild) this](https://github.com/neo/T2) ran into several problems along the way, most
-of which aren't worth discussing here. Suffice to say, we are in the midst of a reboot on things to get to the
-vision that will work best for Neo.
+of which aren't worth discussing here. Suffice to say, we have since gone back and rebuilt the suite with an architecture
+that should work better for the ways in which we can develop it.
 
 
-## Current status
-We now actively developing several different repositories/apps:
+## The T2 Ecosystem
+We now have several different repositories/apps:
 
-1. This repository, which is deployed to
-   http://t2api.herokuapp.com is to own the data layer and also add in
-   authentication and simple navigation features (i.e. it is the the thing that
-   draws the left navbar in an iframe for other apps). When we're all done with
-   the transition, it will be this that answers to t2.neo.com. When you go
-   there, you'll be authenticated (using google OAuth) and then that app will
-   redirect you to your preferred T2 application. Client Principals may prefer
-   to see the allocation tool while Daniel may prefer to start off seeing the
-   reporting tool.  Each t2 styled application works basically the same way.
-   It's a client-side only app that is passed an authentication token on
-   invocation. That token is passed in AJAX calls back tot he API when fetching
-   data. Also, the t2 app is expected to setup an iframe on the left side of
-   the page and fill it with t2api.herokuapp.com/navbar. The API will fill that
-   navbar with links to the available T2 applications you can use.
+1. This repository, which is deployed to http://t2api.herokuapp.com owns the
+   data layer and also adds in authentication When you go to t2.neo.com you
+   will be redirected here. At that point, you'll be authenticated (using
+   google OAuth) and then this app will redirect you to your preferred T2
+   application. Principals may prefer to see the allocation tool while the CEO
+   may prefer to start off seeing the reporting tool.  Each t2 styled
+   application works basically the same way.  It's a client-side only app that
+   is passed an authentication token on invocation. That token is passed in
+   AJAX calls back to the API when fetching data. Also, each t2 app is expected
+   to setup a navigation bar on the top strip of the app and fill it with
+   content that is driven by an API response. These navigation strips are
+   currently common code that is unfortunately copied and pasted from one T2
+   app to another.
 
-2. https://github.com/neo/t2-allocation is the new repo for taking over the
-   allocation portion of the old T2. It's not yet deployed to heroku (I'm
-   hoping to make that happen in the next day or two). It's an ember app.
-   It's the thing that needs the most love
-   and is probably on the critical path to making the transition away from
-   neo/T2 happen. If people are on the bench and want to contribute, this would
-   be a great spot - especially if they already know ember.js. But if they
-   don't know it, they're probably best advised to start with some ember
-   tutorials or helping somewhere else because this is actually a fairly
-   complicated bit of code.
+2. https://github.com/neo/t2-allocation is the repository that houses the
+   allocation tool. Like most T2 applications, it is an ember.js application.
+   The tool is used primarily by Principals to assign people to projects (where
+   projects is broadly understood to include not just billable client works but
+   really anything that can occupy a person's time including things like
+   vacation and conference attendance). This production version of that
+   repository is deployed to http://t2-allocation.herokuapp.com.
 
-3. https://github.com/neo/t2-utilization is a new repo for utilization
-   reporting. It's deployed to http://t2-utilization.herokuapp.com. It's an ember app,
-   and one that is substantially simpler than t2-allocation. If there are
-   people who are looking to learn ember, this would be a good place to
-   contribute.
+3. https://github.com/neo/t2-utilization is the repo for utilization (and
+   eventually other key performance indicator) reporting. It's deployed to
+   http://t2-utilization.herokuapp.com. It too is an ember.js application.
 
-4. https://github.com/neo/t2-pto is a new repo for entering vacation and other
-   paid time off. It's an angular application that is brand new. Scott Walker
-   in the Columbus office has been building it. If you have someone who is
-   comfortable with angular, this could be a good place to contribute.  It is
-   deployed to http://t2-pto.herokuapp.com.
+4. https://github.com/neo/t2-pto is a repository for entering vacation and
+   other paid time off. It's currently an angular application though it may be
+   moved to ember.js for consistency across the T2 world. This application has
+   not been updated to reflect the new PTO policy announced in October 2013 and
+   is thus not generally available. Once the work is done, it will be deployed
+   to http://t2-pto.herokuapp.com.
 
-5. https://github.com/neo/t2-user-preferences is a new rep for maintaining
-   user preferences for T2 application.  This includes your default T2 application,
-   preferred date format, etd.. It's an angular app.  It is deployed as
-   http://t2-user-preferences.herokuapp.com
+5. https://github.com/neo/t2-user-preferences is for maintaining user
+   preferences for T2 applications.  This includes your default T2 application,
+   preferred date format, etc.. It's an angular app.  It is deployed as
+   http://t2-user-preferences.herokuapp.com but we're not yet pointing to it
+   because we have not made the changes to other apps to respect those
+   preferences.
+
+6. https://github.com/neo/t2-people is an employee directory application that
+   is deployed to t2-people.herokuapp.com. It allows us to CRUD people resources
+   within the T2 ecosystem and then filter them in interesting ways (e.g. see
+   who is on the bench across the company). It is an ember application.
+
+7. https://github.com/neo/zoho_reports is not a T2 application per-se in that
+   it doesn't make use of this API or the database behind it. But it does show
+   up on the T2 navigation bar as a key internal tool. It pulls sales pipeline
+   data from Zoho CRM into its own DB and displays it in ways somewhat helpful
+   to us. Note that it's constrained by the awfulness that is Zoho CRM and
+   so it's not long for this world. We're in the process of spinning up a new
+   CRM application that is part of the T2 ecosystem.
 
 
 ## Authentication and Navigation Flow
-
-**Note - some of this section is speculative at this point. We are still building this piece.**
 
 The navigation and authentication flow works like this.
 
@@ -85,16 +93,25 @@ The navigation and authentication flow works like this.
 3. After Google OAuth completes, the user is directed (or redirected) to their default T2 application.  The application
    is passed a query string parameter named *authentication_token* that contains an authentication token to use when talking
    to the API.
-4. Each application grabs that token and shoves it into an HTTP header named 'Authorization' with each call it
+4. Each application grabs that token from the URL, rewriting the URL in the process so that links can be shared, and stores
+   the token in local storage.
+5. The app then puts the token into an HTTP header named 'Authorization' with each call it
    makes. Optionally the client app can also authenticate it's API calls by passing it as a query param named *authentication_token*.
-5. Each application also draws an iframe and fills it with http://t2api.herokuapp.com/navbar.  This will draw out the set of
-   icons for the left hand side navigation common to all T2 applications.
+6. The API side uses that token to understand who the current User is for the application.
 
 In cases where a T2 application is called directly (e.g. navigating to http://t2-utilization.herokuapp.com directly
 in your browser), the app will be unable to use the API layer until it authenticates. In this case, the app should
 redirect the user to the /sign_in route for this app and include a *return_url* query string parameter.  After
 authentication is completed, the API layer will redirect the user to that URL and included the token parameter
 mentioned above.
+
+Once authenticated, each application is responsible for drawing a navigation bar at the top of the page that makes
+it easy for users to move from one T2 application to another. To do this, the app makes an API call to get the set
+of available T2 applications and associated meta-data, including the fully authenticated version of the URL that should
+be invoked to move to that application.  The result is rendered in the top navigation bar along with other elements that
+the app uses for in-app navigation. A common example of the latter is an office picker that is used to customize the view
+of an app for a particular office.
+
 
 
 # Contributing
@@ -106,27 +123,38 @@ If you want to contribute, we'd welcome your help.  Getting started is best achi
    each of the above repositories good resources to use in getting going, but
    it can still be a challenge to get all the moving pieces together.
 
-2. Check out the issues in the various repos for things to do. We're using
-   github issues for these rather than Pivotal Tracker, primarily because
-   there's less friction to getting someone going and because it allows the
-   issue to live closer to the code.  If you're working on an issue, assign it
-   to yourself and let us know in hipchat so we don't get multiple people
-   working on the same thing.
+2. We use a combination of github issues and pivotal tracker for describing
+   prioritizing work. Each new issue/feature request starts off in github
+   issues within the appropriate repository. Discussion about the issue is
+   done there so that we can benefit from the rich commenting environment there
+   and make it easy for everyone in the company to see open issue and log new ones.
+   Issues that are being worked on are then put into Pivotal Tracker. We have
+   a single Pivotal Tracker project across all of the T2 repositories so that
+   a common backlog of work. By convention, we use a "In Pivotal" label for any
+   github issue that has made its way into the common backlog.
 
 3. Work in a branch and use pull requests.  We're trying to follow the model
    spelled out here http://scottchacon.com/2011/08/31/github-flow.html for
    this.
 
 4. We're using heroku organizations to house these apps.  Getting access to
-   push/pull is done by adding you to the heroku organization.  I can help you
-   with this if needed.  Ping me in hipchat.
+   push/pull is done by adding you to the heroku organization.  Mike Doel can help you
+   with this if needed.  Ping him in hipchat.
 
-5. If you want to build a new T2-style application, consider using the
-   [t2-angular-template](https://github.com/neo/t2-angular-template) that has been
-   extracted from some of the other apps. It provides a starting project, including
-   authentication, to help you get going quickly.
+5. If you want to build a new T2-style application, please follow the conventions
+   we are using. This includes using ember.js, Ember Data, SASS, lineman.js and
+   other tech stack choices already made. It also includes certain visual conventions
+   that we've begun to use (e.g. the aforementioned navigation and office selector).
+   It's not helpful if each T2 project reinvents the wheel on these things as it makes
+   it difficult for people to be productive across the suite. Please review other
+   repositories when starting a new one and ask in hipchat before making a
+   conscious decision to use something new or different.
 
-6. Ask for help if you need it.  As I said, there are a lot of moving pieces.
+6. We do daily standups and bi-weekly iteration planning meetings and retrospectives.
+   Please join us for these. Ask Mike Doel to add you to the meeting invite. That
+   invite includes the link to the google hangout we use.
+
+7. Ask for help if you need it.  As mentioned above, there are a lot of moving pieces.
 
 
 # Building and Running Locally
@@ -151,9 +179,16 @@ Copy the env sample file:
   $ cp .env.sample .env
 ```
 
+and add the following (or their equivalent) to your .profile, .bashrc, .zshrc, whatever:
+
+```
+export GOOGLE_CLIENT_ID="480140443980.apps.googleusercontent.com"
+export GOOGLE_SECRET="v03dRPvKlgn_OsK79MXSDn5j"
+```
+
 This sets you up with API access to Google using a default account (adam.mccrea@gmail.com).
-Feel free to replace the credentials with your own if you need to make any changes.
-To do so, first get your Google Client ID and Secret keys from: https://code.google.com/apis/console/.
+If for whatever reason we need to change this (unlikely), here is what is needed.
+First create your Google Client ID and Secret keys from: https://code.google.com/apis/console/.
 Then, in your Google API console, under API Access > Client ID for web applications, set the
 `Redirect URIs` value to `[host]/users/auth/google_oauth2/callback`.
 Eg.: `http://localhost:5000/users/auth/google_oauth2/callback`
@@ -164,25 +199,21 @@ We're currently using MRI ruby 1.9.3-p448
 
 ## Develop
 
+Install gems and bootstrap the DB...
+
 ```
 bundle
 foreman run rake db:create:all
 foreman run rake db:schema:load
 ```
 
-We don't yet have a good seed file to use locally (feel free to create one).  Instead, we're making copies
-of the data on heroku (which as mentioned above is itself a copy of the currently live t2 production data).
-To get this, you'll need to be added to the t2api heroku application.  Ask for this on ask@neo.com.  Once you
-have been setup as a collaborator, you can run:
+Then establish links to production and staging and pull down a local copy of the production database to use for dev.
 
 ```
 ./.git_remotes_setup.sh
 rake db:refresh_from_production
 ```
 
-to pull down the latest development database.  Note that you do end up running "rake db:seed" above. This is
-not enough to create a full-on dev database, but it will ensure that the navigataion data works correctly
-in a dev environment.
 
 #### Start the server
 
@@ -234,37 +265,3 @@ heroku run rake obscure_projects -a t2api-staging
 ```
 
 This is done automatically whenever we transfer data from production to staging (see below).
-
-
-## Refreshing data
-
-As mentioned above, this repository is not yet the authoritative copy of the allocation
-and related data.  That exists in the heroku app named t2-production.  We periodically
-pull data from that app into one of the heroku apps for this repository.  To do this, you need
-to be a collaborator on both t2-production and the appropriate api apps in heroku.  Send a note to
-ask@neo.com if you need either.  Once you are setup, you can refresh the heroku data
-with:
-
-```
-rake db:transfer_staging_db
-```
-
-or
-
-```
-rake db:transfer_prod_db
-```
-
-and then pull that data down for your own development use with:
-
-```
-rake db:refresh
-```
-
-for staging or
-
-```
-rake db:refresh_from_production
-```
-
-for production
