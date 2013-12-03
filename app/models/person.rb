@@ -36,6 +36,10 @@ class Person < ActiveRecord::Base
 
   after_create :create_or_associate_user, :create_missing_project_allowances
 
+  def self.editable_attributes
+    accessible_attributes.to_a - ['office', 'office_id']
+  end
+
   def self.from_auth_token(token)
     joins(:user).where("users.authentication_token = ?", token).first
   end

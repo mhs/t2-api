@@ -1,6 +1,6 @@
 class Api::V1::PeopleController < ApplicationController
 
-  before_filter :fetch_person, only: [:show, :similar]
+  before_filter :fetch_person, only: [:show, :update, :similar]
 
   def index
     people = with_ids_from_params(Person.includes(:user, :project_allowances, :allocations, :office))
@@ -9,6 +9,15 @@ class Api::V1::PeopleController < ApplicationController
 
   def show
     render json: @person
+  end
+
+  def update
+    # TODO: return 422 + sensible payload on errors
+    attrs = params[:person].slice(*Person.editable_attributes)
+    if attrs[:avatar] && attrs[:avatar].is_a?(Hash)
+      attrs.delete(:avatar)
+    end
+    render json: @person, status: @person.update_attributes(attrs) ? 200 : 400
   end
 
   def profile
