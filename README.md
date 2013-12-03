@@ -19,11 +19,11 @@ we need to run our business.  Current and potential features could include:
 
 From an architectural perspective, we wanted to have proper separation of concerns.  In particular, we want an API layer
 that contains the business objects and a constellation of small, focused apps, that combine that data in interesting
-ways. We dont' want a monolithic beast with all features in one spot. As just one example, few people need to work
+ways. We don't want a monolithic beast with all features in one spot. As just one example, few people need to work
 with billing/invoicing.
 
 The [first effort to build (and then rebuild) this](https://github.com/neo/T2) ran into several problems along the way, most
-of which aren't worth discussing here. Suffice to say, we have since gone back and rebuilt the suite with an architecture
+of which aren't worth discussing here. We have since gone back and rebuilt the suite with an architecture
 that should work better for the ways in which we can develop it.
 
 
@@ -31,33 +31,33 @@ that should work better for the ways in which we can develop it.
 We now have several different repositories/apps:
 
 1. This repository, which is deployed to http://t2api.herokuapp.com owns the
-   data layer and also adds in authentication When you go to t2.neo.com you
+   data layer and also adds in authentication. When you go to t2.neo.com you
    will be redirected here. At that point, you'll be authenticated (using
    google OAuth) and then this app will redirect you to your preferred T2
    application. Principals may prefer to see the allocation tool while the CEO
-   may prefer to start off seeing the reporting tool.  Each t2 styled
-   application works basically the same way.  It's a client-side only app that
+   may prefer to start off seeing the reporting tool.  Each t2-styled
+   application works basically the same way.  It's a client-side-only app that
    is passed an authentication token on invocation. That token is passed in
    AJAX calls back to the API when fetching data. Also, each t2 app is expected
    to setup a navigation bar on the top strip of the app and fill it with
    content that is driven by an API response. These navigation strips are
-   currently common code that is unfortunately copied and pasted from one T2
+   currently common code unfortunately copied and pasted from one T2
    app to another.
 
 2. https://github.com/neo/t2-allocation is the repository that houses the
    allocation tool. Like most T2 applications, it is an ember.js application.
    The tool is used primarily by Principals to assign people to projects (where
-   projects is broadly understood to include not just billable client works but
+   "projects" are broadly understood to include not just billable client works but
    really anything that can occupy a person's time including things like
-   vacation and conference attendance). This production version of that
+   vacation and conference attendance). The production version of that
    repository is deployed to http://t2-allocation.herokuapp.com.
 
 3. https://github.com/neo/t2-utilization is the repo for utilization (and
-   eventually other key performance indicator) reporting. It's deployed to
-   http://t2-utilization.herokuapp.com. It too is an ember.js application.
+   eventually other key performance indicators) reporting. It's deployed to
+   http://t2-utilization.herokuapp.com. It too is an Ember application.
 
 4. https://github.com/neo/t2-pto is a repository for entering vacation and
-   other paid time off. It's currently an angular application though it may be
+   other paid time off. It's currently an Angular application though it may be
    moved to ember.js for consistency across the T2 world. This application has
    not been updated to reflect the new PTO policy announced in October 2013 and
    is thus not generally available. Once the work is done, it will be deployed
@@ -65,7 +65,7 @@ We now have several different repositories/apps:
 
 5. https://github.com/neo/t2-user-preferences is for maintaining user
    preferences for T2 applications.  This includes your default T2 application,
-   preferred date format, etc.. It's an angular app.  It is deployed as
+   preferred date format, etc.. It's an Angular app.  It is deployed as
    http://t2-user-preferences.herokuapp.com but we're not yet pointing to it
    because we have not made the changes to other apps to respect those
    preferences.
@@ -73,7 +73,7 @@ We now have several different repositories/apps:
 6. https://github.com/neo/t2-people is an employee directory application that
    is deployed to t2-people.herokuapp.com. It allows us to CRUD people resources
    within the T2 ecosystem and then filter them in interesting ways (e.g. see
-   who is on the bench across the company). It is an ember application.
+   who is on the bench across the company). It is an Ember application.
 
 7. https://github.com/neo/zoho_reports is not a T2 application per-se in that
    it doesn't make use of this API or the database behind it. But it does show
@@ -96,7 +96,7 @@ The navigation and authentication flow works like this.
 4. Each application grabs that token from the URL, rewriting the URL in the process so that links can be shared, and stores
    the token in local storage.
 5. The app then puts the token into an HTTP header named 'Authorization' with each call it
-   makes. Optionally the client app can also authenticate it's API calls by passing it as a query param named *authentication_token*.
+   makes. Optionally the client app can also authenticate its API calls by passing it as a query param named *authentication_token*.
 6. The API side uses that token to understand who the current User is for the application.
 
 In cases where a T2 application is called directly (e.g. navigating to http://t2-utilization.herokuapp.com directly
@@ -116,7 +116,7 @@ of an app for a particular office.
 
 # Contributing
 
-If you want to contribute, we'd welcome your help.  Getting started is best achieved by:
+If you want to contribute, we'd welcome your help.  To get started:
 
 1. Pile into the T2 room in hipchat where those of us who are working on it
    hang out and talk through things.  We're trying to make the README files in
@@ -239,7 +239,7 @@ rake
 
 #### Setup
 
-The api app runs on Heroku in both production (t2api) and staging (t2api-staging) instances.  You will need to
+The API app runs on Heroku in both production (t2api) and staging (t2api-staging) instances.  You will need to
 be added as a collaborator to one or both in order to deploy. To set up the heroku git remotes run:
 
 ```
@@ -257,7 +257,7 @@ git push production master
 ```
 ## Obscuring Project Names
 
-Working on t2-api is something we sometimes do with candidates on pairing days.  Some of our clients
+Working on t2-api is something we someetimes do with candidates on pairing days.  Some of our clients
 insist that our work for them is confidential. As such, we keep project names in staging obscure via
 
 ```
