@@ -15,7 +15,10 @@ class Person < ActiveRecord::Base
   belongs_to  :project
   has_many    :project_allowances, inverse_of: :person
 
-  validates :email, uniqueness: true
+  validates :name, presence: true
+  validates :role, presence: true
+  validates :office, presence: true
+  validates :email, presence: true, uniqueness: true
   validates :user_id, presence: true, on: :update
 
   scope :employed_on_date, lambda { |d|

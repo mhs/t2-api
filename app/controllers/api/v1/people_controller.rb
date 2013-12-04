@@ -41,7 +41,11 @@ class Api::V1::PeopleController < ApplicationController
     if avatar && !avatar.is_a?(Hash)
       attrs[:avatar] = avatar
     end
-    render json: @person, status: @person.update_attributes(attrs) ? 200 : 400
+    if @person.update_attributes(attrs)
+      render json: @person
+    else
+      render json: { errors: @person.errors }, status: :unprocessable_entity
+    end
   end
 
   def profile
