@@ -11,11 +11,35 @@ class Api::V1::PeopleController < ApplicationController
     render json: @person
   end
 
+  def create
+    attrs = params[:person].slice(*Person.editable_attributes)
+    avatar = attrs.delete(:avatar)
+    # null out blanks
+    attrs.each do |k, v|
+      attrs[k] = nil if v.blank?
+    end
+    if avatar && !avatar.is_a?(Hash)
+      attrs[:avatar] = avatar
+    end
+    office = Office.find(params[:person][:office_id])
+    person = office.people.new(attrs)
+    if person.save
+      render json: person
+    else
+      render json: { errors: person.errors }, status: :unprocessable_entity
+    end
+  end
+
   def update
     # TODO: return 422 + sensible payload on errors
     attrs = params[:person].slice(*Person.editable_attributes)
-    if attrs[:avatar] && attrs[:avatar].is_a?(Hash)
-      attrs.delete(:avatar)
+    avatar = attrs.delete(:avatar)
+    # null out blanks
+    attrs.each do |k, v|
+      attrs[k] = nil if v.blank?
+    end
+    if avatar && !avatar.is_a?(Hash)
+      attrs[:avatar] = avatar
     end
     render json: @person, status: @person.update_attributes(attrs) ? 200 : 400
   end
