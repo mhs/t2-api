@@ -3,7 +3,7 @@ class PersonSerializer < ActiveModel::Serializer
     :github, :twitter, :website, :title, :bio, :errors, :avatar, :office_slug, :role
   has_many :allocations, embed: :ids
   has_one :user, embed: :ids
-  has_one :current_allocation, embed: :ids
+  has_one :current_allocation, embed: :ids, include: true, root: :allocations
   has_one :office, embed: :ids
   has_many :project_allowances, embed: :ids
   has_many :similar_people, serializer: MinimumPersonSerializer
