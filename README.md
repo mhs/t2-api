@@ -179,6 +179,12 @@ Copy the env sample file:
   $ cp .env.sample .env
 ```
 
+Copy the database config file:
+
+```
+  $ cp config/database.sample.yml config/database.yml
+```
+
 and add the following (or their equivalent) to your .profile, .bashrc, .zshrc, whatever:
 
 ```

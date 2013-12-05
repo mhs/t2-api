@@ -27,3 +27,5 @@ bin
 db/dumps
 doc/daily
 public/system
+.vagrant
+config/database.yml
