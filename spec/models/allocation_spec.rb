@@ -178,10 +178,11 @@ describe Allocation do
   end
 
   describe '.this_year' do
-    let(:start_date) {1.month.ago}
-    let(:end_date) {1.month.from_now}
-    let(:start_of_year) { Date.today.beginning_of_year }
-    let(:end_of_year) { Date.today.end_of_year }
+    let(:base_date) { Date.parse "2013-06-06" }
+    let(:start_date) { base_date - 1.month }
+    let(:end_date) { base_date + 1.month }
+    let(:start_of_year) { base_date.beginning_of_year }
+    let(:end_of_year) { base_date.end_of_year }
 
     it 'includes allocations falling within this year' do
       allocation = FactoryGirl.create(:allocation, start_date: start_date, end_date: end_date)
