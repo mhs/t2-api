@@ -17,4 +17,4 @@ heroku run rake db:link_people_to_users -a t2api
 heroku run rake db:clean_users_and_people -a t2api
 heroku run rake applications:set_default_for_all -a t2api
 heroku run rake db:restore_deleted_from_snapshots -a t2api
-git diff
+heroku run rake db:set_initial_roles
