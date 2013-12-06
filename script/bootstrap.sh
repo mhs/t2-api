@@ -16,6 +16,17 @@ fi
 # echo -e "postgres\npostgres" | passwd postgres
 # su - postgres -c 'createdb t2api -O vagrant'
 # su - vagrant -c "ruby /vagrant/script/config-db.rb"
+echo "export LANGUAGE=en_US.UTF-8" >> /etc/bash.bashrc
+echo "export LC_ALL=en_US.UTF-8" >> /etc/bash.bashrc
+echo "export LANG=en_US.UTF-8" >> /etc/bash.bashrc
+
+locale-gen en_US.UTF-8
+dpkg-reconfigure locales
+
+su - postgres -c "psql -c 'CREATE USER vagrant WITH CREATEDB CREATEROLE;'"
+
+sed -i 's/md5/trust/g' /etc/postgresql/9.1/main/pg_hba.conf
+sed -i 's/#listen/listen/g' /etc/postgresql/9.1/main/postgresql.conf
 
 # T2 stuff starts here:
 if [ ! -f /vagrant/.env ]; then
@@ -25,7 +36,6 @@ fi
 if [ ! -f /vagrant/config/database.yml ]; then
     su - vagrant -c 'cp /vagrant/config/database{.sample,}.yml'
 fi
-
 
 if grep -i "GOOGLE_CLIENT_ID" ~/.bashrc; then
     echo "Google Client ID already set"
@@ -38,6 +48,8 @@ if grep -i "GOOGLE_CLIENT_ID" ~/.bashrc; then
 else
     su - vagrant -c 'echo "export GOOGLE_SECRET=\"v03dRPvKlgn_OsK79MXSDn5j\"" >>  ~/.bashrc'
 fi
+su - vagrant -c 'source ~/.bashrc'
+
 
 if [ -f /vagrant/Gemfile.lock ]; then
   rm /vagrant/Gemfile.lock
@@ -47,4 +59,4 @@ su - vagrant -c 'cd /vagrant && bundle'
 su - vagrant -c 'cd /vagrant && foreman run rake db:create:all'
 su - vagrant -c 'cd /vagrant && foreman run rake db:schema:load'
 su - vagrant -c 'cd /vagrant && ./.git_remotes_setup.sh'
-su - vagrant -c 'rake db:refresh_from_production'
+su - vagrant -c 'cd /vagrant && rake db:refresh_from_production'
