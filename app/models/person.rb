@@ -15,7 +15,9 @@ class Person < ActiveRecord::Base
   belongs_to  :project
   has_many    :project_allowances, inverse_of: :person
 
-  validates :email, uniqueness: true
+  validates :name, presence: true
+  validates :office, presence: true
+  validates :email, presence: true, uniqueness: true
   validates :user_id, presence: true, on: :update
 
   scope :employed_on_date, lambda { |d|
@@ -35,6 +37,10 @@ class Person < ActiveRecord::Base
   scope :by_office, lambda {|office| office ? where(office_id: office.id) : where(false) }
 
   after_create :create_or_associate_user, :create_missing_project_allowances
+
+  def self.editable_attributes
+    accessible_attributes.to_a - ['office', 'office_id']
+  end
 
   def self.from_auth_token(token)
     joins(:user).where("users.authentication_token = ?", token).first

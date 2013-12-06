@@ -125,6 +125,7 @@ describe Snapshot do
     end
 
     it 'should fetch staff_ids, overhead_ids, billable_ids, unassignable_ids' do
+      collection.stub(pluck: collection_ids)
       Person.should_receive(:employed_on_date).with(date).at_least(3).times.and_return(collection)
       Person.should_receive(:unassignable_on_date).with(date, nil).once.and_return(collection)
       Person.should_receive(:billing_on_date).with(date, nil).once.and_return(collection)
