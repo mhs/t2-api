@@ -16,7 +16,6 @@ class Person < ActiveRecord::Base
   has_many    :project_allowances, inverse_of: :person
 
   validates :name, presence: true
-  validates :role, presence: true
   validates :office, presence: true
   validates :email, presence: true, uniqueness: true
   validates :user_id, presence: true, on: :update
