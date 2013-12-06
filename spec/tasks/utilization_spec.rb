@@ -1,7 +1,9 @@
 require 'spec_helper'
+require 'utilization_helper'
 require 'rake'
 
 describe 'Utilization Rake Tasks' do
+  include UtilizationHelper
   before do
     FactoryGirl.create(:person)
     FactoryGirl.create(:office)
