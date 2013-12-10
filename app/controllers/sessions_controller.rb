@@ -5,7 +5,7 @@ class SessionsController < Devise::SessionsController
   prepend_before_filter :set_return_url, only: [:new]
 
   def destroy
-    current_user.clear_authentication_token!
+    current_user.clear_authentication_token! if current_user
     super
   end
 
