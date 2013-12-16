@@ -10,6 +10,7 @@
        5.times do
          FactoryGirl.create(:company)
        end
+
        sign_in :user, person.user
      end
 

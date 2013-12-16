@@ -14,6 +14,7 @@ class Person < ActiveRecord::Base
   belongs_to  :office
   belongs_to  :project
   has_many    :project_allowances, inverse_of: :person
+  has_many    :opportunity_notes
 
   validates :name, presence: true
   validates :office, presence: true

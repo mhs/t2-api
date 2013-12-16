@@ -36,6 +36,7 @@ T2Api::Application.routes.draw do
         end
       end
       resources :companies, only: :index
+      resources :unfiled_notes, only: [:index, :create, :destroy]
     end
   end
 
