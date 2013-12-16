@@ -11,10 +11,6 @@ describe PersonSerializer do
     10.times { FactoryGirl.create(:person, skill_list: tags) }
   end
 
-  it "should serialize skill tags" do
-    person_serialized.skill_list.should eql(tags)
-  end
-
   it "should serialize office" do
     person_serialized.office.should eql(person.office)
   end
