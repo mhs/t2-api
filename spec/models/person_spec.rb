@@ -262,9 +262,9 @@ describe Person do
       Person.billing_on_date(date).should include(overhead_employee)
     end
 
-    it 'includes someone who is marked as unbillable so long as the project is billable and they are not available' do
+    it 'does not include someone who is marked as unbillable even if the project is billable and they are not available' do
       FactoryGirl.create(:allocation, person: employee, project: billable_project, start_date: 1.week.ago, end_date: Date.tomorrow, billable: false, binding: true)
-      Person.billing_on_date(date).should include(employee)
+      Person.billing_on_date(date).should_not include(employee)
     end
 
     it 'does not include someone who is marked as unbillable/unavailable if the project itself is not billable' do
