@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131202202359) do
+ActiveRecord::Schema.define(:version => 20131216174442) do
 
   create_table "allocations", :force => true do |t|
     t.date     "start_date"
@@ -40,6 +40,14 @@ ActiveRecord::Schema.define(:version => 20131202202359) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
+
+  create_table "companies", :force => true do |t|
+    t.text     "name",       :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "companies", ["name"], :name => "index_companies_on_name", :unique => true
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0

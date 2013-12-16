@@ -35,6 +35,7 @@ T2Api::Application.routes.draw do
           get ":date" => :show
         end
       end
+      resources :companies, only: :index
     end
   end
 
