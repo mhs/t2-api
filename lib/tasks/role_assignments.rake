@@ -85,6 +85,7 @@ namespace :db do
     Person.where(name: 'Paul Wilson').first.update_attributes(role: 'Managing Director')
     Person.where(name: 'Peter Aitken').first.update_attributes(role: 'Developer')
     Person.where(name: 'Peter Shanley').first.update_attributes(role: 'Principal')
+    Person.where(name: 'Rachel Heaton').first.update_attributes(role: 'Developer')
     Person.where(name: 'Raven Keller').first.update_attributes(role: 'Designer')
     Person.where(name: 'Rika Nakazawa').first.update_attributes(role: 'Business Development')
     Person.where(name: 'Rizwan Reza').first.update_attributes(role: 'Developer')

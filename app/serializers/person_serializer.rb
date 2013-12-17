@@ -1,12 +1,11 @@
 class PersonSerializer < ActiveModel::Serializer
-  attributes :id, :name, :notes, :email, :unsellable, :office_id, :start_date, :end_date, :skill_list,
+  attributes :id, :name, :notes, :email, :unsellable, :office_id, :start_date, :end_date,
     :github, :twitter, :website, :title, :bio, :errors, :avatar, :office_slug, :role
   has_many :allocations, embed: :ids
   has_one :user, embed: :ids
   has_one :current_allocation, embed: :ids, include: true, root: :allocations
   has_one :office, embed: :ids
   has_many :project_allowances, embed: :ids
-  has_many :similar_people, serializer: MinimumPersonSerializer
 
   def avatar
     {
