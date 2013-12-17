@@ -18,7 +18,7 @@
        get :index
 
        companies = JSON.parse(response.body)
-       companies.size.should eq(5)
+       companies["companies"].size.should eq(5)
      end
 
      it "should display the entire list order asc" do
@@ -27,8 +27,8 @@
        get :index
 
        companies = JSON.parse(response.body)
-       companies.first["name"].should eq('AAaa')
-       companies.first["name"].should be < companies.last["name"]
+       companies["companies"].first["name"].should eq('AAaa')
+       companies["companies"].first["name"].should be < companies["companies"].last["name"]
      end
    end
  end

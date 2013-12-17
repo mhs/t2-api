@@ -26,9 +26,9 @@ describe Api::V1::UnfiledNotesController do
       get :index
 
       notes = JSON.parse(response.body)
-      notes.size.should eq 3
-      notes.first["owner"]["email"].should eq(person.email)
-      notes.first["owner"]["name"].should eq(person.name)
+      notes['unfiled_notes'].size.should eq 3
+      notes['unfiled_notes'].first["owner"]["email"].should eq(person.email)
+      notes['unfiled_notes'].first["owner"]["name"].should eq(person.name)
     end
 
     it 'should allow to destroy' do

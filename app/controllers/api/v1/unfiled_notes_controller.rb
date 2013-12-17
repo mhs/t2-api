@@ -2,8 +2,8 @@ class Api::V1::UnfiledNotesController < ApplicationController
   skip_before_filter :authenticate_user!, only: :create
 
   def index
-    @notes = OpportunityNote.where(person_id: current_user.id)
-    render json: @notes, root: false
+    @notes = OpportunityNote.where(person_id: current_user.person.id)
+    render json: @notes
   end
 
   def create
