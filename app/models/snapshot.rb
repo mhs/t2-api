@@ -32,10 +32,12 @@ class Snapshot < ActiveRecord::Base
   end
 
   def self.on_date!(date, office_id=nil)
-    snap = where(snap_date: date, office_id: office_id).first_or_initialize
-    snap.capture_data
-    snap.save!
-    snap
+    snap_scope = by_date(date).by_office_id(office_id)
+    snap_scope.first_or_initialize.tap do |snap|
+      break snap unless snap.new_record?
+      snap.capture_data
+      snap.save!
+    end
   end
 
   def self.for_weekdays_between!(start_date, end_date, office_id=nil)
@@ -49,7 +51,7 @@ class Snapshot < ActiveRecord::Base
   alias_method :old_office, :office
 
   def office
-   old_office || Office::SummaryOffice.new
+    old_office || Office::SummaryOffice.new
   end
 
 
@@ -65,6 +67,11 @@ class Snapshot < ActiveRecord::Base
   end
 
   alias_method :people, :staff
+
+  def recalculate!
+    capture_date
+    save!
+  end
 
   def capture_data
     queried_office = office.id ? office : nil
