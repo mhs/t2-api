@@ -15,13 +15,13 @@ class Snapshot < ActiveRecord::Base
   attr_accessible :snap_date, :utilization, :office_id
   belongs_to :office
   scope :by_date, lambda {|date| where(snap_date: date) }
-  scope :by_office_id, lambda {|office_id| office_id ? where(office_id: office_id) : where(false) }
+  scope :by_office_id, lambda {|office_id| where(office_id: office_id) }
 
   validates_uniqueness_of :snap_date, scope: :office_id
 
   def self.one_per_day(office_id=nil)
     snaps = {}
-    Snapshot.order("snap_date ASC").where(office_id: office_id).all.each do |snap|
+    Snapshot.order("snap_date ASC").by_office_id(office_id).all.each do |snap|
       snaps[snap.snap_date] = snap
     end
     snaps.values
