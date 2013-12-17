@@ -33,7 +33,7 @@ class Person < ActiveRecord::Base
   validates :email, presence: true, uniqueness: true
   validates :user_id, presence: true, on: :update
 
-  validates :role, inclusion: { in: ROLES }
+  validates :role, inclusion: { in: ROLES }, allow_blank: true
 
   scope :employed_on_date, lambda { |d|
     where("start_date is NULL or start_date < ?",d)
