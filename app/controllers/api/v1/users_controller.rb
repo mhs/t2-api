@@ -10,7 +10,7 @@ class Api::V1::UsersController < ApplicationController
     if user.update_attributes(params[:user])
       render json: user, status: :ok
     else
-      render json: user.errors, status: unprocessable_entity
+      render json: { errors: user.errors }, status: unprocessable_entity
     end
   end
 
