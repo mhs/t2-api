@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131216213028) do
+ActiveRecord::Schema.define(:version => 20131217223242) do
 
   create_table "allocations", :force => true do |t|
     t.date     "start_date"
@@ -85,6 +85,16 @@ ActiveRecord::Schema.define(:version => 20131216213028) do
     t.string   "slug"
     t.datetime "deleted_at"
     t.integer  "position"
+  end
+
+  create_table "opportunities", :force => true do |t|
+    t.string   "title"
+    t.string   "stage"
+    t.string   "confidence",          :default => "warm"
+    t.decimal  "amount",              :default => 0.0
+    t.datetime "expected_date_close"
+    t.integer  "person_id",                               :null => false
+    t.integer  "company_id"
   end
 
   create_table "opportunity_notes", :force => true do |t|
