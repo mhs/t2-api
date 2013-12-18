@@ -21,7 +21,7 @@ class Api::V1::AllocationsController < ApplicationController
     if allocation.save
       render json: allocation, status: :created
     else
-      render json: allocation.errors, status: :unprocessable_entity
+      render json: { errors: allocation.errors }, status: :unprocessable_entity
     end
   end
 
@@ -31,7 +31,7 @@ class Api::V1::AllocationsController < ApplicationController
     if allocation.update_attributes(params[:allocation])
       render json: allocation, status: :ok
     else
-      render json: allocation.errors, status: :unprocessable_entity
+      render json: { errors: allocation.errors }, status: :unprocessable_entity
     end
   end
 
