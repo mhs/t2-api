@@ -5,10 +5,6 @@ describe Api::V1::UnfiledNotesController do
   let(:person) { FactoryGirl.create(:person, email: 'person@neo.com') }
   let(:another_person) { FactoryGirl.create(:person, email: 'another_person@neo.com') }
 
-  it 'should allow to create a note' do
-    pending 'waiting for oportunities'
-  end
-
   describe 'User must be logged in' do
     before do
       3.times do

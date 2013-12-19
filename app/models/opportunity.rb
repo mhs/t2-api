@@ -7,6 +7,8 @@ class Opportunity < ActiveRecord::Base
 
   attr_accessible :title, :stage, :confidence, :amount, :expected_date_close
 
+  has_many :opportunity_notes
+
   belongs_to :person
   belongs_to :company
   belongs_to :contact

@@ -26,6 +26,22 @@ describe Api::V1::OpportunitiesController do
     opportunities["opportunities"].select{ |opportunity| opportunity["owner"]["id"] == person.id }.size.should eq(4)
   end
 
+  describe 'OpportunityNotes' do
+    before do
+      4.times do
+        FactoryGirl.create(:opportunity_note, opportunity: Opportunity.where(person_id: person.id).first)
+      end
+    end
+
+    it 'should include notes' do
+      get :index
+
+      opportunities = JSON.parse(response.body)
+      opportunities["opportunities"].first["opportunity_notes"].size.should eq(4)
+      opportunities["opportunities"].first["opportunity_notes"].first["detail"].should eq(OpportunityNote.first.detail)
+    end
+  end
+
   describe 'create an opportunity' do
     it 'should create with default values' do
       post :create

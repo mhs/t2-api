@@ -1,4 +1,5 @@
 class Api::V1::OpportunitiesController < ApplicationController
+  before_filter :get_opportunity, only: [:update, :destroy]
   before_filter :get_company_params, only: [:create, :update]
   before_filter :get_contact_params, only: [:create, :update]
   before_filter :set_company_with_contact, only: [:create, :update]
@@ -10,42 +11,40 @@ class Api::V1::OpportunitiesController < ApplicationController
   end
 
   def create
-    opportunity = Opportunity.new(params[:opportunity])
-    set_opportunity(opportunity)
+    @opportunity = Opportunity.new(params[:opportunity])
+    set_opportunity
   end
 
   def update
-    opportunity = Opportunity.find(params[:id])
     
-    if opportunity
-      opportunity.update_attributes(params[:opportunity])
-      set_opportunity(opportunity)
+    if @opportunity
+      @opportunity.update_attributes(params[:opportunity])
+      set_opportunity
     else
       render json: {error: 'it does not exist an opportunity'}
     end
   end
 
   def destroy
-    opportunity = Opportunity.find(params[:id])
-    if opportunity.nil?
+    if @opportunity.nil?
       render json: {error: 'There is no an opportunity'}
     else
-      opportunity.destroy
+      @opportunity.destroy
       render json: nil, status: :ok
     end
   end
 
   private
 
-  def set_opportunity(opportunity)
-    opportunity.company = @company unless @company.nil?
-    opportunity.contact = @contact unless @contact.nil?
-    opportunity.person = @owner
+  def set_opportunity
+    @opportunity.company = @company unless @company.nil?
+    @opportunity.contact = @contact unless @contact.nil?
+    @opportunity.person = @owner
 
-    if opportunity.save
-      render json: opportunity, root: false
+    if @opportunity.save
+      render json: @opportunity, root: false
     else
-      render json: {error: opportunity.errors}
+      render json: {error: @opportunity.errors}
     end
   end
 
@@ -96,5 +95,9 @@ class Api::V1::OpportunitiesController < ApplicationController
         @owner = Person.find(person_id) || current_user.person
       end
     end
+  end
+
+  def get_opportunity
+    @opportunity = Opportunity.find(params[:id])
   end
 end

@@ -4,4 +4,5 @@ class OpportunityNote < ActiveRecord::Base
   validates :detail, presence: true
 
   belongs_to :person
+  belongs_to :opportunity
 end
