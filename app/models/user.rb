@@ -21,13 +21,8 @@ class User < ActiveRecord::Base
                                 provider: auth.provider,
                                 uid: auth.uid
                               )
-      # no user record so create a new one
-      elsif auth.extra.raw_info.email.match(/neo\.com$/)
-        user = User.create( name: auth.extra.raw_info.name,
-                            email: auth.extra.raw_info.email,
-                            provider: auth.provider,
-                            uid: auth.uid
-                          )
+      else
+        # GTFO
       end
     end
     user.ensure_authentication_token! if user
