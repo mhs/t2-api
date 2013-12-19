@@ -1,5 +1,5 @@
 class OpportunitySerializer < ActiveModel::Serializer
-  attributes :id, :title, :stage, :confidence, :amount, :expected_date_close, :owner, :company
+  attributes :id, :title, :stage, :confidence, :amount, :expected_date_close, :owner, :company, :contact
 
   def owner
     {
@@ -14,6 +14,17 @@ class OpportunitySerializer < ActiveModel::Serializer
       {
         id: object.company.id,
         name: object.company.name
+      }
+    end
+  end
+
+  def contact
+    unless object.contact.nil?
+      {
+        id: object.contact.id,
+        name: object.contact.name,
+        email: object.contact.email,
+        phone: object.contact.phone
       }
     end
   end

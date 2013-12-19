@@ -1,5 +1,6 @@
 class Api::V1::OpportunitiesController < ApplicationController
   before_filter :get_company_params, only: [:create, :update]
+  before_filter :get_contact_params, only: [:create, :update]
   before_filter :get_owner_params, only: [:create, :update]
 
   def index
@@ -37,6 +38,7 @@ class Api::V1::OpportunitiesController < ApplicationController
 
   def set_opportunity(opportunity)
     opportunity.company = @company unless @company.nil?
+    opportunity.contact = @contact unless @contact.nil?
     opportunity.person = @owner
 
     if opportunity.save
@@ -56,6 +58,34 @@ class Api::V1::OpportunitiesController < ApplicationController
 
       elsif !company_name.nil?
         @company = Company.where("name ILIKE ?", company_name).first || Company.create(name: company_name)
+      end
+    end
+  end
+
+  def get_contact_params
+    unless params[:opportunity].nil?
+      contact_params = params[:opportunity].delete(:contact)
+
+      unless contact_params.nil?
+        if !contact_params[:email].nil?
+          contact_email = Contact.where(email: contact_params[:email]).first
+          if contact_email.nil?
+            @contact = Contact.create(contact_params)
+          else
+            @contact = contact_email
+
+            if !@contact.company.nil? and @company.nil?
+              @company = @contact.company
+            end
+          end
+        else
+          @contact = Contact.create(contact_params)
+        end
+
+        if !@company.nil? and @contact.company.nil?
+          @contact.company = @company
+          @contact.save
+        end
       end
     end
   end

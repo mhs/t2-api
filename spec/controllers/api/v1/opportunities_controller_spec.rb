@@ -49,7 +49,6 @@ describe Api::V1::OpportunitiesController do
     end
 
     it 'should allow any value and use existent company' do
-
       post :create, { opportunity: {company_id: company.id, title: 'some title', stage: 'won'} }
 
       opportunity = JSON.parse(response.body)
@@ -58,6 +57,45 @@ describe Api::V1::OpportunitiesController do
       opportunity["stage"].should eq('won')
       opportunity["confidence"].should eq('warm')
       opportunity["title"].should eq("some title")
+    end
+
+    describe 'contacts' do
+      let(:contact) { FactoryGirl.create(:contact, company: company) }
+
+      it 'should use an existent contact with company' do
+        post :create, { opportunity: {company_id: company.id, contact: {name: contact.name, email: contact.email}} }
+
+        opportunity = JSON.parse(response.body)
+        opportunity["company"]["name"].should eq(company.name)
+        opportunity["contact"]["name"].should eq(contact.name)
+        opportunity["contact"]["email"].should eq(contact.email)
+      end
+
+      it 'should use an existent contact without company - associate opportunity to company' do
+        post :create, { opportunity: {contact: {name: contact.name, email: contact.email}} }
+
+        opportunity = JSON.parse(response.body)
+        opportunity["company"]["name"].should eq(company.name)
+        opportunity["contact"]["name"].should eq(contact.name)
+        opportunity["contact"]["email"].should eq(contact.email)
+      end
+
+      it 'should create a contact with company - associate opportunity to company' do
+        post :create, { opportunity: {company_id: company.id, contact: {name: 'foo', email: 'foo@bar.com'}} }
+
+        opportunity = JSON.parse(response.body)
+        opportunity["company"]["name"].should eq(company.name)
+        opportunity["contact"]["name"].should eq('foo')
+        opportunity["contact"]["email"].should eq('foo@bar.com')
+      end
+
+      it 'should create a contact without company - it should not associate opportunity to company' do
+        post :create, { opportunity: {contact: {name: 'foo', email: 'foo@bar.com'}} }
+
+        opportunity = JSON.parse(response.body)
+        opportunity["contact"]["name"].should eq('foo')
+        opportunity["contact"]["email"].should eq('foo@bar.com')
+      end
     end
   end
   

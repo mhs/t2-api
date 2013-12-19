@@ -9,6 +9,7 @@ class Opportunity < ActiveRecord::Base
 
   belongs_to :person
   belongs_to :company
+  belongs_to :contact
 
   validates :confidence, inclusion: { in: %w(cold warm hot) }
   validates :stage, inclusion: { in: %w(on_hold new scoped won lost rejected) }
