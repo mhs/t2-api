@@ -1,4 +1,17 @@
 class Person < ActiveRecord::Base
+
+  ROLES = [
+    'Apprentice',
+    'Business Development',
+    'Designer',
+    'Developer',
+    'General & Administrative',
+    'Managing Director',
+    'Principal',
+    'Product Manager',
+    'Support Staff'
+  ]
+
   acts_as_paranoid
   acts_as_taggable_on :skills
 
@@ -21,6 +34,8 @@ class Person < ActiveRecord::Base
   validates :office, presence: true
   validates :email, presence: true, uniqueness: true
   validates :user_id, presence: true, on: :update
+
+  validates :role, inclusion: { in: ROLES }, allow_blank: true
 
   scope :employed_on_date, lambda { |d|
     where("start_date is NULL or start_date < ?",d)

@@ -5,10 +5,10 @@ namespace :applications do
   task :seed => :environment do
     T2Application.delete_all
     applications_attributes = [
-      {url: "http://t2-allocation.herokuapp.com",       icon: "📊", title: "Allocations",  classes: "allocations"},
-      {url: "http://t2-utilization.herokuapp.com",      icon: "📈", title: "Utilization"},
+      {url: "http://t2allocation.neo.com",       icon: "📊", title: "Allocations",  classes: "allocations"},
+      {url: "http://t2utilization.neo.com",      icon: "📈", title: "Utilization"},
       {url: "http://brockman.herokuapp.com",            icon: "", title: "Pipeline"},
-      {url: "http://t2-people.herokuapp.com",           icon: "👤", title: "Neons"}
+      {url: "http://t2people.neo.com",           icon: "👤", title: "Neons"}
     ]
 
     applications_attributes.each_with_index do |attrs, index|

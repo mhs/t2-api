@@ -25,8 +25,8 @@ class PersonSerializer < ActiveModel::Serializer
 
   def current_allocation
     now = Date.today
-    object.allocations.to_a.find do |alloc|
+    object.allocations.to_a.select do |alloc|
       alloc.end_date >= now && alloc.start_date <= now
-    end
+    end.sort_by { |x| x.vacation? ? 0 : 1 }.first
   end
 end

@@ -56,6 +56,10 @@ class Allocation < ActiveRecord::Base
     duration_in_days * 8
   end
 
+  def vacation?
+    project.vacation?
+  end
+
   private
 
   def does_not_exceed_project_allowance

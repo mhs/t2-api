@@ -15,13 +15,13 @@ class Snapshot < ActiveRecord::Base
   attr_accessible :snap_date, :utilization, :office_id
   belongs_to :office
   scope :by_date, lambda {|date| where(snap_date: date) }
-  scope :by_office_id, lambda {|office_id| office_id ? where(office_id: office_id) : where(false) }
+  scope :by_office_id, lambda {|office_id| where(office_id: office_id) }
 
   validates_uniqueness_of :snap_date, scope: :office_id
 
   def self.one_per_day(office_id=nil)
     snaps = {}
-    Snapshot.order("snap_date ASC").where(office_id: office_id).all.each do |snap|
+    Snapshot.order("snap_date ASC").by_office_id(office_id).all.each do |snap|
       snaps[snap.snap_date] = snap
     end
     snaps.values
@@ -32,10 +32,12 @@ class Snapshot < ActiveRecord::Base
   end
 
   def self.on_date!(date, office_id=nil)
-    snap = where(snap_date: date, office_id: office_id).first_or_initialize
-    snap.capture_data
-    snap.save!
-    snap
+    snap_scope = by_date(date).by_office_id(office_id)
+    snap_scope.first_or_initialize.tap do |snap|
+      break snap unless snap.new_record?
+      snap.capture_data
+      snap.save!
+    end
   end
 
   def self.for_weekdays_between!(start_date, end_date, office_id=nil)
@@ -49,7 +51,7 @@ class Snapshot < ActiveRecord::Base
   alias_method :old_office, :office
 
   def office
-   old_office || Office::SummaryOffice.new
+    old_office || Office::SummaryOffice.new
   end
 
 
@@ -65,6 +67,11 @@ class Snapshot < ActiveRecord::Base
   end
 
   alias_method :people, :staff
+
+  def recalculate!
+    capture_date
+    save!
+  end
 
   def capture_data
     queried_office = office.id ? office : nil
