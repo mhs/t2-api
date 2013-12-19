@@ -14,9 +14,10 @@ class User < ActiveRecord::Base
 
     unless user
       # if no user with auth info try to find one with same email
-      if user = User.where(email: auth.extra.raw_info.email).first
+      email = auth.extra.raw_info.email.downcase
+      if user = User.where(email: email).first
         user.update_attributes( name: auth.extra.raw_info.name,
-                                email: auth.extra.raw_info.email,
+                                email: email,
                                 provider: auth.provider,
                                 uid: auth.uid
                               )
