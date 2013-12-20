@@ -5,7 +5,7 @@ class Opportunity < ActiveRecord::Base
 
   before_save :set_title
 
-  attr_accessible :title, :stage, :confidence, :amount, :expected_date_close
+  attr_accessible :title, :description, :stage, :confidence, :amount, :expected_date_close
 
   has_many :opportunity_notes
 
