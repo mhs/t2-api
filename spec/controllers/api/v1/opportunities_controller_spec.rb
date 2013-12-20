@@ -53,6 +53,13 @@ describe Api::V1::OpportunitiesController do
       opportunity["title"].should eq("#{person.name}'s new opportunity")
     end
 
+    it 'should allow to include description' do
+      post :create, { opportunity: {description: 'long project description'} }
+
+      opportunity = JSON.parse(response.body)
+      opportunity["description"].should eq Opportunity.last.description
+    end
+
     it 'should allow any value and create company if it does not exist' do
       post :create, { opportunity: {company_name: 'company inc', title: 'some title', stage: 'won'} }
 

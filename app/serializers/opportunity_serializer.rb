@@ -1,5 +1,5 @@
 class OpportunitySerializer < ActiveModel::Serializer
-  attributes :id, :title, :stage, :confidence, :amount, :expected_date_close, :owner, :company, :contact, :opportunity_notes
+  attributes :id, :title, :description, :stage, :confidence, :amount, :expected_date_close, :owner, :company, :contact, :opportunity_notes
 
   def owner
     {
