@@ -1,0 +1,145 @@
+@import url(http://fonts.googleapis.com/css?family=Lato:400,400italic|Montserrat:400,700);
+@import url(http://weloveiconfonts.com/api/?family=entypo);
+/* line 49, /Users/lauren/Projects/t2/t2-api/source/stylesheets/styles.css.scss */
+.navigation {
+  width: 175px;
+  height: 100%;
+  position: fixed;
+  box-shadow: 3px 3px 5px 3px #eee; }
+  /* line 55, /Users/lauren/Projects/t2/t2-api/source/stylesheets/styles.css.scss */
+  .navigation .titleBlock {
+    width: 100%;
+    height: 90px;
+    background-color: #73d7f4;
+    margin-top: 30px; }
+  /* line 62, /Users/lauren/Projects/t2/t2-api/source/stylesheets/styles.css.scss */
+  .navigation h1 {
+    font-family: "Montserrat";
+    font-weight: 700;
+    font-style: normal;
+    display: block;
+    float: left;
+    color: #fff;
+    font-size: 28px;
+    text-align: center;
+    margin: 15px 0 0 25px;
+    text-shadow: 0px 1px 0px #5FB7D0; }
+    /* line 72, /Users/lauren/Projects/t2/t2-api/source/stylesheets/styles.css.scss */
+    .navigation h1 span {
+      font-family: "Lato";
+      font-weight: 400;
+      font-style: italic;
+      font-size: 20px; }
+  /* line 78, /Users/lauren/Projects/t2/t2-api/source/stylesheets/styles.css.scss */
+  .navigation .logo {
+    display: block;
+    float: right;
+    background-image: url(../images/logo.png);
+    background-repeat: no-repeat;
+    background-size: 60px 22px;
+    width: 60px;
+    height: 22px;
+    margin: 24px 27px 0 0; }
+    @media screen and (min-resolution: 120dpi) {
+      /* line 78, /Users/lauren/Projects/t2/t2-api/source/stylesheets/styles.css.scss */
+      .navigation .logo {
+        background-image: url(../images/logo@2x.png); } }
+  /* line 93, /Users/lauren/Projects/t2/t2-api/source/stylesheets/styles.css.scss */
+  .navigation h2 {
+    font-family: "Montserrat";
+    font-weight: 400;
+    font-style: normal;
+    display: inline-block;
+    clear: both;
+    width: 100%;
+    font-size: 18px;
+    text-align: center;
+    color: #fff;
+    margin: 0; }
+  /* line 106, /Users/lauren/Projects/t2/t2-api/source/stylesheets/styles.css.scss */
+  .navigation .categoryList :nth-child(1) {
+    margin-top: 10px; }
+  /* line 110, /Users/lauren/Projects/t2/t2-api/source/stylesheets/styles.css.scss */
+  .navigation .categoryList a:before {
+    font-family: "Entypo";
+    color: #777c7c;
+    font-size: 18px;
+    content: '\E75E';
+    padding-right: 10px; }
+  /* line 118, /Users/lauren/Projects/t2/t2-api/source/stylesheets/styles.css.scss */
+  .navigation .categoryList a {
+    display: inline-block;
+    clear: both;
+    text-align: center;
+    text-decoration: none;
+    font-family: "Montserrat";
+    font-weight: 400;
+    font-style: normal;
+    color: #777c7c;
+    font-size: 14px;
+    margin: 0px auto 5px 30px; }
+
+/* line 135, /Users/lauren/Projects/t2/t2-api/source/stylesheets/styles.css.scss */
+.content {
+  height: 100%;
+  position: absolute;
+  left: 175px;
+  padding: 36px 35px 100px 35px; }
+  /* line 141, /Users/lauren/Projects/t2/t2-api/source/stylesheets/styles.css.scss */
+  .content h1 {
+    font-family: "Montserrat";
+    font-weight: 700;
+    font-style: normal;
+    color: #fff;
+    font-size: 24px;
+    background-color: #e5684c;
+    margin: 30px 0 5px 0;
+    padding: 5px 10px;
+    display: inline-block; }
+  /* line 151, /Users/lauren/Projects/t2/t2-api/source/stylesheets/styles.css.scss */
+  .content p {
+    font-family: "Montserrat";
+    font-weight: 400;
+    font-style: normal;
+    font-size: 13px;
+    line-height: 21px;
+    color: #313131; }
+  /* line 158, /Users/lauren/Projects/t2/t2-api/source/stylesheets/styles.css.scss */
+  .content h2 {
+    font-family: "Montserrat";
+    font-weight: 700;
+    font-style: normal;
+    font-size: 16px;
+    color: #313131;
+    padding: 0 0 5px 0;
+    margin: 25px 0 15px 0;
+    border-bottom: 1px solid #9b9b9b; }
+  /* line 167, /Users/lauren/Projects/t2/t2-api/source/stylesheets/styles.css.scss */
+  .content > p {
+    font-family: "Lato";
+    font-weight: 400;
+    font-style: italic;
+    color: #313131;
+    font-size: 18px;
+    margin: 15px 0 0 0; }
+
+/* line 179, /Users/lauren/Projects/t2/t2-api/source/stylesheets/styles.css.scss */
+.colorSwatch .color {
+  width: 25px;
+  height: 25px;
+  float: left;
+  background-color: #ccc; }
+/* line 185, /Users/lauren/Projects/t2/t2-api/source/stylesheets/styles.css.scss */
+.colorSwatch .colorName {
+  float: left;
+  font-family: "Montserrat";
+  font-weight: 400;
+  font-style: normal;
+  font-size: 11px;
+  color: #777c7c; }
+  /* line 191, /Users/lauren/Projects/t2/t2-api/source/stylesheets/styles.css.scss */
+  .colorSwatch .colorName .hex {
+    color: #9b9b9b; }
+    /* line 194, /Users/lauren/Projects/t2/t2-api/source/stylesheets/styles.css.scss */
+    .colorSwatch .colorName .hex :before {
+      content: "</br>"; }
