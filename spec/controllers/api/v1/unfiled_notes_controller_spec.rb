@@ -4,15 +4,20 @@ describe Api::V1::UnfiledNotesController do
 
   let(:person) { FactoryGirl.create(:person, email: 'person@neo.com') }
   let(:another_person) { FactoryGirl.create(:person, email: 'another_person@neo.com') }
+  let(:opportunity) { FactoryGirl.create(:opportunity, person: person) }
 
   describe 'User must be logged in' do
     before do
       3.times do
-        FactoryGirl.create(:opportunity_note, person: person)
+        FactoryGirl.create(:opportunity_note, person: person, opportunity: nil)
       end
 
       3.times do
-        FactoryGirl.create(:opportunity_note, person: another_person)
+        FactoryGirl.create(:opportunity_note, person: person, opportunity: opportunity)
+      end
+
+      3.times do
+        FactoryGirl.create(:opportunity_note, person: another_person, opportunity: nil)
       end
 
       sign_in :user, person.user
@@ -30,7 +35,17 @@ describe Api::V1::UnfiledNotesController do
     it 'should allow to destroy' do
       delete :destroy, id: OpportunityNote.all.first.id
       response.status.should eq(200)
-      OpportunityNote.all.count.should eq(5)
+      OpportunityNote.all.count.should eq(8)
+    end
+
+    it 'should allow to file a note' do
+      note = OpportunityNote.first
+      note.opportunity.should be nil
+
+      put :update, { id:  note.id, note: { opportunity_id:  opportunity.id, detail: 'a detail text'}}
+
+      response.status.should eq 200
+      OpportunityNote.find(note.id).opportunity.should eq opportunity
     end
   end
 
@@ -57,9 +72,5 @@ describe Api::V1::UnfiledNotesController do
 
       OpportunityNote.all.count.should eq(0)
     end
-  end
-
-  it 'should allow to update note relationship' do
-    pending 'waiting for oportunities'
   end
 end

@@ -4,7 +4,7 @@ class Api::V1::OpportunityNotesController < ApplicationController
 
   def create
     if @opportunity.nil?
-      render json: { error: 'opportunity does not exist' }, status: 401
+      render json: { error: 'opportunity does not exist' }, status: 404
     else
       note = OpportunityNote.new(params[:note])
       note.opportunity = @opportunity
@@ -17,10 +17,20 @@ class Api::V1::OpportunityNotesController < ApplicationController
       end
     end
   end
+  
+  def update
+    if @opportunity_note.nil?
+      render json: {error: 'opportunity note does not exist'}, status: 404
+    else
+      @opportunity_note.update_attributes(params[:note])
+
+      render json: @opportunity_note, root: false
+    end
+  end
 
   def destroy
     if @opportunity_note.nil?
-      render json: { error: 'opportunity does not exist' }, status: 401
+      render json: { error: 'opportunity note does not exist' }, status: 404
     else
       @opportunity_note.destroy
       render json: nil, status: :ok

@@ -19,7 +19,15 @@ describe Api::V1::OpportunityNotesController do
 
   it 'should allow to destroy' do
     delete :destroy, opportunity_id: opportunity.id, id: opportunity_note.id
+
     response.status.should eq(200)
     OpportunityNote.count.should eq(0)
+  end
+
+  it 'should allow to update' do
+    put :update, { opportunity_id: opportunity.id, id: opportunity_note.id, note: { detail: 'a new detail' } }
+
+    note = JSON.parse(response.body)
+    note["detail"].should eq('a new detail')
   end
 end
