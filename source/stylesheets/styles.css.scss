@@ -1,0 +1,200 @@
+/////////////////////////////////
+
+// Fonts
+@import url(http://fonts.googleapis.com/css?family=Lato:400,400italic|Montserrat:400,700);
+@import url(http://weloveiconfonts.com/api/?family=entypo);
+
+@mixin Montserrat-Bold {
+  font-family:"Montserrat";
+  font-weight: 700;
+  font-style: normal;
+}
+
+@mixin Montserrat-Regular {
+  font-family:"Montserrat";
+  font-weight: 400;
+  font-style: normal;
+}
+
+@mixin Lato-Regular {
+  font-family:"Montserrat";
+  font-weight: 400;
+  font-style: normal;
+}
+
+@mixin Lato-Italic {
+  font-family:"Lato";
+  font-weight: 400;
+  font-style: italic;
+}
+
+@mixin icons {
+  font-family:"Entypo";
+}
+
+/////////////////////////////////
+
+// Colors
+$red: #E5684C;
+$blue: #73D7F4;
+$green: #3BCF91;
+$light-grey: #9B9B9B;
+$med-grey: #777C7C;
+$dark-grey: #313131;
+
+/////////////////////////////////
+
+// Layout
+
+.navigation {
+  width: 175px;
+  height: 100%;
+  position: fixed;
+  box-shadow: 3px 3px 5px 3px #eee;
+
+  .titleBlock {
+    width: 100%;
+    height: 90px;
+    background-color: $blue;
+    margin-top: 30px;
+  }
+
+  h1 {
+    @include Montserrat-Bold;
+    display: block;
+    float: left;
+    color: #fff;
+    font-size: 28px;
+    text-align: center;
+    margin: 15px 0 0 25px;
+    text-shadow: 0px 1px 0px #5FB7D0;
+
+    span {
+      @include Lato-Italic;
+      font-size: 20px;
+    }
+  }
+
+  .logo {
+    display: block;
+    float: right;
+    background-image: url(../images/logo.png);
+    background-repeat: no-repeat;
+    background-size: 60px 22px;
+    width: 60px;
+    height: 22px;
+    margin: 24px 27px 0 0;
+
+    @media screen and (min-resolution: 120dpi) {
+      background-image: url(../images/logo@2x.png);
+    }
+  }
+
+  h2 {
+    @include Montserrat-Regular;
+    display: inline-block;
+    clear: both;
+    width: 100%;
+    font-size: 18px;
+    text-align: center;
+    color: #fff;
+    margin: 0;
+  }
+
+  .categoryList {
+
+    :nth-child(1) {
+      margin-top: 10px;
+    }
+
+    a:before {
+        @include icons;
+        color: $med-grey;
+        font-size: 18px;
+        content: '\E75E';
+        padding-right: 10px;
+      }
+
+    a {
+      display: inline-block;
+      clear: both;
+      text-align: center;
+      text-decoration: none;
+      @include Montserrat-Regular;
+      color: $med-grey;
+      font-size: 14px;
+      margin: 0px auto 5px 30px;
+
+      :link {
+
+    }
+  }
+  }
+}
+
+.content {
+  height: 100%;
+  position: absolute;
+  left: 175px;
+  padding: 36px 35px 100px 35px;
+
+  h1 {
+    @include Montserrat-Bold;
+    color: #fff;
+    font-size: 24px;
+    background-color: $red;
+    margin: 30px 0 5px 0;
+    padding: 5px 10px;
+    display: inline-block;
+  }
+
+  p {
+    @include Lato-Regular;
+    font-size: 13px;
+    line-height: 21px;
+    color: $dark-grey;
+  }
+
+  h2 {
+    @include Montserrat-Bold;
+    font-size: 16px;
+    color: $dark-grey;
+    padding: 0 0 5px 0;
+    margin: 25px 0 15px 0;
+    border-bottom: 1px solid $light-grey;
+  }
+
+  > p {
+    @include Lato-Italic;
+    color: $dark-grey;
+    font-size: 18px;
+    margin: 15px 0 0 0;
+    // max-width: 420px;
+  }
+}
+
+// Sample Color/Text Swatches
+
+.colorSwatch {
+  .color {
+    width: 25px;
+    height: 25px;
+    float: left;
+    background-color: #ccc;
+  }
+  .colorName {
+    float: left;
+    @include Lato-Regular;
+    font-size: 11px;
+    color: $med-grey;
+
+    .hex {
+      color: $light-grey;
+
+      :before {
+        content:"</br>";
+      }
+    }
+  }
+
+}
