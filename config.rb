@@ -48,6 +48,7 @@
 activate :livereload
 
 require 'slim'
+require 'middleman-gh-pages'
 
 set :css_dir, 'stylesheets'
 
