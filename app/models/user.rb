@@ -14,19 +14,15 @@ class User < ActiveRecord::Base
 
     unless user
       # if no user with auth info try to find one with same email
-      if user = User.where(email: auth.extra.raw_info.email).first
+      email = auth.extra.raw_info.email.downcase
+      if user = User.where(email: email).first
         user.update_attributes( name: auth.extra.raw_info.name,
-                                email: auth.extra.raw_info.email,
+                                email: email,
                                 provider: auth.provider,
                                 uid: auth.uid
                               )
-      # no user record so create a new one
-      elsif auth.extra.raw_info.email.match(/neo\.com$/)
-        user = User.create( name: auth.extra.raw_info.name,
-                            email: auth.extra.raw_info.email,
-                            provider: auth.provider,
-                            uid: auth.uid
-                          )
+      else
+        # GTFO
       end
     end
     user.ensure_authentication_token! if user

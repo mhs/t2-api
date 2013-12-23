@@ -30,7 +30,7 @@ class Person < ActiveRecord::Base
 
   validates :name, presence: true
   validates :office, presence: true
-  validates :email, presence: true, uniqueness: true
+  validates :email, presence: true, uniqueness: true, format: { with: /\A[^@\s]+@([^.\s]+\.)+([^.\s]+)\Z/i }
   validates :user_id, presence: true, on: :update
 
   validates :role, inclusion: { in: ROLES }, allow_blank: true
@@ -131,7 +131,7 @@ class Person < ActiveRecord::Base
   private
 
   def create_or_associate_user
-    self.user = User.find_or_create_by_email!(email) do |u|
+    self.user = User.find_or_create_by_email!(email.downcase) do |u|
       u.name = name
     end
 
