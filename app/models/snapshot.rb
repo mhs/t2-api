@@ -69,7 +69,7 @@ class Snapshot < ActiveRecord::Base
   alias_method :people, :staff
 
   def recalculate!
-    capture_date
+    capture_data
     save!
   end
 
