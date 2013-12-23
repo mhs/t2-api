@@ -16,7 +16,7 @@ class Api::V1::ProjectsController < ApplicationController
     if project.save
       render json: project, status: :created
     else
-      render json: project.errors, status: :unprocessable_entity
+      render json: { errors: project.errors }, status: :unprocessable_entity
     end
   end
 
@@ -26,7 +26,7 @@ class Api::V1::ProjectsController < ApplicationController
     if project.update_attributes(params[:project])
       render json: project, status: :ok
     else
-      render json: project.errors, status: :unprocessable_entity
+      render json: { errors: project.errors }, status: :unprocessable_entity
     end
   end
 
