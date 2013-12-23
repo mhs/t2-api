@@ -14,6 +14,7 @@ T2Api::Application.routes.draw do
       resources :projects, only: [:index, :show, :update, :create, :destroy]
       resources :slots, only: [:index, :show]
       resources :allocations, only: [:index, :show, :update, :create, :destroy]
+      resources :allocation_bundles, only: [:index]
       resources :people, only: [:index, :show, :update, :create] do
         resources :pto_requests, only: [:index, :create, :update, :destroy]
 
