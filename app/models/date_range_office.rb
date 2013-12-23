@@ -10,6 +10,16 @@ class DateRangeOffice < DelegateClass(Office)
   end
 
   def people
-    super.employed_between @start_date, @end_date
+    # do this in-memory because people should be preloaded
+    super.to_a.select do |person|
+      person.employed_between?(@start_date, @end_date)
+    end
+  end
+
+  def projects
+    super.to_a.select do |project|
+      # do nothing for now
+      true
+    end
   end
 end

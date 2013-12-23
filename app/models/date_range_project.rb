@@ -10,6 +10,7 @@ class DateRangeProject < DelegateClass(Project)
   end
 
   def allocations
+    # filter in-memory
     super.between @start_date, @end_date
   end
 end

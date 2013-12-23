@@ -126,7 +126,9 @@ class Person < ActiveRecord::Base
     AvailabilityCalculator.new(allocations_within_range, initial_availability).availabilities
   end
 
-
+  def employed_between?(start_window, end_window)
+    (start_date.nil? || start_date <= end_window) && (end_date.nil? || end_date >= start_window)
+  end
 
   private
 
