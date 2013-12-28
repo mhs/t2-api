@@ -5,21 +5,21 @@ describe Opportunity do
   let(:person) { FactoryGirl.create(:person) }
 
   it 'should allow only cold/warm/hot confidence values' do
-    cold = Opportunity.new(confidence: 'cold')
+    cold = Opportunity.new(confidence: 'cold', stage: 'new')
     cold.valid?.should eq true
 
-    warm = Opportunity.new(confidence: 'warm')
+    warm = Opportunity.new(confidence: 'warm', stage: 'new')
     warm.valid?.should eq true
 
-    hot = Opportunity.new(confidence: 'hot')
+    hot = Opportunity.new(confidence: 'hot', stage: 'new')
     hot.valid?.should eq true
 
-    chill = Opportunity.new(confidence: 'chill')
+    chill = Opportunity.new(confidence: 'chill', stage: 'new')
     chill.valid?.should eq false
   end
 
   it 'should allow COLD/WARM/HOT and lower_case them' do
-    cold = Opportunity.new(confidence: 'COLD')
+    cold = Opportunity.new(confidence: 'COLD', stage: 'new')
     cold.valid?.should eq true
   end
    it 'should create with default values' do
@@ -28,8 +28,6 @@ describe Opportunity do
      default_values.save
 
      default_values.confidence.should eq 'warm'
-     default_values.stage.should eq 'new'
-     default_values.title.should eq "#{person.name}'s new opportunity"
    end
 
   it 'should allow only valid stages' do

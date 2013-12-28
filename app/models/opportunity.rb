@@ -1,9 +1,6 @@
 class Opportunity < ActiveRecord::Base
-  before_validation :set_default_values
   before_validation :downcase_confidence
   before_validation :downcase_stage
-
-  before_save :set_title
 
   attr_accessible :title, :description, :stage, :confidence, :amount, :expected_date_close
 
@@ -18,20 +15,11 @@ class Opportunity < ActiveRecord::Base
 
   private
 
-  def set_default_values
-    self.confidence ||= 'warm'
-    self.stage ||= 'new'
-  end
-
   def downcase_confidence
-    self.confidence.downcase!
+    self.confidence.downcase! unless self.confidence.nil?
   end
 
   def downcase_stage
-    self.stage.downcase!
-  end
-
-  def set_title
-    self.title = "#{self.person.name}'s new opportunity" if !self.person.nil? and self.title.nil?
+    self.stage.downcase! unless self.stage.nil?
   end
 end
