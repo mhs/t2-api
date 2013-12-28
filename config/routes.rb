@@ -38,6 +38,6 @@ T2Api::Application.routes.draw do
     end
   end
 
-  match "navbar" => "application#navbar"
+  get "navbar" => "application#navbar"
   root to: "application#show"
 end

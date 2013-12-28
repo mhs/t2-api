@@ -10,7 +10,7 @@ module ApplicationHelper
 
   # TODO: torch these when the old navbar code goes away
   def t2_applications
-    T2Application.order('position ASC').all.reject { |app| app.title.downcase == "settings" }
+    T2Application.order('position ASC').to_a.reject { |app| app.title.downcase == "settings" }
   end
 
   def default_application

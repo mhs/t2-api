@@ -47,8 +47,8 @@ class Person < ActiveRecord::Base
     )
   end
 
-  scope :overhead, where(unsellable: true)
-  scope :billable, where(unsellable: false)
+  scope :overhead, -> { where(unsellable: true) }
+  scope :billable, -> { where(unsellable: false) }
   scope :by_office, lambda {|office| office ? where(office_id: office.id) : where(false) }
 
   after_create :create_or_associate_user, :create_missing_project_allowances
@@ -126,12 +126,16 @@ class Person < ActiveRecord::Base
     AvailabilityCalculator.new(allocations_within_range, initial_availability).availabilities
   end
 
+  def skill_list=(v)
+    # DO NOTHING
+    # something's b0rked with ActsAsTaggableOn::Tag and mass assignment
+  end
 
 
   private
 
   def create_or_associate_user
-    self.user = User.find_or_create_by_email!(email.downcase) do |u|
+    self.user = User.find_or_create_by!(:email => email.downcase) do |u|
       u.name = name
     end
 

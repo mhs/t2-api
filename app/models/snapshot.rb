@@ -21,7 +21,7 @@ class Snapshot < ActiveRecord::Base
 
   def self.one_per_day(office_id=nil)
     snaps = {}
-    Snapshot.order("snap_date ASC").by_office_id(office_id).all.each do |snap|
+    Snapshot.order("snap_date ASC").by_office_id(office_id).each do |snap|
       snaps[snap.snap_date] = snap
     end
     snaps.values

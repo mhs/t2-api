@@ -66,7 +66,7 @@ describe Allocation do
     end
 
     it 'should return all allocations if office is nil' do
-      Allocation.by_office(nil).to_a.should eql(Allocation.all)
+      Allocation.by_office(nil).to_a.should eql(Allocation.all.to_a)
     end
   end
 

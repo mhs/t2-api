@@ -2,10 +2,10 @@ source 'https://rubygems.org'
 
 ruby '1.9.3'
 
-gem 'rails', '~> 3.2'
+gem 'rails', '~> 4.0'
 gem 'pg'
 gem 'active_model_serializers'
-gem 'acts_as_paranoid'
+gem 'paranoia', '~> 2.0'
 gem 'hashie'
 gem 'rack-cors', require: 'rack/cors'
 gem 'memoist'
@@ -13,12 +13,13 @@ gem 'devise'
 gem 'omniauth-google-oauth2'
 gem 'haml'
 gem 'acts-as-taggable-on'
-gem 'paperclip', "~> 3.0"
+gem 'paperclip'
 gem 'aws-sdk'
+gem 'protected_attributes' # TODO: remove this and replace with strong params
 
 group :assets do
-  gem 'sass-rails',   '~> 3.2.3'
-  gem 'coffee-rails', '~> 3.2.1'
+  gem 'sass-rails'
+  gem 'coffee-rails'
 
   gem 'uglifier', '>= 1.0.3'
 end
@@ -28,7 +29,7 @@ gem 'validates_timeliness'
 
 group :development, :test do
   gem 'heroku'
-  gem 'rspec-rails', '~> 2.0'
+  gem 'rspec-rails'
   gem 'factory_girl_rails'
   gem 'ffaker'
   gem 'pry-rails'

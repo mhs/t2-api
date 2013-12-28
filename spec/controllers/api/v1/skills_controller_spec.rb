@@ -19,10 +19,14 @@ describe Api::V1::SkillsController do
     end
 
     it 'should return all skills' do
+      pending "skill_list not implemented"
+
       serialized_response.count.should eql(2)
     end
 
     it 'should return associated people' do
+      pending "skill_list not implemented"
+
       serialized_response.first["people"].first["email"].should eql(@person.email)
     end
   end

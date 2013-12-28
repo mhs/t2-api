@@ -1,7 +1,7 @@
 class Api::V1::AllocationsController < ApplicationController
   # GET /allocations.json
   def index
-    relation = with_ids_from_params(Allocation.scoped)
+    relation = with_ids_from_params(Allocation.relation)
     if (start_date = params[:startDate])
       render json: relation.with_start_date(start_date)
     else

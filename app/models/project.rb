@@ -10,7 +10,7 @@ class Project < ActiveRecord::Base
 
   acts_as_paranoid
 
-  scope :assignable, where(vacation: true)
+  scope :assignable, -> { where(vacation: true) }
 
   def allowance_for_office(office_id)
     project_offices.where(office_id: office_id).first.try(:allowance)

@@ -1,7 +1,8 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
-  before_filter :authenticate_user!
   prepend_before_filter :get_auth_token
+  before_filter :authenticate_user_from_token!
+  before_filter :authenticate_user!
 
   def navbar
   end
@@ -31,6 +32,20 @@ class ApplicationController < ActionController::Base
       # we're overloading ActiveResource's Basic HTTP authentication here, so we need to
       # do some unpacking of the auth token and re-save it as a parameter.
       params[:authentication_token] = auth_token
+    end
+  end
+
+  # backportery of removed token_authenticatable stuff
+  def authenticate_user_from_token!
+    user_token = params[:authentication_token].presence
+    user       = user_token && User.find_by(:authentication_token => user_token.to_s)
+
+    if user
+      # Notice we are passing store false, so the user is not
+      # actually stored in the session and a token is needed
+      # for every request. If you want the token to work as a
+      # sign in token, you can simply remove store: false.
+      sign_in user, store: false
     end
   end
 
