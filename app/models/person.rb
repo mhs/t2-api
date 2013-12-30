@@ -131,6 +131,9 @@ class Person < ActiveRecord::Base
     # something's b0rked with ActsAsTaggableOn::Tag and mass assignment
   end
 
+  def employed_between?(start_window, end_window)
+    (start_date.nil? || start_date <= end_window) && (end_date.nil? || end_date >= start_window)
+  end
 
   private
 

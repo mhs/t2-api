@@ -22,8 +22,8 @@ class Allocation < ActiveRecord::Base
   def self.within(start_date, end_date)
     # NOTE: this is subtly different from between, which excludes allocations that
     #       start before start_date or end after end_date.
-    where("allocations.start_date <= ?", end_date.to_date)
-    .where("allocations.end_date >= ?", start_date.to_date)
+    where("allocations.start_date <= ? OR allocations.start_date IS NULL", end_date.to_date)
+    .where("allocations.end_date >= ? OR allocations.end_date IS NULL", start_date.to_date)
   end
 
   def self.for_date(d)
