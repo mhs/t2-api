@@ -2,7 +2,7 @@ module HasManyCurrent
   extend ActiveSupport::Concern
 
   included do
-    ActiveRecord::Base.send(:include, DateRanges) unless ActiveRecord::Base < HasManyCurrent
+    ActiveRecord::Base.send(:include, DateRanges) unless ActiveRecord::Base < DateRanges
   end
 
   module ClassMethods
