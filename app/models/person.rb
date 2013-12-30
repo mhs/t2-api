@@ -1,4 +1,5 @@
 class Person < ActiveRecord::Base
+  include HasManyCurrent
 
   ROLES = [
     'Apprentice',
@@ -23,7 +24,7 @@ class Person < ActiveRecord::Base
                       default_url: "https://t2-data.s3.amazonaws.com/default.png"
 
   belongs_to  :user, inverse_of: :person
-  has_many    :allocations
+  has_many_current :allocations
   belongs_to  :office
   belongs_to  :project
   has_many    :project_allowances, inverse_of: :person

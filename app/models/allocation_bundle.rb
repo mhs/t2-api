@@ -7,23 +7,25 @@ class AllocationBundle
   end
 
   def projects
-    Project.includes(:offices, :allocations).merge(allocations_scope).to_a
-
-    # Project.all.map do |project|
-    #   DateRangeProject.new project, @start_date, @end_date
-    # end
+    Project.within_date_range(@start_date, @end_date) do
+      Project.includes(:offices, :allocations).to_a
+    end
   end
 
   def allocations
-    allocations_scope.to_a
+    Allocation.within(@start_date, @end_date).to_a
   end
 
   def offices
-    records = Office.includes(:projects, :people).merge(Person.employed_between(@start_date, @end_date)).where('projects.deleted_at IS NULL').to_a
+    Office.within_date_range(@start_date, @end_date) do
+      Office.includes(:projects, :people).to_a
+    end
   end
 
   def people
-    Person.employed_between(@start_date, @end_date).merge(allocations_scope).includes(:allocations).to_a
+    Person.within_date_range(@start_date, @end_date) do
+      Person.includes(:office, :user, :allocations => :project).to_a
+    end
   end
 
   alias read_attribute_for_serialization send
@@ -32,9 +34,4 @@ class AllocationBundle
     AllocationBundleSerializer
   end
 
-  private
-
-  def allocations_scope
-    Allocation.within(@start_date, @end_date)
-  end
 end

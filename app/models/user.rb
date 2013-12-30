@@ -7,7 +7,6 @@ class User < ActiveRecord::Base
 
   before_create :set_date_format_if_unset
 
-
   def self.find_for_google_oauth2(auth, signed_in_resource=nil)
     # try to find user by auth info
     user = User.where(provider: auth.provider, uid: auth.uid).first
