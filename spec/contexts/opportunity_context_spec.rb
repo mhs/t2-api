@@ -6,12 +6,8 @@ describe 'OpportunityContext' do
   let(:company) { FactoryGirl.create(:company) }
 
   before do
-    4.times do
+    3.times do
       FactoryGirl.create(:opportunity, person: person)
-    end
-
-    6.times do
-      FactoryGirl.create(:opportunity, person: another_person)
     end
 
     @opportunity_context = OpportunityContext.new(person)
@@ -81,5 +77,21 @@ describe 'OpportunityContext' do
         opportunity.company.should eq nil
       end
     end
+  end
+
+  describe 'update opportunity' do
+
+    it 'should update correctly' do
+      opportunity = @opportunity_context.update_opportunity(Opportunity.last.id, {company: {name: 'acme inc'}, title: 'ux workshop', owner: {id: another_person.id}, confidence: 'hot'})
+      opportunity.title.should eq 'ux workshop'
+      opportunity.confidence.should eq 'hot'
+      opportunity.person.should eq another_person
+      opportunity.company.name.should eq 'acme inc'
+    end
+  end
+
+  it 'delete opportunity' do
+    opportunity = @opportunity_context.destroy_opportunity(Opportunity.last.id)
+    Opportunity.count.should eq 2
   end
 end

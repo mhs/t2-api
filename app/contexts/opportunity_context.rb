@@ -18,6 +18,31 @@ class OpportunityContext
     end
   end
 
+  def update_opportunity(opportunity_id, params)
+    extra_params = prepare_opportunity_extra_params(params) unless params.nil?
+
+    opportunity = Opportunity.find(opportunity_id)
+
+    if opportunity
+      opportunity.update_attributes(params)
+      set_opportunity_relations(opportunity, extra_params)
+      opportunity
+    else
+      {error: "there's no opportunity with that id"}
+    end
+  end
+
+  def destroy_opportunity(opportunity_id)
+    opportunity = Opportunity.find(opportunity_id)
+
+    if opportunity
+      opportunity.destroy
+      nil
+    else
+      {error: "there's no opportunity with that id"}
+    end
+  end
+
   private
 
   def prepare_opportunity_extra_params(params)
