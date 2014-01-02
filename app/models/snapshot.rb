@@ -16,7 +16,7 @@ class Snapshot < ActiveRecord::Base
   belongs_to :office
   scope :by_date, lambda {|date| where(snap_date: date) }
   scope :by_office_id, lambda {|office_id| where(office_id: office_id) }
-
+  scope :future, lambda { where('snap_date >= ?', Date.today) }
   validates_uniqueness_of :snap_date, scope: :office_id
 
   def self.one_per_day(office_id=nil)
@@ -69,7 +69,7 @@ class Snapshot < ActiveRecord::Base
   alias_method :people, :staff
 
   def recalculate!
-    capture_date
+    capture_data
     save!
   end
 

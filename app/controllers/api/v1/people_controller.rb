@@ -21,8 +21,8 @@ class Api::V1::PeopleController < ApplicationController
     if avatar && !avatar.is_a?(Hash)
       attrs[:avatar] = avatar
     end
-    office = Office.find(params[:person][:office_id])
-    person = office.people.new(attrs)
+    person = Person.new(attrs)
+    person.office_id = params[:person][:office_id].to_i
     if person.save
       render json: person
     else
