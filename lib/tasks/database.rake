@@ -3,59 +3,36 @@ namespace :db do
     puts s
     system s
   end
-  desc "Copy database instance from t2.herokuapp.com to t2api.herokuapp.com"
-  task :transfer_prod_db do
-    puts "creating backup of t2-production..."
-    sysputs "heroku pgbackups:capture -a t2-production --expire"
-    puts "creating backup of t2api..."
-    sysputs "heroku pgbackups:capture -a t2api --expire"
-    restore_url = `heroku pgbackups:url -a t2-production`
-    puts "copying data..."
-    sysputs "heroku pgbackups:restore HEROKU_POSTGRESQL_WHITE -a t2api --confirm t2api '#{restore_url}'"
-  end
 
-  desc "Copy database instance from t2.herokuapp.com to t2api-staging.herokuapp.com"
-  task :transfer_staging_db_from_t2 do
-    puts "creating backup of t2-production..."
-    sysputs "heroku pgbackups:capture -a t2-production --expire"
-    puts "creating backup of t2api-staging..."
-    sysputs "heroku pgbackups:capture -a t2api-staging --expire"
-    restore_url = `heroku pgbackups:url -a t2-production`
-    puts "copying data..."
-    sysputs "heroku pgbackups:restore HEROKU_POSTGRESQL_ORANGE -a t2api-staging --confirm t2api-staging '#{restore_url}'"
-    puts "obscuring project names..."
-    sysputs "heroku run rake obscure_projects -a t2api-staging"
-  end
-
-  desc "Copy database instance from t2api.herokuapp.com to t2api-staging.herokuapp.com"
+  desc "Copy database instance from t2api.herokuapp.com to t2-staging.herokuapp.com"
   task :transfer_staging_db_from_prod do
     puts "creating backup of t2api..."
     sysputs "heroku pgbackups:capture -a t2api --expire"
-    puts "creating backup of t2api-staging..."
-    sysputs "heroku pgbackups:capture -a t2api-staging --expire"
+    puts "creating backup of t2-staging..."
+    sysputs "heroku pgbackups:capture -a t2-staging --expire"
     restore_url = `heroku pgbackups:url -a t2api`
     puts "copying data..."
-    sysputs "heroku pgbackups:restore HEROKU_POSTGRESQL_ORANGE -a t2api-staging --confirm t2api-staging '#{restore_url}'"
-    puts "obscuring project names..."
-    sysputs "heroku run rake obscure_projects -a t2api-staging"
+    sysputs "heroku pgbackups:restore HEROKU_POSTGRESQL_ONYX_URL -a t2-staging --confirm t2-staging '#{restore_url}'"
+    # puts "obscuring project names..."
+    # sysputs "heroku run rake obscure_projects -a t2-staging"
   end
 
 
   desc "Copy database from t2api to localhost"
   task :pull_prod do
-    system "heroku db:pull -a t2api --confirm t2api"
+    system "heroku pg:pull HEROKU_POSTGRESQL_WHITE_URL t2api -a t2api"
   end
 
   desc "Copy database from t2api to localhost"
   task :pull_staging do
-    system "heroku db:pull -a t2api-staging --confirm t2api-staging"
+    system "heroku pg:pull HEROKU_POSTGRESQL_ONYX_URL t2api -a t2-staging"
   end
 
   desc "Complete reset of local database from staging"
-  task :refresh => [ :drop, :create, :pull_staging ]
+  task :refresh => [ :drop, :pull_staging, :seed ]
 
   desc "Complete reset of local database from production"
-  task :refresh_from_production => [ :drop, :create, :pull_prod, :seed ]
+  task :refresh_from_production => [ :drop, :pull_prod, :seed ]
 
   desc "Links people records to users via matching emails"
   task :link_people_to_users => :environment do
