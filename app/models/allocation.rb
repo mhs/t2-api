@@ -1,5 +1,5 @@
 class Allocation < ActiveRecord::Base
-  attr_accessible :notes, :start_date, :end_date, :billable, :binding, :slot, :slot_id, :person, :person_id, :project, :project_id
+  attr_accessible :notes, :start_date, :end_date, :billable, :binding, :slot, :slot_id, :person, :person_id, :project, :project_id, :percent_allocated
 
   TIME_WINDOW = 20 # weeks
 
@@ -11,6 +11,7 @@ class Allocation < ActiveRecord::Base
   validates :person_id, :project_id, :start_date, :end_date, presence: true
   validates_date :end_date, on_or_after: :start_date
 
+  validates :percent_allocated, inclusion: {in: 0..100}
   validate :does_not_exceed_project_allowance
 
   scope :current, includes(:project).where("projects.deleted_at is NULL")

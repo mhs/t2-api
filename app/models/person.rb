@@ -16,7 +16,7 @@ class Person < ActiveRecord::Base
   acts_as_taggable_on :skills
 
   attr_accessible :name, :notes, :email, :unsellable, :office, :office_id, :start_date, :end_date,
-                  :github, :twitter, :website, :title, :bio, :skill_list, :avatar, :role
+                  :github, :twitter, :website, :title, :bio, :skill_list, :avatar, :role, :percent_billable
 
   has_attached_file :avatar,
                       styles: { medium: "300x300>", small: "100x100>", thumb: "50x50>" },
@@ -34,6 +34,8 @@ class Person < ActiveRecord::Base
   validates :user_id, presence: true, on: :update
 
   validates :role, inclusion: { in: ROLES }, allow_blank: true
+
+  validates :percent_billable, inclusion: {in: 0..100}
 
   scope :employed_on_date, lambda { |d|
     where("start_date is NULL or start_date < ?",d)
