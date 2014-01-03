@@ -15,7 +15,7 @@ class Person < ActiveRecord::Base
   acts_as_paranoid
   acts_as_taggable_on :skills
 
-  attr_accessible :name, :notes, :email, :unsellable, :office, :office_id, :start_date, :end_date,
+  attr_accessible :name, :notes, :email, :office, :office_id, :start_date, :end_date,
                   :github, :twitter, :website, :title, :bio, :skill_list, :avatar, :role, :percent_billable
 
   has_attached_file :avatar,
@@ -49,8 +49,8 @@ class Person < ActiveRecord::Base
     )
   end
 
-  scope :overhead, where(unsellable: true)
-  scope :billable, where(unsellable: false)
+  scope :overhead, -> { where("percent_billable < 100") }
+  scope :billable, -> { where("percent_billable > 0") }
   scope :by_office, lambda {|office| office ? where(office_id: office.id) : where(false) }
 
   after_create :create_or_associate_user, :create_missing_project_allowances
