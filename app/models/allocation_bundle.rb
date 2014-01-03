@@ -18,7 +18,7 @@ class AllocationBundle
 
   def offices
     Office.within_date_range(@start_date, @end_date) do
-      Office.includes(:projects, :people).to_a
+      Office.includes(:projects, :people).references(:projects).to_a
     end
   end
 

@@ -4,7 +4,7 @@ class Office < ActiveRecord::Base
   attr_accessible :name, :notes, :slug
 
   has_many :project_offices
-  has_many :projects, :through => :project_offices
+  has_many_current :projects, :through => :project_offices
   has_many_current :people
   has_many_current :allocations, :through => :people
 
