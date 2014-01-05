@@ -1,9 +1,12 @@
 require 'spec_helper'
 
 describe AllowanceCalculator do
-  let(:person) { FactoryGirl.create :person, allocation_ids: [allocation.id], office_id: office.id }
+  let(:person) { FactoryGirl.create :person, office_id: office.id }
   let(:project) { FactoryGirl.create :project }
-  let(:allocation) { FactoryGirl.create :allocation, start_date: Date.parse('03-09-2013'), end_date: Date.parse('05-09-2013'), project_id: project.id }
+  # NOTE: this is tricky, since allowances are calculated with allocations.this_year
+  let(:start_date) { [Date.today - 2.months, Date.today.beginning_of_year].max }
+  let(:end_date) { start_date + 3.days }
+  let!(:allocation) { FactoryGirl.create :allocation, start_date: start_date, end_date: end_date, person_id: person.id, project_id: project.id }
   let(:office) { FactoryGirl.create :office }
   let!(:project_office) { FactoryGirl.create :project_office, allowance: 80, project: project, office_id: office.id }
 
