@@ -6,8 +6,9 @@ describe ProjectAllowance do
     let(:vacation)   { FactoryGirl.create(:project, :vacation) }
     let(:person)     { FactoryGirl.create(:person, allocation_ids: [caribbean_vacation.id, italy_vacation.id]) }
     let(:vacation_allowance) { FactoryGirl.create(:project_allowance, person: person, project: vacation, hours: 160) }
-    let(:caribbean_vacation) { FactoryGirl.create(:allocation, project: vacation, start_date: Date.parse('04-09-2013'), end_date: Date.parse('05-09-2013')) }
-    let(:italy_vacation) { FactoryGirl.create(:allocation, project: vacation, start_date: Date.parse('09-09-2013'), end_date: Date.parse('13-09-2013')) }
+    let(:start_date) { [Date.today - 1.month - 10.days, Date.today.beginning_of_year].max }
+    let(:caribbean_vacation) { FactoryGirl.create(:allocation, project: vacation, start_date: start_date, end_date: start_date + 4.days) }
+    let(:italy_vacation) { FactoryGirl.create(:allocation, project: vacation, start_date: start_date + 1.month, end_date: start_date + 1.month + 5.days) }
 
     it 'counts its available hours' do
       expect(vacation_allowance.available).to eq(104)

@@ -239,7 +239,7 @@ rake
 
 #### Setup
 
-The API app runs on Heroku in both production (t2api) and staging (t2api-staging) instances.  You will need to
+The API app runs on Heroku in both production (t2api) and staging (t2-staging) instances.  You will need to
 be added as a collaborator to one or both in order to deploy. To set up the heroku git remotes run:
 
 ```
@@ -261,7 +261,7 @@ Working on t2-api is something we someetimes do with candidates on pairing days.
 insist that our work for them is confidential. As such, we keep project names in staging obscure via
 
 ```
-heroku run rake obscure_projects -a t2api-staging
+heroku run rake obscure_projects -a t2-staging
 ```
 
 This is done automatically whenever we transfer data from production to staging (see below).

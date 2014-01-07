@@ -31,6 +31,8 @@ describe User do
     end
 
     it "creates a new authorized user if from neo.com domain" do
+      pending "this behavior is wrong now"
+
       new_email = auth_info.raw_info.email = 'neon@neo.com'
 
       expect {
