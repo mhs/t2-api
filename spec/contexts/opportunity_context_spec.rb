@@ -47,6 +47,12 @@ describe 'OpportunityContext' do
       opportunity.person.should eq another_person
     end
 
+    it 'should transform correctly date, DD-MM-YYYY format' do
+      opportunity = @opportunity_context.create_opportunity({title: 'some title', expected_date_close: '13-11-2013'})
+      opportunity.title.should eq 'some title'
+      opportunity.expected_date_close.day.should eq 13
+    end
+
     describe 'contacts' do
       let(:another_company) { FactoryGirl.create(:company) }
       let(:contact) { FactoryGirl.create(:contact, company: another_company) }

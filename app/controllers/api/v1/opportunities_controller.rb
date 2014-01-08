@@ -1,7 +1,7 @@
 class Api::V1::OpportunitiesController < ApplicationController
 
   def index
-    @opportunities = Opportunity.all
+    @opportunities = Opportunity.order('expected_date_close ASC')
     render json: @opportunities
   end
 

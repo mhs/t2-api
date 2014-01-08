@@ -26,6 +26,8 @@ class OpportunityContext
     if opportunity
       opportunity.update_attributes(params)
       set_opportunity_relations(opportunity, extra_params)
+
+      opportunity.save
       opportunity
     else
       {error: "there's no opportunity with that id"}
