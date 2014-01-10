@@ -1,5 +1,6 @@
 class OpportunitySerializer < ActiveModel::Serializer
   attributes :id, :title, :description, :stage, :confidence, :amount, :expected_date_close, :owner, :company, :contact, :opportunity_notes
+  embed :ids, include: true
 
   def expected_date_close
     Time::DATE_FORMATS[:day_month_year] = '%d-%m-%Y'
@@ -8,30 +9,28 @@ class OpportunitySerializer < ActiveModel::Serializer
   end
 
   def owner
-    {
-      id: object.person.id,
-      name: object.person.name,
-      email: object.person.email
-    }
-  end
-
-  def company
-    unless object.company.nil?
-      {
-        id: object.company.id,
-        name: object.company.name
-      }
-    end
-  end
-
-  def contact
-    unless object.contact.nil?
-      {
-        id: object.contact.id,
-        name: object.contact.name,
-        email: object.contact.email,
-        phone: object.contact.phone
-      }
-    end
+    object.person.id
   end
 end
+
+
+#   def company
+#     unless object.company.nil?
+#       {
+#         id: object.company.id,
+#         name: object.company.name
+#       }
+#     end
+#   end
+# 
+#   def contact
+#     unless object.contact.nil?
+#       {
+#         id: object.contact.id,
+#         name: object.contact.name,
+#         email: object.contact.email,
+#         phone: object.contact.phone
+#       }
+#     end
+#   end
+# end

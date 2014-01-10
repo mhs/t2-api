@@ -1,5 +1,9 @@
 class OpportunityContext
 
+  def self.all
+    CrmData.new(Opportunity.all, Person.all, Office.where("slug NOT SIMILAR TO '(dublin|headquarters|archived)'"))
+  end
+
   def initialize(person)
     @person = person
   end
@@ -51,7 +55,7 @@ class OpportunityContext
     {
       contact: params.delete(:contact),
       company: params.delete(:company),
-      owner: params.delete(:owner)
+      owner: params.delete(:person_id)
     }
   end
 
@@ -101,8 +105,8 @@ class OpportunityContext
   end
 
   def get_owner(owner, opportunity)
-    unless owner[:id].nil?
-      person = Person.find(owner[:id])
+    unless owner.nil?
+      person = Person.find(owner)
       opportunity.person = person unless person.nil?
     end
   end
