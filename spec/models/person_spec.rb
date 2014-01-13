@@ -121,18 +121,18 @@ describe Person do
   end
 
   describe '.overhead' do
-    it 'includes people marked as unsellable' do
-      employee = FactoryGirl.create(:person, unsellable: true)
+    it 'includes people who are < 100% billable' do
+      employee = FactoryGirl.create(:person, :unsellable)
       Person.overhead.should include(employee)
     end
 
     it 'does not include people marked as sellable' do
-      employee = FactoryGirl.create(:person, unsellable: false)
+      employee = FactoryGirl.create(:person)
       Person.overhead.should_not include(employee)
     end
 
     it 'does not include deleted employees' do
-      employee = FactoryGirl.create(:person, unsellable: true)
+      employee = FactoryGirl.create(:person, :unsellable)
       employee.destroy
       Person.overhead.should_not include(employee)
     end
@@ -140,17 +140,17 @@ describe Person do
 
   describe '.billable' do
     it 'does not include people marked as unsellable' do
-      employee = FactoryGirl.create(:person, unsellable: true)
+      employee = FactoryGirl.create(:person, :unsellable)
       Person.billable.should_not include(employee)
     end
 
     it 'includes people marked as sellable' do
-      employee = FactoryGirl.create(:person, unsellable: false)
+      employee = FactoryGirl.create(:person)
       Person.billable.should include(employee)
     end
 
     it 'does not include deleted employees' do
-      employee = FactoryGirl.create(:person, unsellable: false)
+      employee = FactoryGirl.create(:person)
       employee.destroy
       Person.billable.should_not include(employee)
     end
@@ -159,8 +159,8 @@ describe Person do
   describe '.unassignable_on_date by office' do
     let(:date) { Date.today }
     let(:project) { FactoryGirl.create(:project, :vacation) }
-    let(:office_employee) { FactoryGirl.create(:person, unsellable: false) }
-    let(:other_office_employee) { FactoryGirl.create(:person, unsellable: false) }
+    let(:office_employee) { FactoryGirl.create(:person) }
+    let(:other_office_employee) { FactoryGirl.create(:person) }
 
     before do
       FactoryGirl.create(:allocation, project: project, person: office_employee, start_date: 1.week.ago, end_date: Date.tomorrow)
@@ -178,13 +178,13 @@ describe Person do
     let(:vacation) { FactoryGirl.create(:project, :vacation) }
 
     it 'includes someone allocated to vacation today' do
-      employee = FactoryGirl.create(:person, unsellable: false)
+      employee = FactoryGirl.create(:person)
       FactoryGirl.create(:allocation, person: employee, project: vacation, start_date: 1.week.ago, end_date: Date.tomorrow)
       Person.unassignable_on_date(date).should include(employee)
     end
 
     it 'includes them only once even if they are billed on two vacation projects' do
-      employee = FactoryGirl.create(:person, unsellable: false)
+      employee = FactoryGirl.create(:person)
       conference = FactoryGirl.create(:project, :vacation)
       FactoryGirl.create(:allocation, person: employee, project: vacation, start_date: 1.week.ago, end_date: Date.tomorrow)
       FactoryGirl.create(:allocation, person: employee, project: conference, start_date: 1.week.ago, end_date: Date.tomorrow)
@@ -193,14 +193,14 @@ describe Person do
     end
 
     it 'does not include someone allocated to a billable project today' do
-      employee = FactoryGirl.create(:person, unsellable: false)
+      employee = FactoryGirl.create(:person)
       project = FactoryGirl.create(:project, :billable)
       FactoryGirl.create(:allocation, person: employee, project: project, start_date: 1.week.ago, end_date: Date.tomorrow)
       Person.unassignable_on_date(date).should_not include(employee)
     end
 
     it 'does not include someone who is unsellable' do
-      employee = FactoryGirl.create(:person, unsellable: true)
+      employee = FactoryGirl.create(:person, :unsellable)
       FactoryGirl.create(:allocation, person: employee, project: vacation, start_date: 1.week.ago, end_date: Date.tomorrow)
       Person.unassignable_on_date(date).should_not include(employee)
     end
@@ -256,8 +256,8 @@ describe Person do
       Person.billing_on_date(date).should_not include(employee)
     end
 
-    it 'does include someone who is billing even though they normall do not' do
-      overhead_employee = FactoryGirl.create(:person, unsellable: true)
+    it 'does include someone who is billing even though they are unsellable' do
+      overhead_employee = FactoryGirl.create(:person, :unsellable)
       FactoryGirl.create(:allocation, person: overhead_employee, project: billable_project, start_date: 1.week.ago, end_date: Date.tomorrow, billable: true)
       Person.billing_on_date(date).should include(overhead_employee)
     end
