@@ -1,4 +1,5 @@
 class Person < ActiveRecord::Base
+  include HasManyCurrent
 
   ROLES = [
     'Apprentice',
@@ -23,7 +24,7 @@ class Person < ActiveRecord::Base
                       default_url: "https://t2-data.s3.amazonaws.com/default.png"
 
   belongs_to  :user, inverse_of: :person
-  has_many    :allocations
+  has_many_current :allocations
   belongs_to  :office
   belongs_to  :project
   has_many    :project_allowances, inverse_of: :person
@@ -128,12 +129,19 @@ class Person < ActiveRecord::Base
     AvailabilityCalculator.new(allocations_within_range, initial_availability).availabilities
   end
 
+  def skill_list=(v)
+    # DO NOTHING
+    # something's b0rked with ActsAsTaggableOn::Tag and mass assignment
+  end
 
+  def employed_between?(start_window, end_window)
+    (start_date.nil? || start_date <= end_window) && (end_date.nil? || end_date >= start_window)
+  end
 
   private
 
   def create_or_associate_user
-    self.user = User.find_or_create_by_email!(email.downcase) do |u|
+    self.user = User.find_or_create_by!(:email => email.downcase) do |u|
       u.name = name
     end
 

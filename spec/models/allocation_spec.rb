@@ -38,8 +38,9 @@ describe Allocation do
     person = FactoryGirl.create(:person)
     project = FactoryGirl.create(:project)
     proj_office = FactoryGirl.create(:project_office, allowance: 160, project: project, office: person.office)
+    start_date = [Date.today, Date.today.beginning_of_year].max
 
-    allocation = FactoryGirl.build(:allocation, start_date: Date.parse("03-06-2013"), end_date: Date.parse("05-09-2013"), person: person, project: project)
+    allocation = FactoryGirl.build(:allocation, start_date: start_date, end_date: start_date + 2.months, person: person, project: project)
     expect(allocation).to_not be_valid
   end
 
@@ -66,7 +67,7 @@ describe Allocation do
     end
 
     it 'should return all allocations if office is nil' do
-      Allocation.by_office(nil).to_a.should eql(Allocation.all)
+      Allocation.by_office(nil).to_a.should eql(Allocation.all.to_a)
     end
   end
 
@@ -178,7 +179,7 @@ describe Allocation do
   end
 
   describe '.this_year' do
-    let(:base_date) { Date.parse "2013-06-06" }
+    let(:base_date) { [Date.today - 1.month, Date.today.beginning_of_year].max + 1.month }
     let(:start_date) { base_date - 1.month }
     let(:end_date) { base_date + 1.month }
     let(:start_of_year) { base_date.beginning_of_year }

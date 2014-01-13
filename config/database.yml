@@ -2,6 +2,7 @@ development:
   adapter: postgresql
   database: t2api
   host: localhost
+  min_messages: WARNING
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
