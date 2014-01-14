@@ -6,7 +6,7 @@ class Api::V1::OpportunitiesController < ApplicationController
 
   def create
     context = OpportunityContext.new(current_user.person)
-    render json: context.create_opportunity(params[:opportunity])
+    render json: context.create_opportunity(params[:opportunity]), serializer: Opportunity::OpportunitySerializer
   end
 
   def update
