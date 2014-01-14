@@ -75,5 +75,26 @@ describe WeightedSet do
         expect(w.compact).to eq WeightedSet.new( {1 => 100})
       end
     end
+
+    describe "max" do
+      it "does nothing to a set with larger elements" do
+        w = WeightedSet.new({ 1 => 100 })
+        expect(w.max(0)).to eq w
+      end
+
+      it "changes smaller elements to the specified value" do
+        w = WeightedSet.new({ 1 => 100, 2 => -20 })
+        expected = WeightedSet.new({ 1 => 100, 2 => 10 })
+        expect(w.max(10)).to eq expected
+      end
+    end
+
+    describe "==" do
+      it "considers different key orders identical" do
+        w = WeightedSet.new({ 1 => 100, 2 => 75, 3 => 50 })
+        w2 = WeightedSet.new({ 3 => 50, 1 => 100, 2 => 75 })
+        expect(w).to eq(w2)
+      end
+    end
   end
 end
