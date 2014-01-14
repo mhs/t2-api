@@ -1,7 +1,7 @@
 class OpportunityContext
 
   def self.all
-    CrmData.new(Opportunity.all, Person.all, Office.where("slug NOT SIMILAR TO '(dublin|headquarters|archived)'"))
+    CrmData.new(Opportunity.all, Person.all, Office.where("slug NOT SIMILAR TO '(dublin|headquarters|archived)'"), Company.all, Contact.all)
   end
 
   def initialize(person)
@@ -53,9 +53,9 @@ class OpportunityContext
 
   def prepare_opportunity_extra_params(params)
     {
-      contact: params.delete(:contact),
-      company: params.delete(:company),
-      owner: params.delete(:person_id)
+      contact: {id: params.delete(:contact_id), name: params.delete(:contact_name), email: params.delete(:contact_email)},
+      company: {id: params.delete(:company_id), name: params.delete(:company_name)},
+      owner: params.delete(:owner_id)
     }
   end
 
@@ -77,8 +77,8 @@ class OpportunityContext
   end
 
   def get_contact(contact_params, opportunity)
-    contact = Contact.where(email: contact_params[:email]).first unless contact_params[:email].nil?
-    contact ||= Contact.create(contact_params)
+    contact = Contact.where(email: contact_params[:email]).first if !contact_params[:email].nil? or contact_params[:email] != ''
+    contact ||= Contact.create(contact_params) if contact_params[:email] != ''
 
     opportunity.contact = contact
   end
