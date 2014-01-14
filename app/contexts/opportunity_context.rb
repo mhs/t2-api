@@ -55,7 +55,8 @@ class OpportunityContext
     {
       contact: {id: params.delete(:contact_id), name: params.delete(:contact_name), email: params.delete(:contact_email)},
       company: {id: params.delete(:company_id), name: params.delete(:company_name)},
-      owner: params.delete(:owner_id)
+      owner: params.delete(:owner_id),
+      office: params.delete(:office_id)
     }
   end
 
@@ -66,6 +67,7 @@ class OpportunityContext
 
       set_contact_company(opportunity)
       get_owner(relationship_params[:owner], opportunity) unless relationship_params[:owner].nil?
+      set_office(relationship_params[:office], opportunity) unless relationship_params[:office].nil?
     end
   end
 
@@ -74,6 +76,7 @@ class OpportunityContext
     opportunity.confidence = opportunity.confidence || 'warm'
     opportunity.stage = opportunity.stage || 'new'
     opportunity.person = @person
+    opportunity.office = @person.office
   end
 
   def get_contact(contact_params, opportunity)
@@ -109,5 +112,10 @@ class OpportunityContext
       person = Person.find(owner)
       opportunity.person = person unless person.nil?
     end
+  end
+
+  def set_office(office_id, opportunity)
+    office = Office.find(office_id)
+    opportunity.office = office unless office.nil?
   end
 end

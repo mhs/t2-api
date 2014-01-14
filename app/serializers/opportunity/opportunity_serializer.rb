@@ -3,6 +3,7 @@ class Opportunity::OpportunitySerializer < ActiveModel::Serializer
     :owner, :owner_id,
     :company, :company_id, :company_name,
     :contact, :contact_id, :contact_name, :contact_email,
+    :office
     :opportunity_notes
 
   embed :ids, include: true
@@ -39,6 +40,10 @@ class Opportunity::OpportunitySerializer < ActiveModel::Serializer
 
   def contact_id
     contact
+  end
+
+  def office
+    object.office_id
   end
 
   def contact_name

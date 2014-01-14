@@ -4,6 +4,7 @@ describe 'OpportunityContext' do
   let(:person) {FactoryGirl.create(:person)}
   let(:another_person) { FactoryGirl.create(:person, email: 'another_person@neo.com') }
   let(:company) { FactoryGirl.create(:company) }
+  let(:office) {FactoryGirl.create(:office)}
 
   before do
     3.times do
@@ -21,6 +22,12 @@ describe 'OpportunityContext' do
       opportunity.person.should eq person
       opportunity.confidence.should eq 'warm'
       opportunity.stage.should eq 'new'
+      opportunity.office.id.should eq person.office.id
+    end
+
+    it 'should allow to include office' do
+      opportunity = @opportunity_context.create_opportunity({office_id: office.id})
+      opportunity.office.id.should eq office.id
     end
 
     it 'should allow to include description' do
