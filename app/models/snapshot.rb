@@ -91,7 +91,8 @@ class Snapshot < ActiveRecord::Base
 
   def capture_data
     queried_office = office.id ? office : nil
-    calc = WeightCalculator.new(snap_date, queried_office)
+    allocation_relation = Allocation.by_office(office).on_date(date).includes(:person)
+    calc = WeightCalculator.new(allocation_relation)
 
     # TODO: need to change the keys on these
     self.staff_weights = calc.staff

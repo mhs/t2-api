@@ -1,11 +1,12 @@
+require 'weighted_set'
+
 class WeightCalculator
   extend Memoist
 
-  attr_reader :date, :office
+  attr_reader :allocations
 
-  def initialize(date, office=nil)
-    @date = date
-    @office = office
+  def initialize(allocation_relation)
+    @allocations = allocation_relation
   end
 
   def staff
@@ -43,7 +44,9 @@ class WeightCalculator
   end
   memoize :billing
 
-  def allocation_sum
+  private
+
+  def allocation_sum(allocations)
     sums = Hash.new(0)
     allocations.each_with_object(sums) do |allocation, s|
       s[allocation.person] += allocation.percent_allocated
@@ -51,7 +54,4 @@ class WeightCalculator
     sums
   end
 
-  def allocations
-    Allocation.by_office(office).on_date(date).includes(:person)
-  end
 end

@@ -1,125 +1,141 @@
 require 'spec_helper'
 describe WeightCalculator do
-  describe '.unassignable_on_date by office' do
-    let(:date) { Date.today }
-    let(:project) { FactoryGirl.create(:project, :vacation) }
-    let(:office_employee) { FactoryGirl.create(:person) }
-    let(:other_office_employee) { FactoryGirl.create(:person) }
+  let(:date) { Date.today }
+  let(:office) { FactoryGirl.create(:office) }
+  let(:project) { FactoryGirl.create(:project, vacation: false, billable: true, offices: [office]) }
+  let(:vacation_project) { FactoryGirl.create(:project, vacation: true, billable: false, offices: [office]) }
+  let(:allocation_relation) { Allocation.by_office(nil).on_date(date).includes(:person) }
+  let(:calc) { WeightCalculator.new allocation_relation }
+  let(:developer) { FactoryGirl.create(:person) }
+  let(:pm) { FactoryGirl.create(:person, percent_billable: 75) }
+  let(:staff) { FactoryGirl.create(:person, percent_billable: 0) }
 
-    before do
-      FactoryGirl.create(:allocation, project: project, person: office_employee, start_date: 1.week.ago, end_date: Date.tomorrow)
-      FactoryGirl.create(:allocation, project: project, person: other_office_employee, start_date: 1.week.ago, end_date: Date.tomorrow)
+  describe ".billing" do
+    let(:result) { calc.billing }
+
+    context "a developer on vacation" do
+      let!(:vacation) { vacation_for(developer, percent_allocated: 100) }
+      let!(:allocation) { allocation_for(developer, percent_allocated: 100) }
+
+      it "doesn't show the developer" do
+        expect(result.size).to eq(0)
+      end
     end
 
-    it 'should return unassignable people by office' do
-      Person.unassignable_on_date(date, office_employee.office).should include(office_employee)
-      Person.unassignable_on_date(date, office_employee.office).should_not include(other_office_employee)
+    context "a developer on a half-day" do
+      let!(:vacation) { vacation_for(developer, percent_allocated: 50) }
+      let!(:allocation) { allocation_for(developer, percent_allocated: 100) }
+
+      it "shows the developer as 50% billing" do
+        expect(result.size).to eq(1)
+        expect(result[developer]).to eq(50)
+      end
+    end
+
+    context "a PM on vacation" do
+      let!(:vacation) { vacation_for(pm, percent_allocated: 100) }
+      let!(:allocation) { allocation_for(pm, percent_allocated: 75) }
+
+      it "does not show the PM" do
+        expect(result.size).to eq(0)
+      end
+    end
+
+    context "a PM on a half-day" do
+      let!(:vacation) { vacation_for(pm, percent_allocated: 50) }
+      let!(:allocation) { allocation_for(pm, percent_allocated: 75) }
+
+      it "shows the PM as 37% billing" do
+        expect(result.size).to eq(1)
+        expect(result[pm]).to eq(37)
+      end
+    end
+
+    context "staff assigned to billable work on vacation" do
+      let!(:vacation) { vacation_for(staff, percent_allocated: 100) }
+      let!(:allocation) { allocation_for(staff, percent_allocated: 100) }
+
+      it "does not show the staff" do
+        expect(result.size).to eq(0)
+      end
+    end
+
+    context "staff assigned to billable work on a half-day" do
+      let!(:vacation) { vacation_for(staff, percent_allocated: 50) }
+      let!(:allocation) { allocation_for(staff, percent_allocated: 100) }
+
+      it "shows the staff" do
+        expect(result.size).to eq(1)
+        expect(result[staff]).to eq(50)
+      end
+    end
+  end
+
+  describe ".unassignable" do
+    let(:result) { calc.unassignable }
+
+    context "a developer on vacation" do
+      let!(:allocation) { vacation_for(developer, percent_allocated: 100) }
+
+      it "shows the developer as 100% unassignable" do
+        expect(result.size).to eq(1)
+        expect(result[developer]).to eq(100)
+      end
+    end
+
+    context "a developer on a half-day" do
+      let!(:allocation) { vacation_for(developer, percent_allocated: 50) }
+
+      it "shows the developer as 50% unassignable" do
+        expect(result.size).to eq(1)
+        expect(result[developer]).to eq(50)
+      end
+    end
+
+    context "a PM on vacation" do
+      let!(:allocation) { vacation_for(pm, percent_allocated: 100) }
+
+      it "shows the PM as 75% unassignable" do
+        expect(result.size).to eq(1)
+        expect(result[pm]).to eq(75)
+      end
+    end
+
+    context "a PM on a half-day" do
+      let!(:allocation) { vacation_for(pm, percent_allocated: 50) }
+
+      it "shows the PM as 37% unassignable" do
+        expect(result.size).to eq(1)
+        expect(result[pm]).to eq(37)
+      end
+    end
+
+    context "staff on vacation" do
+      let!(:allocation) { vacation_for(staff, percent_allocated: 100) }
+
+      it "does not show the staff" do
+        expect(result.size).to eq(0)
+      end
+    end
+
+    context "staff on a half-day" do
+      let!(:allocation) { vacation_for(staff, percent_allocated: 50) }
+
+      it "does not show the staff" do
+        expect(result.size).to eq(0)
+      end
     end
   end
 
-  describe '.unassignable_on_date with today as date' do
-    let(:date) { Date.today }
-    let(:vacation) { FactoryGirl.create(:project, :vacation) }
+  # CORNER CASES:
+  #  * double-booking on vacations?
 
-    it 'includes someone allocated to vacation today' do
-      employee = FactoryGirl.create(:person)
-      FactoryGirl.create(:allocation, person: employee, project: vacation, start_date: 1.week.ago, end_date: Date.tomorrow)
-      Person.unassignable_on_date(date).should include(employee)
-    end
-
-    it 'includes them only once even if they are billed on two vacation projects' do
-      employee = FactoryGirl.create(:person)
-      conference = FactoryGirl.create(:project, :vacation)
-      FactoryGirl.create(:allocation, person: employee, project: vacation, start_date: 1.week.ago, end_date: Date.tomorrow)
-      FactoryGirl.create(:allocation, person: employee, project: conference, start_date: 1.week.ago, end_date: Date.tomorrow)
-      Person.unassignable_on_date(date).should include(employee)
-      Person.unassignable_on_date(date).size.should eql(1)
-    end
-
-    it 'does not include someone allocated to a billable project today' do
-      employee = FactoryGirl.create(:person)
-      project = FactoryGirl.create(:project, :billable)
-      FactoryGirl.create(:allocation, person: employee, project: project, start_date: 1.week.ago, end_date: Date.tomorrow)
-      Person.unassignable_on_date(date).should_not include(employee)
-    end
-
-    it 'does not include someone who is unsellable' do
-      employee = FactoryGirl.create(:person, :unsellable)
-      FactoryGirl.create(:allocation, person: employee, project: vacation, start_date: 1.week.ago, end_date: Date.tomorrow)
-      Person.unassignable_on_date(date).should_not include(employee)
-    end
-
-    it 'does not include someone who no longer works here' do
-      former_employee = FactoryGirl.create(:person)
-      FactoryGirl.create(:allocation, person: former_employee, project: vacation, start_date: 1.week.ago, end_date: Date.tomorrow)
-      former_employee.update_attributes!(end_date: Date.yesterday)
-      Person.unassignable_on_date(date).should_not include(former_employee)
-    end
+  def allocation_for(person, options={})
+    FactoryGirl.create(:allocation, { person: person, project: project, binding: true, billable: true }.merge(options))
   end
 
-  describe '.billing_on_date with -today- as value' do
-    let(:date) { Date.today }
-    let(:billable_project) { FactoryGirl.create(:project, :billable) }
-    let(:unbillable_project) { FactoryGirl.create(:project, :unbillable) }
-    let(:employee) { FactoryGirl.create(:person) }
-
-    it 'includes someone allocated to a billable project today' do
-      FactoryGirl.create(:allocation, person: employee, project: billable_project, start_date: 1.week.ago, end_date: Date.tomorrow, billable: true)
-      Person.billing_on_date(date).should include(employee)
-    end
-
-    it 'includes the person only once, even if they are allocated to two different projects' do
-      another_billable_project = FactoryGirl.create(:project, billable: true)
-      FactoryGirl.create(:allocation, person: employee, project: billable_project, start_date: 1.week.ago, end_date: Date.tomorrow, billable: true)
-      FactoryGirl.create(:allocation, person: employee, project: another_billable_project, start_date: 1.week.ago, end_date: Date.tomorrow, billable: true)
-      Person.billing_on_date(date).should include(employee)
-      Person.billing_on_date(date).size.should eql(1)
-    end
-
-    it 'does not include someone allocated to a billable project in an unbillable way' do
-      FactoryGirl.create(:allocation, person: employee, project: billable_project, start_date: 1.week.ago, end_date: Date.tomorrow, billable: false)
-      Person.billing_on_date(date).should_not include(employee)
-    end
-
-    it 'does not include someone allocated to an unbillable project' do
-      unbillable_project = FactoryGirl.create(:project, billable: false)
-      FactoryGirl.create(:allocation, person: employee, project: unbillable_project, start_date: 1.week.ago, end_date: Date.tomorrow, billable: false)
-      Person.billing_on_date(date).should_not include(employee)
-    end
-
-    it 'does not include someone on vacation' do
-      vacation = FactoryGirl.create(:project, :vacation)
-      FactoryGirl.create(:allocation, person: employee, project: vacation, start_date: 1.week.ago, end_date: Date.tomorrow)
-      Person.billing_on_date(date).should_not include(employee)
-    end
-
-    it 'does not include someone on vacation if they are also allocated to a billable project' do
-      vacation = FactoryGirl.create(:project, :vacation)
-      FactoryGirl.create(:allocation, person: employee, project: vacation, start_date: 1.day.ago, end_date: Date.tomorrow)
-      FactoryGirl.create(:allocation, person: employee, project: billable_project, start_date: 1.week.ago, end_date: 1.week.from_now, billable: true)
-      Person.billing_on_date(date).should_not include(employee)
-    end
-
-    it 'does include someone who is billing even though they are unsellable' do
-      overhead_employee = FactoryGirl.create(:person, :unsellable)
-      FactoryGirl.create(:allocation, person: overhead_employee, project: billable_project, start_date: 1.week.ago, end_date: Date.tomorrow, billable: true)
-      Person.billing_on_date(date).should include(overhead_employee)
-    end
-
-    it 'does not include someone who is marked as unbillable even if the project is billable and they are not available' do
-      FactoryGirl.create(:allocation, person: employee, project: billable_project, start_date: 1.week.ago, end_date: Date.tomorrow, billable: false, binding: true)
-      Person.billing_on_date(date).should_not include(employee)
-    end
-
-    it 'does not include someone who is marked as unbillable/unavailable if the project itself is not billable' do
-      FactoryGirl.create(:allocation, person: employee, project: unbillable_project, start_date: 1.week.ago, end_date: Date.tomorrow, billable: false, binding: true)
-      Person.billing_on_date(date).should_not include(employee)
-    end
-
-    it 'should be able to filter by office' do
-      FactoryGirl.create(:allocation, person: employee, project: billable_project, start_date: 1.week.ago, end_date: Date.tomorrow, billable: true)
-      Person.billing_on_date(date, employee.office).should include(employee)
-      Person.billing_on_date(date, FactoryGirl.create(:office)).should_not include(employee)
-    end
+  def vacation_for(person, options={})
+    FactoryGirl.create(:allocation, { person: person, project: vacation_project, binding: true, billable: false }.merge(options))
   end
+
 end
