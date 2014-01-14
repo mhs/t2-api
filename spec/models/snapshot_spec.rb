@@ -53,7 +53,7 @@ describe Snapshot do
     end
 
     it 'sets the snapshot date' do
-      date = 3.days.ago
+      date = 3.days.ago.to_date
       Snapshot.on_date!(date).snap_date.should eql(date)
     end
 

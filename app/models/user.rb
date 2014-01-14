@@ -1,12 +1,11 @@
 class User < ActiveRecord::Base
-  devise :omniauthable, :token_authenticatable, :omniauth_providers => [:google_oauth2]
+  devise :omniauthable, :omniauth_providers => [:google_oauth2]
   attr_accessible :email, :name, :uid, :date_format, :office_id, :office, :provider, :t2_application_id
   belongs_to :office
   has_one :person, inverse_of: :user
   belongs_to :t2_application
 
   before_create :set_date_format_if_unset
-
 
   def self.find_for_google_oauth2(auth, signed_in_resource=nil)
     # try to find user by auth info
@@ -28,6 +27,12 @@ class User < ActiveRecord::Base
     user.ensure_authentication_token! if user
 
     user
+  end
+
+  def ensure_authentication_token!
+    return unless authentication_token.blank?
+    self.authentication_token = generate_authentication_token
+    save!
   end
 
   def clear_authentication_token!
@@ -58,5 +63,13 @@ class User < ActiveRecord::Base
   def set_date_format_if_unset
     self.date_format ||= 'month_first'
   end
+
+  def generate_authentication_token
+    loop do
+      token = Devise.friendly_token
+      break token unless User.where(authentication_token: token).exists?
+    end
+  end
+
 end
 
