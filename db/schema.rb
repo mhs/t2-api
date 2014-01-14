@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140103160212) do
+ActiveRecord::Schema.define(version: 20140103160212) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,8 +24,8 @@ ActiveRecord::Schema.define(:version => 20140103160212) do
     t.boolean  "billable"
     t.boolean  "binding"
     t.text     "notes"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
     t.integer  "slot_id"
     t.integer  "percent_allocated"
   end
@@ -88,9 +88,8 @@ ActiveRecord::Schema.define(:version => 20140103160212) do
     t.integer  "office_id"
     t.string   "email"
     t.text     "notes"
-    t.datetime "created_at",                          null: false
-    t.datetime "updated_at",                          null: false
-    t.boolean  "unsellable",          default: false, null: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
     t.date     "start_date"
     t.date     "end_date"
     t.integer  "user_id"
@@ -105,13 +104,12 @@ ActiveRecord::Schema.define(:version => 20140103160212) do
     t.datetime "avatar_updated_at"
     t.datetime "deleted_at"
     t.string   "role"
-    t.integer  "percent_billable",    :default => 100, :null => false
+    t.integer  "percent_billable",    default: 100, null: false
   end
 
   add_index "people", ["end_date"], name: "index_people_on_end_date", using: :btree
   add_index "people", ["office_id"], name: "index_people_on_office_id", using: :btree
   add_index "people", ["start_date"], name: "index_people_on_start_date", using: :btree
-  add_index "people", ["unsellable"], name: "index_people_on_unsellable", using: :btree
 
   create_table "project_allowances", force: true do |t|
     t.integer "hours"
