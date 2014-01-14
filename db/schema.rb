@@ -44,15 +44,15 @@ ActiveRecord::Schema.define(version: 20140102220403) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "companies", :force => true do |t|
-    t.text     "name",       :null => false
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+  create_table "companies", force: true do |t|
+    t.text     "name",       null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
-  add_index "companies", ["name"], :name => "index_companies_on_name", :unique => true
+  add_index "companies", ["name"], name: "index_companies_on_name", unique: true, using: :btree
 
-  create_table "contacts", :force => true do |t|
+  create_table "contacts", force: true do |t|
     t.string  "name"
     t.string  "email"
     t.string  "phone"
@@ -97,23 +97,23 @@ ActiveRecord::Schema.define(version: 20140102220403) do
     t.integer  "position"
   end
 
-  create_table "opportunities", :force => true do |t|
+  create_table "opportunities", force: true do |t|
     t.string   "title"
     t.string   "stage"
-    t.string   "confidence",          :default => "warm"
-    t.decimal  "amount",              :default => 0.0
+    t.string   "confidence",          default: "warm"
+    t.decimal  "amount",              default: 0.0
     t.datetime "expected_date_close"
-    t.integer  "person_id",                               :null => false
+    t.integer  "person_id",                            null: false
     t.integer  "company_id"
     t.integer  "contact_id"
     t.text     "description"
   end
 
-  create_table "opportunity_notes", :force => true do |t|
-    t.text     "detail",         :null => false
-    t.integer  "person_id",      :null => false
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
+  create_table "opportunity_notes", force: true do |t|
+    t.text     "detail",         null: false
+    t.integer  "person_id",      null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
     t.integer  "opportunity_id"
   end
 
