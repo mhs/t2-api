@@ -2,7 +2,7 @@ class Opportunity < ActiveRecord::Base
   before_validation :downcase_confidence
   before_validation :downcase_stage
 
-  attr_accessible :title, :description, :stage, :confidence, :amount, :expected_date_close
+  attr_accessible :title, :description, :stage, :confidence, :amount, :expected_date_close, :next_step
 
   has_many :opportunity_notes
 

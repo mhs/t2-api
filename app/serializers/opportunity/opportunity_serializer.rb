@@ -1,5 +1,5 @@
 class Opportunity::OpportunitySerializer < ActiveModel::Serializer
-  attributes :id, :title, :description, :stage, :confidence, :amount, :expected_date_close,
+  attributes :id, :title, :description, :stage, :confidence, :amount, :expected_date_close, :next_step,
     :owner, :owner_id,
     :company, :company_id, :company_name,
     :contact, :contact_id, :contact_name, :contact_email,
