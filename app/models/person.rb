@@ -52,7 +52,7 @@ class Person < ActiveRecord::Base
 
   scope :overhead, -> { where("percent_billable < 100") }
   scope :billable, -> { where("percent_billable > 0") }
-  scope :by_office, lambda {|office| office ? where(office_id: office.id) : where(false) }
+  scope :by_office, lambda { |office| office ? where(office_id: office.id) : where(false) }
 
   after_create :create_or_associate_user, :create_missing_project_allowances
 
@@ -62,21 +62,6 @@ class Person < ActiveRecord::Base
 
   def self.from_auth_token(token)
     joins(:user).where("users.authentication_token = ?", token).first
-  end
-
-  def self.unassignable_on_date(date, office=nil)
-    # Unsellable = ALWAYS overhead (e.g. the CEO)
-    # Unassignable = Usually available to be assigned, but out on vacation or something like that
-    eligible_employees = by_office(office).billable.employed_on_date(date)
-    Allocation.by_office(office).on_date(date).unassignable.map(&:person).select{|p| eligible_employees.include?(p)}.uniq
-  end
-
-  def self.billing_on_date(date, office=nil)
-    on_vacation = unassignable_on_date(date, office)
-    allocations = Allocation.by_office_and_date(office, date).includes(:person)
-    billable_allocations = allocations.billable_and_assignable
-    relevant_people = billable_allocations.map(&:person).uniq.compact
-    relevant_people - on_vacation
   end
 
   def pto_requests

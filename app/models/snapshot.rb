@@ -4,6 +4,7 @@ class Snapshot < ActiveRecord::Base
   extend Memoist
   extend UtilizationHelper
 
+  # TODO: remove these, or set them up in the migration
   serialize :staff_ids
   serialize :overhead_ids
   serialize :billable_ids
@@ -11,6 +12,20 @@ class Snapshot < ActiveRecord::Base
   serialize :assignable_ids
   serialize :billing_ids
   serialize :non_billing_ids
+
+  serialize :staff_weights
+  serialize :unassignable_weights
+  serialize :billing_weights
+
+  def assignable_weights
+    (staff_weights - unassignable_weights).compact
+  end
+  memoize :assignable_weights
+
+  def non_billing_weights
+    (assignable_weights - billing_weights).compact
+  end
+  memoize :non_billing_weights
 
   attr_accessible :snap_date, :utilization, :office_id
   belongs_to :office
@@ -59,6 +74,7 @@ class Snapshot < ActiveRecord::Base
     by_date(Date.today).order("created_at ASC").last
   end
 
+  # TODO: do we still need this?
   %w{ assignable billing non_billing overhead billable unassignable staff }.each do |method_name|
     define_method method_name do
       Person.where(id: send("#{method_name}_ids"))
@@ -75,21 +91,20 @@ class Snapshot < ActiveRecord::Base
 
   def capture_data
     queried_office = office.id ? office : nil
-    self.staff_ids        = Person.by_office(queried_office).employed_on_date(snap_date).pluck(:id)
-    self.overhead_ids     = Person.by_office(queried_office).overhead.employed_on_date(snap_date).pluck(:id)
-    self.billable_ids     = Person.by_office(queried_office).billable.employed_on_date(snap_date).pluck(:id)
-    self.unassignable_ids = Person.unassignable_on_date(snap_date, queried_office).map(&:id)
-    self.billing_ids      = Person.billing_on_date(snap_date, queried_office).map(&:id)
-    self.assignable_ids   = billable_ids - unassignable_ids
-    self.non_billing_ids  = assignable_ids - billing_ids
-    self.utilization      = calculate_utilization
+    calc = WeightCalculator.new(snap_date, queried_office)
+
+    # TODO: need to change the keys on these
+    self.staff_weights = calc.staff
+    self.unassignable_weights = calc.unassignable
+    self.billing_weights = calc.billing
+    self.utilization = calculate_utilization
   end
 
   def calculate_utilization
-    if assignable_ids.empty?
+    if assignable_weights.empty?
       0.0
     else
-      sprintf "%.1f", (100.0 * billing_ids.size) / assignable_ids.size
+      sprintf "%.1f", (100.0 * billing_weights.total) / assignable_weights.total
     end
   end
 end
