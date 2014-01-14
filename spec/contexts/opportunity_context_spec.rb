@@ -29,19 +29,19 @@ describe 'OpportunityContext' do
     end
 
     it 'should create company if it does not exist' do
-      opportunity = @opportunity_context.create_opportunity({company: {name: 'company inc'}, confidence: 'cold', title: 'some title'})
+      opportunity = @opportunity_context.create_opportunity({company_name: 'company inc', confidence: 'cold', title: 'some title'})
       opportunity.title.should eq 'some title'
       opportunity.company.name.should eq 'company inc'
       opportunity.confidence.should eq 'cold'
     end
 
     it 'should use an existent company' do
-      opportunity = @opportunity_context.create_opportunity({company: {name: company.name, id: company.id}})
+      opportunity = @opportunity_context.create_opportunity({company_name: company.name, company_id: company.id})
       opportunity.company.should eq company
     end
 
     it 'should allow to assign a different owner' do
-      opportunity = @opportunity_context.create_opportunity({owner: {id: another_person.id, name: another_person.name}, title: 'some title', confidence: 'hot'})
+      opportunity = @opportunity_context.create_opportunity({owner_id: another_person.id, title: 'some title', confidence: 'hot'})
       opportunity.title.should eq 'some title'
       opportunity.confidence.should eq 'hot'
       opportunity.person.should eq another_person
@@ -58,26 +58,26 @@ describe 'OpportunityContext' do
       let(:contact) { FactoryGirl.create(:contact, company: another_company) }
 
       it 'should use an existent contact' do
-        opportunity = @opportunity_context.create_opportunity({contact: {id: contact.id, name: contact.name, email: contact.email}})
+        opportunity = @opportunity_context.create_opportunity({contact_id: contact.id, contact_name: contact.name, contact_email: contact.email})
         opportunity.contact.should eq contact
         opportunity.company.should eq another_company
       end
 
       it 'should use an existent company and an existent company' do
-        opportunity = @opportunity_context.create_opportunity({contact: {id: contact.id, name: contact.name, email: contact.email}, company: {id: company.id, name: company.name}})
+        opportunity = @opportunity_context.create_opportunity({contact_id: contact.id, contact_name: contact.name, contact_email: contact.email, company_id: company.id, company_name: company.name})
         opportunity.contact.should eq contact
         opportunity.company.should eq company
       end
 
       it 'should associate contact to existent company' do
-        opportunity = @opportunity_context.create_opportunity({contact: {name: 'foo', email: 'foo@bar.com'}, company: {id: company.id, name: company.name}})
+        opportunity = @opportunity_context.create_opportunity({contact_name: 'foo', contact_email: 'foo@bar.com', company_id: company.id, company_name: company.name})
         opportunity.contact.email.should eq 'foo@bar.com'
         opportunity.contact.company.should eq company
         opportunity.company.should eq company
       end
 
       it 'should not associate to company if it does not exist' do
-        opportunity = @opportunity_context.create_opportunity({contact: {name: 'foo', email: 'foo@bar.com'}})
+        opportunity = @opportunity_context.create_opportunity({contact_name: 'foo', contact_email: 'foo@bar.com'})
         opportunity.contact.email.should eq 'foo@bar.com'
         opportunity.contact.company.should eq nil
         opportunity.company.should eq nil
@@ -88,7 +88,7 @@ describe 'OpportunityContext' do
   describe 'update opportunity' do
 
     it 'should update correctly' do
-      opportunity = @opportunity_context.update_opportunity(Opportunity.last.id, {company: {name: 'acme inc'}, title: 'ux workshop', owner: {id: another_person.id}, confidence: 'hot'})
+      opportunity = @opportunity_context.update_opportunity(Opportunity.last.id, {company_name: 'acme inc', title: 'ux workshop', owner_id: another_person.id, confidence: 'hot'})
       opportunity.title.should eq 'ux workshop'
       opportunity.confidence.should eq 'hot'
       opportunity.person.should eq another_person

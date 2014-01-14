@@ -1,4 +1,4 @@
-class OpportunityNoteSerializer < ActiveModel::Serializer
+class Opportunity::OpportunityNoteSerializer < ActiveModel::Serializer
   attributes :id, :detail, :owner
 
   def owner

@@ -23,7 +23,7 @@ describe Api::V1::OpportunitiesController do
 
     opportunities = JSON.parse(response.body)
     opportunities["opportunities"].size.should eq (10)
-    opportunities["opportunities"].select{ |opportunity| opportunity["owner"]["id"] == person.id }.size.should eq(4)
+    opportunities["opportunities"].select{ |opportunity| opportunity["owner"] == person.id }.size.should eq(4)
   end
 
   describe 'OpportunityNotes' do
@@ -47,34 +47,32 @@ describe Api::V1::OpportunitiesController do
       post :create
 
       opportunity = JSON.parse(response.body)
-      opportunity['opportunity']["owner"]["name"].should eq(person.name)
-      opportunity['opportunity']["stage"].should eq('new')
-      opportunity['opportunity']["confidence"].should eq('warm')
-      opportunity['opportunity']["title"].should eq("#{person.name}'s new opportunity")
+      opportunity["stage"].should eq('new')
+      opportunity["confidence"].should eq('warm')
+      opportunity["title"].should eq("#{person.name}'s new opportunity")
     end
 
     describe 'contacts' do
       let(:contact) { FactoryGirl.create(:contact, company: company) }
 
       it 'should use an existent contact with company' do
-        post :create, { opportunity: {company: {id: company.id}, contact: {name: contact.name, email: contact.email}} }
+        post :create, { opportunity: {company_id: company.id, contact_name: contact.name, contact_email: contact.email} }
 
         opportunity = JSON.parse(response.body)
-        opportunity['opportunity']["company"]["name"].should eq(company.name)
-        opportunity['opportunity']["contact"]["name"].should eq(contact.name)
-        opportunity['opportunity']["contact"]["email"].should eq(contact.email)
+        opportunity["company_id"].should eq(company.id)
+        opportunity["contact_id"].should eq(contact.id)
       end
     end
   end
   
   it 'update an opportunity' do
-    put :update, { id: Opportunity.all.last.id, opportunity: { company: {name: 'acme inc'}, confidence: 'warm', title: 'ux workshop', owner: {id: another_person.id} } }
+    put :update, { id: Opportunity.all.last.id, opportunity: { company_name: 'acme inc', confidence: 'warm', title: 'ux workshop', owner_id: another_person.id } }
 
     opportunity = JSON.parse(response.body)
-    opportunity['opportunity']["owner"]["name"].should eq(another_person.name)
-    opportunity['opportunity']["stage"].should eq('new')
-    opportunity['opportunity']["confidence"].should eq('warm')
-    opportunity['opportunity']["title"].should eq("ux workshop")
+    opportunity["person_id"].should eq(another_person.id)
+    opportunity["stage"].should eq('new')
+    opportunity["confidence"].should eq('warm')
+    opportunity["title"].should eq("ux workshop")
   end
 
   it 'should allow to destroy' do
