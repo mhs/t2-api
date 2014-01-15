@@ -300,6 +300,7 @@ DEPENDENCIES
   rack-cors
   rails (~> 4.0)
   rails_12factor
+  rake
   rspec-rails
   sass-rails
   sqlite3
