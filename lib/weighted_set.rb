@@ -24,7 +24,7 @@ class WeightedSet < DelegateClass(Hash)
   end
 
   def total
-    this.values.reduce(:+)
+    this.values.reduce(:+) || 0
   end
 
   def max(max_val)
@@ -50,12 +50,20 @@ class WeightedSet < DelegateClass(Hash)
       this.values_at(*other.keys) == other.values
   end
 
-  def transform_keys
-    result = {}
-    each_key do |key|
-      result[yield(key)] = self[key]
-    end
-    self.class.new(result)
+  def transform_keys(&block)
+    self.class.new(this.transform_keys(&block))
+  end
+
+  # serialization API for ActiveRecord
+
+  def self.load(s)
+    return new unless s
+    new(YAML.load(s))
+  end
+
+  def self.dump(o)
+    return unless o
+    YAML.dump(o.send(:this))
   end
 
   private

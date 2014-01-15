@@ -1,21 +1,14 @@
 require 'utilization_helper'
+require 'weighted_set'
+
 class Snapshot < ActiveRecord::Base
 
   extend Memoist
   extend UtilizationHelper
 
-  # TODO: remove these, or set them up in the migration
-  serialize :staff_ids
-  serialize :overhead_ids
-  serialize :billable_ids
-  serialize :unassignable_ids
-  serialize :assignable_ids
-  serialize :billing_ids
-  serialize :non_billing_ids
-
-  serialize :staff_weights
-  serialize :unassignable_weights
-  serialize :billing_weights
+  serialize :staff_weights, WeightedSet
+  serialize :unassignable_weights, WeightedSet
+  serialize :billing_weights, WeightedSet
 
   def assignable_weights
     (staff_weights - unassignable_weights).compact
@@ -63,16 +56,16 @@ class Snapshot < ActiveRecord::Base
     on_date!(Date.today)
   end
 
+  def self.today
+    by_date(Date.today).order("created_at ASC").last
+  end
+
   alias_method :old_office, :office
 
   def office
     old_office || Office::SummaryOffice.new
   end
 
-
-  def self.today
-    by_date(Date.today).order("created_at ASC").last
-  end
 
   # TODO: do we still need this?
   %w{ assignable billing non_billing overhead billable unassignable staff }.each do |method_name|
@@ -89,15 +82,29 @@ class Snapshot < ActiveRecord::Base
     save!
   end
 
+  def staff_billable_percents
+    people = Person.by_office(queried_office).employed_on_date(snap_date)
+    result = {}
+    # TODO: this is wrong, will not show people who aren't allocated
+    people.each do |person|
+      result[person] = person.percent_billable
+    end
+    WeightedSet.new(result)
+  end
+  memoize :staff_billable_percents
+
+  def queried_office
+    office.id ? office : nil
+  end
+
   def capture_data
-    queried_office = office.id ? office : nil
-    allocation_relation = Allocation.by_office(office).on_date(date).includes(:person)
+    allocation_relation = Allocation.by_office(queried_office).on_date(snap_date).includes(:person)
     calc = WeightCalculator.new(allocation_relation)
 
     # TODO: need to change the keys on these
-    self.staff_weights = calc.staff
-    self.unassignable_weights = calc.unassignable
-    self.billing_weights = calc.billing
+    self.staff_weights = munge_weights(staff_billable_percents)
+    self.unassignable_weights = munge_weights(calc.unassignable)
+    self.billing_weights = munge_weights(calc.billing)
     self.utilization = calculate_utilization
   end
 
@@ -107,5 +114,12 @@ class Snapshot < ActiveRecord::Base
     else
       sprintf "%.1f", (100.0 * billing_weights.total) / assignable_weights.total
     end
+  end
+
+  private
+
+  def munge_weights(weights)
+    # convert a WeightedSet with Person objects as keys to the serialization format
+    weights.transform_keys { |person| person.name }
   end
 end

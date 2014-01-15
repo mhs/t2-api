@@ -90,6 +90,7 @@ describe Snapshot do
 
   describe '.calculate_utilization' do
     let(:snapshot) { Snapshot.new }
+    let(:result) { snapshot.calculate_utilization assignable, billing }
 
     it 'should return 0 if there is no assignable people' do
       snapshot.billing_ids = [1,2,3]

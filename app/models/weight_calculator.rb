@@ -9,15 +9,6 @@ class WeightCalculator
     @allocations = allocation_relation
   end
 
-  def staff
-    result = {}
-    allocations.each do |person|
-      result[person] = person.percent_billable
-    end
-    WeightedSet.new(result)
-  end
-  memoize :staff
-
   def vacations
     allocation_sum(allocations.unassignable)
   end
