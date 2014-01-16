@@ -44,8 +44,8 @@ class MonthlySnapshot < ActiveRecord::Base
     self.billing_days = 0
     with_week_days_in(snap_date) do |date|
       snapshot = Snapshot.on_date!(date, office_id)
-      self.billing_days += snapshot.billing_ids.size
-      self.assignable_days += snapshot.assignable_ids.size
+      self.billing_days += snapshot.billing_weights.total / 100.0
+      self.assignable_days += snapshot.assignable_weights.total / 100.0
     end
   end
 

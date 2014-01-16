@@ -6,7 +6,7 @@ class MonthlyUtilizationTemplate
   end
 
   def format_row(title, snapshot)
-    fraction = "#{snapshot.billing_days.to_s.ljust(4, ' ')} / #{snapshot.assignable_days}".ljust(11, ' ')
+    fraction = "#{snapshot.billing_days.to_s.ljust(5, ' ')} / #{snapshot.assignable_days}".ljust(14, ' ')
     ratio = ((100.0 * snapshot.billing_days) / snapshot.assignable_days) rescue 0.0
     "#{title.ljust(20, ' ')} - #{fraction} = #{"%.1f" % ratio}%\n"
   end
