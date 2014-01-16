@@ -66,17 +66,6 @@ class Snapshot < ActiveRecord::Base
     old_office || Office::SummaryOffice.new
   end
 
-
-  # TODO: do we still need this?
-  %w{ assignable billing non_billing overhead billable unassignable staff }.each do |method_name|
-    define_method method_name do
-      Person.where(id: send("#{method_name}_ids"))
-    end
-    memoize method_name
-  end
-
-  alias_method :people, :staff
-
   def recalculate!
     capture_data
     save!
