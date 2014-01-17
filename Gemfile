@@ -1,7 +1,9 @@
 source 'https://rubygems.org'
 
-ruby '1.9.3'
+ruby '2.0.0'
 
+gem 'rake'
+gem 'rails_12factor', group: :production
 gem 'rails', '~> 4.0'
 gem 'pg'
 gem 'active_model_serializers'
