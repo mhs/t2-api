@@ -52,6 +52,9 @@ class OpportunityContext
   private
 
   def prepare_opportunity_extra_params(params)
+    params.delete_if do |key, value|
+      ['contact', 'company', 'owner', 'office'].include?(key)
+    end
     {
       contact: {id: params.delete(:contact_id), name: params.delete(:contact_name), email: params.delete(:contact_email)},
       company: {id: params.delete(:company_id), name: params.delete(:company_name)},
