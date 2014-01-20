@@ -3,7 +3,6 @@ class PersonSerializer < ActiveModel::Serializer
     :github, :twitter, :website, :title, :bio, :errors, :avatar, :office_slug, :role, :percent_billable
   has_many :allocations, embed: :ids
   has_one :user, embed: :ids
-  has_one :current_allocation, embed: :ids, include: true, root: :allocations
   has_one :office, embed: :ids
   # has_many :project_allowances, embed: :ids
 
@@ -21,12 +20,5 @@ class PersonSerializer < ActiveModel::Serializer
 
   def office_slug
     office.slug
-  end
-
-  def current_allocation
-    now = Date.today
-    object.allocations.to_a.select do |alloc|
-      alloc.end_date >= now && alloc.start_date <= now
-    end.sort_by { |x| x.vacation? ? 0 : 1 }.first
   end
 end
