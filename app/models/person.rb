@@ -109,7 +109,7 @@ class Person < ActiveRecord::Base
     max_end_date = self.end_date.nil? ? end_date : [self.end_date,end_date].min
 
     allocations_within_range = allocations.bound.within(start_date, end_date)
-    initial_availability = Availability.new(person_id: id, start_date: min_start_date, end_date: max_end_date)
+    initial_availability = Availability.new(person_id: id, start_date: min_start_date, end_date: max_end_date, percent_allocated: percent_billable)
 
     AvailabilityCalculator.new(allocations_within_range, initial_availability).availabilities
   end
