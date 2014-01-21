@@ -15,7 +15,6 @@ ActiveRecord::Schema.define(version: 20140120152908) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "hstore"
 
   create_table "allocations", force: true do |t|
     t.date     "start_date"
@@ -44,6 +43,21 @@ ActiveRecord::Schema.define(version: 20140120152908) do
     t.string   "token"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "companies", force: true do |t|
+    t.text     "name",       null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "companies", ["name"], name: "index_companies_on_name", unique: true, using: :btree
+
+  create_table "contacts", force: true do |t|
+    t.string  "name"
+    t.string  "email"
+    t.string  "phone"
+    t.integer "company_id"
   end
 
   create_table "delayed_jobs", force: true do |t|
@@ -82,6 +96,28 @@ ActiveRecord::Schema.define(version: 20140120152908) do
     t.string   "slug"
     t.datetime "deleted_at"
     t.integer  "position"
+  end
+
+  create_table "opportunities", force: true do |t|
+    t.string   "title"
+    t.string   "stage"
+    t.string   "confidence",          default: "warm"
+    t.decimal  "amount",              default: 0.0
+    t.datetime "expected_date_close"
+    t.integer  "person_id",                            null: false
+    t.integer  "company_id"
+    t.integer  "contact_id"
+    t.text     "description"
+    t.integer  "office_id"
+    t.string   "next_step"
+  end
+
+  create_table "opportunity_notes", force: true do |t|
+    t.text     "detail",         null: false
+    t.integer  "person_id",      null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "opportunity_id"
   end
 
   create_table "people", force: true do |t|
