@@ -23,7 +23,6 @@ tags
 chromedriver.log
 .env
 zeus.json
-bin
 db/dumps
 doc/daily
 public/system
