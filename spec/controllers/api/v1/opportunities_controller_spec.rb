@@ -48,9 +48,9 @@ describe Api::V1::OpportunitiesController do
       post :create
 
       opportunity = JSON.parse(response.body)
-      opportunity["stage"].should eq('new')
-      opportunity["confidence"].should eq('warm')
-      opportunity["title"].should eq("#{person.name}'s new opportunity")
+      opportunity["opportunity"]["stage"].should eq('new')
+      opportunity["opportunity"]["confidence"].should eq('warm')
+      opportunity["opportunity"]["title"].should eq("#{person.name}'s new opportunity")
     end
 
     describe 'contacts' do
@@ -60,8 +60,8 @@ describe Api::V1::OpportunitiesController do
         post :create, { opportunity: {company_id: company.id, contact_name: contact.name, contact_email: contact.email} }
 
         opportunity = JSON.parse(response.body)
-        opportunity["company_id"].should eq(company.id)
-        opportunity["contact_id"].should eq(contact.id)
+        opportunity["opportunity"]["company_id"].should eq(company.id)
+        opportunity["opportunity"]["contact_id"].should eq(contact.id)
       end
     end
   end

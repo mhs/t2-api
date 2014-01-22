@@ -84,7 +84,7 @@ class OpportunityContext
 
   def get_contact(contact_params, opportunity)
     contact = Contact.where(email: contact_params[:email]).first if !contact_params[:email].nil? or contact_params[:email] != ''
-    contact ||= Contact.create(contact_params) if contact_params[:email] != ''
+    contact ||= Contact.create(contact_params) if contact_params[:email] != '' and !contact_params[:email].nil?
 
     opportunity.contact = contact
   end
