@@ -195,7 +195,7 @@ Eg.: `http://localhost:5000/users/auth/google_oauth2/callback`
 
 #### Ruby version
 
-We're currently using MRI ruby 1.9.3-p448
+We're currently using MRI ruby 2.0.0-p353
 
 ## Develop
 
