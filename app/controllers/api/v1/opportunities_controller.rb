@@ -4,6 +4,11 @@ class Api::V1::OpportunitiesController < ApplicationController
     render json: OpportunityContext.all, root: false
   end
 
+  def show
+    opportunity = Opportunity.find(params[:id])
+    render json: opportunity, serializer: Opportunity::OpportunitySerializer
+  end
+
   def create
     context = OpportunityContext.new(current_user.person)
     render json: context.create_opportunity(params[:opportunity]), serializer: Opportunity::OpportunitySerializer
@@ -11,7 +16,7 @@ class Api::V1::OpportunitiesController < ApplicationController
 
   def update
     context = OpportunityContext.new(current_user.person)
-    render json: context.update_opportunity(params[:id], params[:opportunity])
+    render json: context.update_opportunity(params[:id], params[:opportunity]), serializer: Opportunity::OpportunitySerializer
   end
 
   def destroy
