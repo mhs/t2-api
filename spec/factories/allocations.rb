@@ -6,6 +6,8 @@ FactoryGirl.define do
     start_date { Date.today + - 1.week }
     end_date   { Date.today + 1.week }
     billable   { [true, false].sample }
+    percent_allocated { 100 }
+
 
     trait :this_week do
       start_date { Date.today.at_beginning_of_week }

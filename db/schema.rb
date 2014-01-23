@@ -25,9 +25,10 @@ ActiveRecord::Schema.define(version: 20140123141042) do
     t.boolean  "billable"
     t.boolean  "binding"
     t.text     "notes"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
     t.integer  "slot_id"
+    t.integer  "percent_allocated", default: 100, null: false
   end
 
   add_index "allocations", ["billable"], name: "index_allocations_on_billable", using: :btree
@@ -79,10 +80,10 @@ ActiveRecord::Schema.define(version: 20140123141042) do
   create_table "monthly_snapshots", force: true do |t|
     t.integer  "office_id"
     t.date     "snap_date"
-    t.integer  "assignable_days"
-    t.integer  "billing_days"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.decimal  "assignable_days", precision: 6, scale: 2
+    t.decimal  "billing_days",    precision: 6, scale: 2
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
   end
 
   add_index "monthly_snapshots", ["office_id"], name: "index_monthly_snapshots_on_office_id", using: :btree
@@ -125,9 +126,8 @@ ActiveRecord::Schema.define(version: 20140123141042) do
     t.integer  "office_id"
     t.string   "email"
     t.text     "notes"
-    t.datetime "created_at",                          null: false
-    t.datetime "updated_at",                          null: false
-    t.boolean  "unsellable",          default: false, null: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
     t.date     "start_date"
     t.date     "end_date"
     t.integer  "user_id"
@@ -142,12 +142,12 @@ ActiveRecord::Schema.define(version: 20140123141042) do
     t.datetime "avatar_updated_at"
     t.datetime "deleted_at"
     t.string   "role"
+    t.integer  "percent_billable",    default: 100, null: false
   end
 
   add_index "people", ["end_date"], name: "index_people_on_end_date", using: :btree
   add_index "people", ["office_id"], name: "index_people_on_office_id", using: :btree
   add_index "people", ["start_date"], name: "index_people_on_start_date", using: :btree
-  add_index "people", ["unsellable"], name: "index_people_on_unsellable", using: :btree
 
   create_table "project_allowances", force: true do |t|
     t.integer "hours"
@@ -195,16 +195,12 @@ ActiveRecord::Schema.define(version: 20140123141042) do
   create_table "snapshots", force: true do |t|
     t.text     "utilization"
     t.date     "snap_date"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
     t.integer  "office_id"
-    t.text     "staff_ids"
-    t.text     "overhead_ids"
-    t.text     "billable_ids"
-    t.text     "unassignable_ids"
-    t.text     "assignable_ids"
-    t.text     "billing_ids"
-    t.text     "non_billing_ids"
+    t.text     "staff_weights"
+    t.text     "unassignable_weights"
+    t.text     "billing_weights"
   end
 
   create_table "t2_applications", force: true do |t|

@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe Snapshot do
+
   describe 'Validations' do
     it 'should not allow two snapshots for given date and office' do
       Snapshot.create!(snap_date: Date.today, office_id: 1)
@@ -58,7 +59,7 @@ describe Snapshot do
     end
 
     it 'captures currently employed staff' do
-      snapshot.staff.should_not be_empty
+      snapshot.staff_weights.should_not be_empty
     end
 
     it 'defaults the office to the entire company' do
@@ -83,18 +84,8 @@ describe Snapshot do
       end
 
       it 'should update captured data' do
-        Snapshot.on_date!(Date.today).billing_ids.count.should eql(2)
+        Snapshot.on_date!(Date.today).billing_weights.size.should eql(2)
       end
-    end
-  end
-
-  describe '.calculate_utilization' do
-    let(:snapshot) { Snapshot.new }
-
-    it 'should return 0 if there is no assignable people' do
-      snapshot.billing_ids = [1,2,3]
-      snapshot.assignable_ids = []
-      snapshot.calculate_utilization.should eql(0.0)
     end
   end
 
@@ -115,94 +106,101 @@ describe Snapshot do
 
   describe '.capture_data' do
     let(:office)           { FactoryGirl.create(:office) }
-    let(:person_in_office) { FactoryGirl.create(:person, office: office) }
     let(:date)             { 1.month.ago.to_date }
     let(:snapshot)         { Snapshot.new(snap_date: date) }
-    let(:collection)       { [ FactoryGirl.create(:person) ] }
-    let(:collection_ids)   { collection.map(&:id) }
-    let(:scope) do
-      scope = mock()
+
+    def pw(person)
+      [person.name, person.percent_billable]
     end
 
-    it 'should fetch staff_ids, overhead_ids, billable_ids, unassignable_ids' do
-      collection.stub(pluck: collection_ids)
-      Person.should_receive(:employed_on_date).with(date).at_least(3).times.and_return(collection)
-      Person.should_receive(:unassignable_on_date).with(date, nil).once.and_return(collection)
-      Person.should_receive(:billing_on_date).with(date, nil).once.and_return(collection)
-
-      snapshot.capture_data
-
-      snapshot.staff_ids.should eql(collection_ids)
-      snapshot.overhead_ids.should eql(collection_ids)
-      snapshot.billable_ids.should eql(collection_ids)
-      snapshot.unassignable_ids.should eql(collection_ids)
-      snapshot.billing_ids.should eql(collection_ids)
+    def wset(*pairs)
+      res = {}
+      pairs.flatten.each_slice(2) do |(k, v)|
+        res[k] = v
+      end
+      WeightedSet.new res
     end
 
-    it 'should not include people from other offices in billing_ids' do
-      FactoryGirl.create(:allocation, :active, :billable, {
-        person: person_in_office,
-        start_date: date - 2.days,
-        end_date: date + 2.days
-      })
-      FactoryGirl.create(:allocation, :active, :billable, {
-        person: FactoryGirl.create(:person), # Person from a different office
-        start_date: date - 2.days,
-        end_date: date + 2.days
-      })
-
-      snapshot.office = office
-      snapshot.capture_data
-      snapshot.billing_ids.should include(person_in_office.id)
-      snapshot.billing_ids.length.should eql(1)
+    def allocation_for(person, options={})
+      FactoryGirl.create(:allocation, { start_date: date, end_date: date, person: person, binding: true, billable: true }.merge(options))
     end
 
-    it 'should not include people from other offices in unassignable_ids' do
-      vacation_project = FactoryGirl.create(:project, vacation: true)
+    context "with a developer and a staff member" do
+      let!(:dev) { FactoryGirl.create(:person, office: office) }
+      let!(:pm) { FactoryGirl.create(:person, office: office, percent_billable: 50) }
+      let!(:staff) { FactoryGirl.create(:person, :unsellable, office: office) }
+      let(:staff_weights) { wset pw(dev), pw(pm), pw(staff) }
+      let(:unassignable_weights) { wset pw(staff) }
+      let(:assignable_weights) { wset pw(dev), pw(pm) }
 
-      FactoryGirl.create(:allocation, :active, {
-        project: vacation_project,
-        person: person_in_office,
-        start_date: date - 2.days,
-        end_date: date + 2.days
-      })
-      FactoryGirl.create(:allocation, :active, {
-        project: vacation_project,
-        person: FactoryGirl.create(:person), # Person from a different office
-        start_date: date - 2.days,
-        end_date: date + 2.days
-      })
+      it 'should fetch staff_weights, assignable_weights' do
+        snapshot.capture_data
+        expect(snapshot.staff_weights).to eq(staff_weights)
+        expect(snapshot.assignable_weights).to eq(assignable_weights)
+      end
 
-      snapshot.office = office
-      snapshot.capture_data
-      snapshot.unassignable_ids.should include(person_in_office.id)
-      snapshot.unassignable_ids.length.should eql(1)
-    end
+      context "with an allocation for the developer" do
+        let!(:alloc) { allocation_for(dev) }
 
-    it 'should return the right utilization ratio' do
-      # This person will be present but will not have
-      # an allocation. It should be taken into account
-      # in the utilization ration calculation.
-      FactoryGirl.create(:person, office: office)
+        it "the pm should not be billing and staff isn't included." do
+          snapshot.capture_data
+          expect(snapshot.billing_weights).to eq(wset(dev.name, 100))
+          expect(snapshot.non_billing_weights).to eq(wset(pm.name, 50))
+        end
+      end
 
-      FactoryGirl.create(:allocation, :active, :billable, {
-        person: person_in_office,
-        start_date: date - 2.days,
-        end_date: date + 2.days
-      })
-      FactoryGirl.create(:allocation, :active, :billable, {
-        person: FactoryGirl.create(:person),
-        start_date: date - 2.days,
-        end_date: date + 2.days
-      })
+      context "a dev on vacation" do
+        let!(:vacation_allocation) do
+          vacation_project = FactoryGirl.create(:project, vacation: true)
+          allocation_for dev, project: vacation_project, billable: false
+        end
 
-      snapshot.office = office
-      snapshot.capture_data
+        it "shows the dev as unassignable" do
+          snapshot.capture_data
+          expect(snapshot.unassignable_weights).to eq(wset(dev.name, 100))
+        end
+      end
 
-      # Since there are two people in the snapshot's office
-      # and only one of them belongs to an allocation, the
-      # utilization ratio should be 50%
-      snapshot.utilization.should eql("50.0")
+      context "with people from another office" do
+        let(:other_office) { FactoryGirl.create :office }
+        let(:other_guy) { FactoryGirl.create :person, office: other_office }
+        it "doesn't include them in snapshots for the first office" do
+          allocation_for(dev)
+          allocation_for(other_guy)
+          snapshot.office = office
+          snapshot.capture_data
+
+          expect(snapshot.staff_weights).to eq(staff_weights)
+          expect(snapshot.billing_weights).not_to include(other_guy.name)
+        end
+      end
+
+      it 'should return the right utilization ratio' do
+        # This person will be present but will not have
+        # an allocation. It should be taken into account
+        # in the utilization ration calculation.
+        FactoryGirl.create(:person, office: office)
+
+        allocation_for(dev)
+        FactoryGirl.create(:allocation, :active, :billable, {
+          person: FactoryGirl.create(:person),
+          start_date: date - 2.days,
+          end_date: date + 2.days
+        })
+
+        snapshot.office = office
+        snapshot.capture_data
+
+        # Since there are three people in the snapshot's office
+        # but one of them is only 50% billable and only one has
+        # an allocation, the utilization should be:
+        #
+        # billing          100 + 0 + 0
+        # -------     =  ---------------- = 40%
+        # assignable      100 + 100 + 50
+        #
+        snapshot.utilization.should eql("40.0")
+      end
     end
   end
 end

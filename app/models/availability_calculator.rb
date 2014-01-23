@@ -13,7 +13,7 @@ class AvailabilityCalculator
     result = [@initial_availability]
     allocations.sort_by(&:start_date).each do |alloc|
       result = result.flat_map do |av|
-        av.remove_range(alloc.start_date, alloc.end_date)
+        av.remove_range(alloc.start_date, alloc.end_date, alloc.percent_allocated)
       end
     end
     remove_weekends(result)

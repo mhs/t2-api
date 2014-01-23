@@ -16,8 +16,8 @@ class Person < ActiveRecord::Base
   acts_as_paranoid
   acts_as_taggable_on :skills
 
-  attr_accessible :name, :notes, :email, :unsellable, :office, :office_id, :start_date, :end_date,
-                  :github, :twitter, :website, :title, :bio, :skill_list, :avatar, :role
+  attr_accessible :name, :notes, :email, :office, :office_id, :start_date, :end_date,
+                  :github, :twitter, :website, :title, :bio, :skill_list, :avatar, :role, :percent_billable
 
   has_attached_file :avatar,
                       styles: { medium: "300x300>", small: "100x100>", thumb: "50x50>" },
@@ -38,6 +38,8 @@ class Person < ActiveRecord::Base
 
   validates :role, inclusion: { in: ROLES }, allow_blank: true
 
+  validates :percent_billable, inclusion: {in: 0..100}
+
   scope :employed_on_date, lambda { |d|
     where("start_date is NULL or start_date < ?",d)
     .where("end_date is NULL or end_date > ?", d)
@@ -50,9 +52,9 @@ class Person < ActiveRecord::Base
     )
   end
 
-  scope :overhead, -> { where(unsellable: true) }
-  scope :billable, -> { where(unsellable: false) }
-  scope :by_office, lambda {|office| office ? where(office_id: office.id) : where(false) }
+  scope :overhead, -> { where("percent_billable < 100") }
+  scope :billable, -> { where("percent_billable > 0") }
+  scope :by_office, lambda { |office| office ? where(office_id: office.id) : where(false) }
 
   after_create :create_or_associate_user, :create_missing_project_allowances
 
@@ -62,21 +64,6 @@ class Person < ActiveRecord::Base
 
   def self.from_auth_token(token)
     joins(:user).where("users.authentication_token = ?", token).first
-  end
-
-  def self.unassignable_on_date(date, office=nil)
-    # Unsellable = ALWAYS overhead (e.g. the CEO)
-    # Unassignable = Usually available to be assigned, but out on vacation or something like that
-    eligible_employees = by_office(office).billable.employed_on_date(date)
-    Allocation.by_office(office).on_date(date).unassignable.map(&:person).select{|p| eligible_employees.include?(p)}.uniq
-  end
-
-  def self.billing_on_date(date, office=nil)
-    on_vacation = unassignable_on_date(date, office)
-    allocations = Allocation.by_office_and_date(office, date).includes(:person)
-    billable_allocations = allocations.billable_and_assignable
-    relevant_people = billable_allocations.map(&:person).uniq.compact
-    relevant_people - on_vacation
   end
 
   def pto_requests
@@ -124,7 +111,7 @@ class Person < ActiveRecord::Base
     max_end_date = self.end_date.nil? ? end_date : [self.end_date,end_date].min
 
     allocations_within_range = allocations.bound.within(start_date, end_date)
-    initial_availability = Availability.new(person_id: id, start_date: min_start_date, end_date: max_end_date)
+    initial_availability = Availability.new(person_id: id, start_date: min_start_date, end_date: max_end_date, percent_allocated: percent_billable)
 
     AvailabilityCalculator.new(allocations_within_range, initial_availability).availabilities
   end

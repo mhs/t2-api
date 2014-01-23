@@ -36,7 +36,7 @@ group :development, :test do
   gem 'factory_girl_rails'
   gem 'ffaker'
   gem 'pry-rails'
-  gem 'pry-plus'
+  # gem 'pry-plus'
   gem 'taps'
   gem 'sqlite3'
   gem 'foreman'
