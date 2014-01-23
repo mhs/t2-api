@@ -18,6 +18,7 @@ gem 'acts-as-taggable-on'
 gem 'paperclip'
 gem 'aws-sdk'
 gem 'protected_attributes' # TODO: remove this and replace with strong params
+gem 'paper_trail', '~> 3.0.0'
 
 group :assets do
   gem 'sass-rails'

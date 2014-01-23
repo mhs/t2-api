@@ -1,4 +1,7 @@
 class Opportunity < ActiveRecord::Base
+
+  has_paper_trail :class_name => 'Version'
+
   before_validation :downcase_confidence
   before_validation :downcase_stage
 

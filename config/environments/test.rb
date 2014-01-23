@@ -33,4 +33,8 @@ T2Api::Application.configure do
   config.active_support.deprecation = :stderr
 
   config.eager_load = false
+
+  config.after_initialize do
+    PaperTrail.enabled = false
+  end
 end

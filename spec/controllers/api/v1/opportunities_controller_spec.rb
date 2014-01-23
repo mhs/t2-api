@@ -82,4 +82,24 @@ describe Api::V1::OpportunitiesController do
     response.status.should eq(200)
     Opportunity.all.count.should eq(9)
   end
+
+  describe 'Versioning' do
+    before do
+      PaperTrail.enabled = true
+      post :create
+      @opportunity = Opportunity.find JSON.parse(response.body)["opportunity"]["id"]
+    end
+
+    after do
+      PaperTrail.enabled = false
+    end
+
+    it 'should keep a version of the model state' do
+      @opportunity.versions.should_not be_empty
+    end
+
+    it 'should keep a track of the user that created the new version' do
+      @opportunity.versions.last.user.should eql(person.user)
+    end
+  end
 end
