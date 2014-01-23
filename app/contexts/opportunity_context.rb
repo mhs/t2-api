@@ -1,7 +1,9 @@
 class OpportunityContext
 
   def self.all
-    CrmData.new(Opportunity.all, Person.all, Office.where("slug NOT SIMILAR TO '(dublin|headquarters|archived)'"), Company.all, Contact.all)
+    persons = Person.where(role: ['Business Development', 'Principal', 'Managing Director', 'General & Administrative'])
+    offices = Office.where("slug NOT SIMILAR TO '(dublin|headquarters|archived)'")
+    CrmData.new(Opportunity.all, persons, offices, Company.all, Contact.all)
   end
 
   def initialize(person)
@@ -56,7 +58,7 @@ class OpportunityContext
       ['contact', 'company', 'owner', 'office'].include?(key)
     end
     {
-      contact: {id: params.delete(:contact_id), name: params.delete(:contact_name), email: params.delete(:contact_email)},
+      contact: {id: params.delete(:contact_id), name: params.delete(:contact_name), email: params.delete(:contact_email), phone: params.delete(:contact_phone)},
       company: {id: params.delete(:company_id), name: params.delete(:company_name)},
       owner: params.delete(:owner_id),
       office: params.delete(:office_id)
