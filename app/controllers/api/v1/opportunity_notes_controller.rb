@@ -1,6 +1,6 @@
 class Api::V1::OpportunityNotesController < ApplicationController
   before_filter :set_opportunity_params, only: [:create, :update]
-  before_filter :get_opportunity, only: [:create, :update, :destroy]
+  before_filter :get_opportunity, only: [:create, :update]
   before_filter :get_owner, only: [:create, :update]
   before_filter :get_opportunity_note, only: [:update, :destroy]
 
@@ -24,9 +24,12 @@ class Api::V1::OpportunityNotesController < ApplicationController
     if @opportunity_note.nil?
       render json: {error: 'opportunity note does not exist'}, status: 404
     else
-      @opportunity_note.update_attributes(params[:note])
+      @opportunity_note.person = @owner unless @owner.nil? 
+      @opportunity_note.opportunity = @opportunity unless @opportunity.nil?
 
-      render json: @opportunity_note, root: false
+      @opportunity_note.update_attributes(params[:opportunity_note])
+
+      render json: @opportunity_note, serializer: Opportunity::OpportunityNoteSerializer
     end
   end
 
@@ -50,10 +53,10 @@ class Api::V1::OpportunityNotesController < ApplicationController
   end
 
   def get_owner
-    @owner = Person.find(@opportunity_params.delete(:owner))
+    @owner = Person.find(@opportunity_params.delete(:owner)) unless @opportunity_params[:owner].nil?
   end
 
   def get_opportunity_note
-    @opportunity_note = @opportunity.opportunity_notes.find(params[:id]) unless @opportunity.nil?
+    @opportunity_note = OpportunityNote.find(params[:id])
   end
 end

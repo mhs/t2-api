@@ -5,6 +5,7 @@ describe Api::V1::OpportunitiesController do
   let(:person) {FactoryGirl.create(:person)}
   let(:another_person) { FactoryGirl.create(:person, email: 'another_person@neo.com') }
   let(:company) { FactoryGirl.create(:company) }
+  let(:contact) { FactoryGirl.create(:contact, company: company) }
 
   before do
     4.times do
@@ -54,24 +55,23 @@ describe Api::V1::OpportunitiesController do
     end
 
     describe 'contacts' do
-      let(:contact) { FactoryGirl.create(:contact, company: company) }
 
       it 'should use an existent contact with company' do
-        post :create, { opportunity: {company_id: company.id, contact_name: contact.name, contact_email: contact.email} }
+        post :create, { opportunity: {company: company.id, contact: contact.id} }
 
         opportunity = JSON.parse(response.body)
-        opportunity["opportunity"]["company_id"].should eq(company.id)
-        opportunity["opportunity"]["contact_id"].should eq(contact.id)
+        opportunity["opportunity"]["company"].should eq(company.id)
+        opportunity["opportunity"]["contact"].should eq(contact.id)
       end
     end
   end
   
   it 'update an opportunity' do
-    put :update, { id: Opportunity.all.last.id, opportunity: { company_name: 'acme inc', confidence: 'warm', title: 'ux workshop', owner_id: another_person.id } }
+    put :update, { id: Opportunity.all.last.id, opportunity: { confidence: 'warm', title: 'ux workshop', owner: another_person.id } }
 
     opportunity = JSON.parse(response.body)
 
-    opportunity["opportunity"]["owner_id"].should eq(another_person.id)
+    opportunity["opportunity"]["owner"].should eq(another_person.id)
     opportunity["opportunity"]["stage"].should eq('new')
     opportunity["opportunity"]["confidence"].should eq('warm')
     opportunity["opportunity"]["title"].should eq("ux workshop")
