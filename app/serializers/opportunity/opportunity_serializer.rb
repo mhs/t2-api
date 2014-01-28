@@ -1,10 +1,6 @@
 class Opportunity::OpportunitySerializer < ActiveModel::Serializer
   attributes :id, :title, :description, :stage, :confidence, :amount, :expected_date_close, :next_step,
-    :owner,
-    :company,
-    :contact, :contact_id, :contact_name, :contact_email,
-    :office,
-    :opportunity_notes
+    :owner, :company, :contact, :office, :opportunity_notes
 
   embed :ids, include: true
 
@@ -26,20 +22,8 @@ class Opportunity::OpportunitySerializer < ActiveModel::Serializer
     object.contact_id
   end
 
-  def contact_id
-    contact
-  end
-
   def office
     object.office_id
-  end
-
-  def contact_name
-    object.contact.name unless object.contact.nil?
-  end
-
-  def contact_email
-    object.contact.email unless object.contact.nil?
   end
 
   def opportunity_notes
