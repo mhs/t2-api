@@ -42,6 +42,7 @@ group :development, :test do
   gem 'foreman'
   gem 'capybara'
   gem 'launchy'
+  gem 'byebug'
 end
 
 group :production do
