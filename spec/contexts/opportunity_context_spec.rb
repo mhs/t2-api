@@ -26,7 +26,7 @@ describe 'OpportunityContext' do
     end
 
     it 'should allow to include office' do
-      opportunity = @opportunity_context.create_opportunity({office_id: office.id})
+      opportunity = @opportunity_context.create_opportunity({office: office.id})
       opportunity.office.id.should eq office.id
     end
 
@@ -35,20 +35,13 @@ describe 'OpportunityContext' do
       opportunity.description.should eq Opportunity.last.description
     end
 
-    it 'should create company if it does not exist' do
-      opportunity = @opportunity_context.create_opportunity({company_name: 'company inc', confidence: 'cold', title: 'some title'})
-      opportunity.title.should eq 'some title'
-      opportunity.company.name.should eq 'company inc'
-      opportunity.confidence.should eq 'cold'
-    end
-
     it 'should use an existent company' do
-      opportunity = @opportunity_context.create_opportunity({company_name: company.name, company_id: company.id})
+      opportunity = @opportunity_context.create_opportunity({company: company.id})
       opportunity.company.should eq company
     end
 
     it 'should allow to assign a different owner' do
-      opportunity = @opportunity_context.create_opportunity({owner_id: another_person.id, title: 'some title', confidence: 'hot'})
+      opportunity = @opportunity_context.create_opportunity({owner: another_person.id, title: 'some title', confidence: 'hot'})
       opportunity.title.should eq 'some title'
       opportunity.confidence.should eq 'hot'
       opportunity.person.should eq another_person
@@ -63,29 +56,32 @@ describe 'OpportunityContext' do
     describe 'contacts' do
       let(:another_company) { FactoryGirl.create(:company) }
       let(:contact) { FactoryGirl.create(:contact, company: another_company) }
+      let(:orphan_contact) { FactoryGirl.create(:contact, company: nil) }
+      let(:another_contact) { FactoryGirl.create(:contact, company: company, name: 'foo') }
 
       it 'should use an existent contact' do
-        opportunity = @opportunity_context.create_opportunity({contact_id: contact.id, contact_name: contact.name, contact_email: contact.email})
+        opportunity = @opportunity_context.create_opportunity({contact: contact.id})
         opportunity.contact.should eq contact
         opportunity.company.should eq another_company
       end
 
-      it 'should use an existent company and an existent company' do
-        opportunity = @opportunity_context.create_opportunity({contact_id: contact.id, contact_name: contact.name, contact_email: contact.email, company_id: company.id, company_name: company.name})
+      it 'should use an existent company and an existent contact' do
+        opportunity = @opportunity_context.create_opportunity({contact: contact.id, company: company.id})
         opportunity.contact.should eq contact
         opportunity.company.should eq company
       end
 
       it 'should associate contact to existent company' do
-        opportunity = @opportunity_context.create_opportunity({contact_name: 'foo', contact_email: 'foo@bar.com', company_id: company.id, company_name: company.name})
-        opportunity.contact.email.should eq 'foo@bar.com'
+        
+        opportunity = @opportunity_context.create_opportunity({contact: another_contact.id, company: company.id})
+        opportunity.contact.email.should eq another_contact.email
         opportunity.contact.company.should eq company
         opportunity.company.should eq company
       end
 
       it 'should not associate to company if it does not exist' do
-        opportunity = @opportunity_context.create_opportunity({contact_name: 'foo', contact_email: 'foo@bar.com'})
-        opportunity.contact.email.should eq 'foo@bar.com'
+        opportunity = @opportunity_context.create_opportunity({contact: orphan_contact.id})
+        opportunity.contact.email.should eq orphan_contact.email
         opportunity.contact.company.should eq nil
         opportunity.company.should eq nil
       end
@@ -93,9 +89,10 @@ describe 'OpportunityContext' do
   end
 
   describe 'update opportunity' do
+    let(:acme_company) { FactoryGirl.create(:company, name: 'acme inc') }
 
     it 'should update correctly' do
-      opportunity = @opportunity_context.update_opportunity(Opportunity.last.id, {company_name: 'acme inc', title: 'ux workshop', owner_id: another_person.id, confidence: 'hot'})
+      opportunity = @opportunity_context.update_opportunity(Opportunity.last.id, {company: acme_company.id, title: 'ux workshop', owner: another_person.id, confidence: 'hot'})
       opportunity.title.should eq 'ux workshop'
       opportunity.confidence.should eq 'hot'
       opportunity.person.should eq another_person

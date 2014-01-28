@@ -3,7 +3,7 @@ class OpportunityContext
   def self.all
     persons = Person.where(role: ['Business Development', 'Principal', 'Managing Director', 'General & Administrative'])
     offices = Office.where("slug NOT SIMILAR TO '(dublin|headquarters|archived)'")
-    CrmData.new(Opportunity.all, persons, offices, Company.all, Contact.all)
+    CrmData.new(Opportunity.all, persons, offices, Company.all, Contact.all, OpportunityNote.all)
   end
 
   def initialize(person)
@@ -54,14 +54,12 @@ class OpportunityContext
   private
 
   def prepare_opportunity_extra_params(params)
-    params.delete_if do |key, value|
-      ['contact', 'company', 'owner', 'office'].include?(key)
-    end
     {
-      contact: {id: params.delete(:contact_id), name: params.delete(:contact_name), email: params.delete(:contact_email), phone: params.delete(:contact_phone)},
-      company: {id: params.delete(:company_id), name: params.delete(:company_name)},
-      owner: params.delete(:owner_id),
-      office: params.delete(:office_id)
+      # contact: {id: params.delete(:contact_id), name: params.delete(:contact_name), email: params.delete(:contact_email), phone: params.delete(:contact_phone)},
+      contact: params.delete(:contact),
+      company: params.delete(:company),
+      owner: params.delete(:owner),
+      office: params.delete(:office)
     }
   end
 
@@ -84,18 +82,17 @@ class OpportunityContext
     opportunity.office = @person.office
   end
 
-  def get_contact(contact_params, opportunity)
-    contact = Contact.where(email: contact_params[:email]).first if !contact_params[:email].nil? or contact_params[:email] != ''
-    contact ||= Contact.create(contact_params) if contact_params[:email] != '' and !contact_params[:email].nil?
+  def get_contact(contact_id, opportunity)
+    # contact = Contact.where(email: contact_params[:email]).first if !contact_params[:email].nil? or contact_params[:email] != ''
+    # contact ||= Contact.create(contact_params) if contact_params[:email] != '' and !contact_params[:email].nil?
 
-    opportunity.contact = contact
+    opportunity.contact = Contact.find(contact_id)
   end
 
-  def get_company(company_params, opportunity)
-    company = Company.find(company_params[:id]) unless company_params[:id].nil?
-    company = (Company.where("name ILIKE ?", company_params[:name]).first || Company.create(name: company_params[:name])) if !company_params[:name].nil? and company.nil?
-
-    opportunity.company = company unless company.nil?
+  def get_company(company_id, opportunity)
+    # company = Company.find(company_params[:id]) unless company_params[:id].nil?
+    opportunity.company = Company.find(company_id)
+    # company = (Company.where("name ILIKE ?", company_params[:name]).first || Company.create(name: company_params[:name])) if !company_params[:name].nil? and company.nil?
   end
 
   def set_contact_company(opportunity)

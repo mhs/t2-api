@@ -1,9 +1,9 @@
 class Opportunity::OpportunitySerializer < ActiveModel::Serializer
   attributes :id, :title, :description, :stage, :confidence, :amount, :expected_date_close, :next_step,
-    :owner, :owner_id,
-    :company, :company_id, :company_name,
+    :owner,
+    :company,
     :contact, :contact_id, :contact_name, :contact_email,
-    :office, :office_id,
+    :office,
     :opportunity_notes
 
   embed :ids, include: true
@@ -18,20 +18,8 @@ class Opportunity::OpportunitySerializer < ActiveModel::Serializer
     object.person.id
   end
 
-  def owner_id
-    owner
-  end
-
   def company
     object.company_id
-  end
-
-  def company_id
-    company
-  end
-
-  def company_name
-    object.company.name unless object.company.nil?
   end
 
   def contact
@@ -45,10 +33,6 @@ class Opportunity::OpportunitySerializer < ActiveModel::Serializer
   def office
     object.office_id
   end
-  
-  def office_id
-    office
-  end
 
   def contact_name
     object.contact.name unless object.contact.nil?
@@ -56,5 +40,9 @@ class Opportunity::OpportunitySerializer < ActiveModel::Serializer
 
   def contact_email
     object.contact.email unless object.contact.nil?
+  end
+
+  def opportunity_notes
+    object.opportunity_notes.select(:id).map{ |note| note.id }
   end
 end
