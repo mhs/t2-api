@@ -54,6 +54,9 @@ class OpportunityContext
   private
 
   def prepare_opportunity_extra_params(params)
+    params.delete(:created)
+    params.delete(:updated)
+
     {
       # contact: {id: params.delete(:contact_id), name: params.delete(:contact_name), email: params.delete(:contact_email), phone: params.delete(:contact_phone)},
       contact: params.delete(:contact),

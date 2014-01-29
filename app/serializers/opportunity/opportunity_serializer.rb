@@ -1,13 +1,12 @@
 class Opportunity::OpportunitySerializer < ActiveModel::Serializer
   attributes :id, :title, :description, :stage, :confidence, :amount, :expected_date_close, :next_step,
-    :owner, :company, :contact, :office, :opportunity_notes
+    :owner, :company, :contact, :office, :opportunity_notes, :created, :updated
 
   embed :ids, include: true
 
   def expected_date_close
-    Time::DATE_FORMATS[:day_month_year] = '%d-%m-%Y'
     return nil if object.expected_date_close.nil?
-    object.expected_date_close.to_s(:day_month_year)
+    object.expected_date_close.strftime(time_format)
   end
 
   def owner
@@ -28,5 +27,19 @@ class Opportunity::OpportunitySerializer < ActiveModel::Serializer
 
   def opportunity_notes
     object.opportunity_notes.select(:id).map{ |note| note.id }
+  end
+
+  def created
+    object.created_at.strftime(time_format)
+  end
+
+  def updated
+    object.updated_at.strftime(time_format)
+  end
+
+  private
+
+  def time_format
+    '%d-%m-%Y'
   end
 end
