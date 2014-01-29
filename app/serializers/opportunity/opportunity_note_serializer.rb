@@ -1,6 +1,8 @@
 class Opportunity::OpportunityNoteSerializer < ActiveModel::Serializer
   attributes :id, :detail, :owner, :opportunity, :created_at
 
+  root true
+
   def owner
     object.person.id
   end
