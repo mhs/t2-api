@@ -1,25 +1,18 @@
 class Api::V1::UnfiledNotesController < ApplicationController
   skip_before_filter :authenticate_user!, only: :create
 
+  before_filter :fetch_person_by_from_address, only: :create
+
   def index
     @notes = OpportunityNote.where(person_id: current_user.person.id).where(opportunity_id: nil)
     render json: @notes, each_serializer: Opportunity::OpportunityNoteSerializer, root: 'opportunity_notes'
   end
 
   def create
-    person = Person.where(email: from_email_address).first
-
-    if person.nil?
-      render json: {error: 'only neo.com emails are accepted currently'}, status: 400
-
+    if @person && @person.opportunity_notes.new(detail: unfiled_note_params["body-plain"]).save
+      render json: {}, status: 200
     else
-      unfiled_note = person.opportunity_notes.new(detail: unfiled_note_params["body-plain"])
-
-      if unfiled_note.save
-        render json: unfiled_note, serializer: Opportunity::OpportunityNoteSerializer
-      else
-        render json: {error: 'the note is invalid'}, status: 400
-      end
+      render json: {error: 'Invalid note'}, status: 400
     end
   end
 
@@ -29,7 +22,8 @@ class Api::V1::UnfiledNotesController < ApplicationController
     params.permit(:from, :subject, "body-plain", "stripped-text")
   end
 
-  def from_email_address
-    unfiled_note_params[:from].scan(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b/i).first
+  def fetch_person_by_from_address
+    email = unfiled_note_params[:from].scan(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b/i).first
+    @person = Person.find_by_email(email)
   end
 end

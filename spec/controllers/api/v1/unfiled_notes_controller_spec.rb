@@ -31,8 +31,7 @@ describe Api::V1::UnfiledNotesController do
     it 'should allow if email is neo.com domain' do
       post :create, 'body-plain' => 'This is just some note', from: "#{person.name} <#{another_person.email}>"
 
-      note = JSON.parse(response.body)
-      note['opportunity_note']['owner'].should eql(another_person.id)
+      response.should be_success
 
       OpportunityNote.all.count.should eq(1)
     end
@@ -42,7 +41,7 @@ describe Api::V1::UnfiledNotesController do
 
       note = JSON.parse(response.body)
       response.status.should eq(400)
-      note['error'].should eq('only neo.com emails are accepted currently')
+      note['error'].should eq('Invalid note')
 
       OpportunityNote.all.count.should eq(0)
     end
