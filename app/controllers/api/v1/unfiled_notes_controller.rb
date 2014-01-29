@@ -7,7 +7,7 @@ class Api::V1::UnfiledNotesController < ApplicationController
   end
 
   def create
-    person = Person.where(email: unfiled_note_params[:sender]).first
+    person = Person.where(email: from_email_address).first
 
     if person.nil?
       render json: {error: 'only neo.com emails are accepted currently'}, status: 400
@@ -26,6 +26,10 @@ class Api::V1::UnfiledNotesController < ApplicationController
   private
 
   def unfiled_note_params
-    params.permit(:sender, :recipient, :subject, "body-plain", "stripped-text")
+    params.permit(:from, :subject, "body-plain", "stripped-text")
+  end
+
+  def from_email_address
+    unfiled_note_params[:from].scan(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b/i).first
   end
 end

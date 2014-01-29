@@ -29,7 +29,7 @@ describe Api::V1::UnfiledNotesController do
     end
 
     it 'should allow if email is neo.com domain' do
-      post :create, 'body-plain' => 'This is just some note', sender: another_person.email
+      post :create, 'body-plain' => 'This is just some note', from: "#{person.name} <#{another_person.email}>"
 
       note = JSON.parse(response.body)
       note['opportunity_note']['owner'].should eql(another_person.id)
@@ -38,7 +38,7 @@ describe Api::V1::UnfiledNotesController do
     end
 
     it 'should not allow if email is not neo.com domain' do
-      post :create, 'body-plain' => 'This is just some note', sender: "user@example.com"
+      post :create, 'body-plain' => 'This is just some note', from: "user@example.com"
 
       note = JSON.parse(response.body)
       response.status.should eq(400)
