@@ -1,60 +1,29 @@
 class Api::V1::UnfiledNotesController < ApplicationController
   skip_before_filter :authenticate_user!, only: :create
-  before_filter :get_opportunity_note, only: [:update, :destroy]
+
+  before_filter :fetch_person_by_from_address, only: :create
 
   def index
     @notes = OpportunityNote.where(person_id: current_user.person.id).where(opportunity_id: nil)
-    render json: @notes
+    render json: @notes, each_serializer: Opportunity::OpportunityNoteSerializer, root: 'opportunity_notes'
   end
 
   def create
-    person = Person.where(email: params[:email]).first
-
-    if person.nil?
-      render json: {error: 'only neo.com emails are accepted currently'}, status: 400
-
+    if @person && @person.opportunity_notes.new(detail: unfiled_note_params["body-plain"]).save
+      render json: {}, status: 200
     else
-      unfiled_note = OpportunityNote.new(detail: params[:detail])
-      unfiled_note.person = person
-
-      if unfiled_note.save
-        render json: unfiled_note, root: false
-      else
-        render json: {error: 'the note is invalid'}, status: 400
-      end
-    end
-  end
-
-  def update
-    if @note.nil?
-      render json: {error: 'There is no a note'}
-    else
-      opportunity_id = params[:note].delete(:opportunity_id).to_i
-
-      @note.update_attributes(params[:note])
-
-      unless opportunity_id.nil?
-        opportunity = Opportunity.find(opportunity_id)
-        @note.opportunity = opportunity unless opportunity.nil?
-        @note.save
-      end
-
-      render json: nil, status: :ok
-    end
-  end
-
-  def destroy
-    if @note.nil?
-      render json: {error: 'There is no a note'}
-    else
-      @note.destroy
-      render json: nil, status: :ok
+      render json: {error: 'Invalid note'}, status: 400
     end
   end
 
   private
 
-  def get_opportunity_note
-    @note = OpportunityNote.find(params[:id])
+  def unfiled_note_params
+    params.permit(:from, :subject, "body-plain", "stripped-text")
+  end
+
+  def fetch_person_by_from_address
+    email = unfiled_note_params[:from].scan(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b/i).first
+    @person = Person.find_by_email(email)
   end
 end
