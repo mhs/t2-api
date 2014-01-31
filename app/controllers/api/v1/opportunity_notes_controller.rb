@@ -19,15 +19,13 @@ class Api::V1::OpportunityNotesController < ApplicationController
       end
     end
   end
-  
+
   def update
     if @opportunity_note.nil?
       render json: {error: 'opportunity note does not exist'}, status: 404
     else
-      @opportunity_note.person = @owner unless @owner.nil? 
       @opportunity_note.opportunity = @opportunity unless @opportunity.nil?
-
-      @opportunity_note.update_attributes(params[:opportunity_note])
+      @opportunity_note.update_attributes(opportunity_note_params)
 
       render json: @opportunity_note, serializer: Opportunity::OpportunityNoteSerializer
     end
@@ -43,6 +41,10 @@ class Api::V1::OpportunityNotesController < ApplicationController
   end
 
   private
+
+  def opportunity_note_params
+    params.require(:opportunity_note).permit(:opportunity, :detail)
+  end
 
   def set_opportunity_params
     @opportunity_params = params[:opportunity_note]
