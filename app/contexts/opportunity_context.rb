@@ -80,7 +80,7 @@ class OpportunityContext
   def set_default_values_for(opportunity)
     opportunity.title = opportunity.title || "#{@person.name}'s new opportunity"
     opportunity.confidence = opportunity.confidence || 'warm'
-    opportunity.stage = opportunity.stage || 'new'
+    opportunity.stage = opportunity.stage || 'idea'
     opportunity.person = @person
     opportunity.office = @person.office
   end

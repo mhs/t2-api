@@ -49,7 +49,7 @@ describe Api::V1::OpportunitiesController do
       post :create
 
       opportunity = JSON.parse(response.body)
-      opportunity["opportunity"]["stage"].should eq('new')
+      opportunity["opportunity"]["stage"].should eq('idea')
       opportunity["opportunity"]["confidence"].should eq('warm')
       opportunity["opportunity"]["title"].should eq("#{person.name}'s new opportunity")
     end
@@ -72,7 +72,7 @@ describe Api::V1::OpportunitiesController do
     opportunity = JSON.parse(response.body)
 
     opportunity["opportunity"]["owner"].should eq(another_person.id)
-    opportunity["opportunity"]["stage"].should eq('new')
+    opportunity["opportunity"]["stage"].should eq('idea')
     opportunity["opportunity"]["confidence"].should eq('warm')
     opportunity["opportunity"]["title"].should eq("ux workshop")
   end
