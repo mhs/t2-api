@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140120152908) do
+ActiveRecord::Schema.define(version: 20140204185717) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -76,6 +76,15 @@ ActiveRecord::Schema.define(version: 20140120152908) do
 
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
 
+  create_table "holidays", force: true do |t|
+    t.string   "name"
+    t.date     "start_date"
+    t.date     "end_date"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "monthly_snapshots", force: true do |t|
     t.integer  "office_id"
     t.date     "snap_date"
@@ -87,6 +96,11 @@ ActiveRecord::Schema.define(version: 20140120152908) do
 
   add_index "monthly_snapshots", ["office_id"], name: "index_monthly_snapshots_on_office_id", using: :btree
   add_index "monthly_snapshots", ["snap_date"], name: "index_monthly_snapshots_on_snap_date", using: :btree
+
+  create_table "office_holidays", force: true do |t|
+    t.integer "office_id"
+    t.integer "holiday_id"
+  end
 
   create_table "offices", force: true do |t|
     t.string   "name"
@@ -178,6 +192,7 @@ ActiveRecord::Schema.define(version: 20140120152908) do
     t.datetime "deleted_at"
     t.date     "start_date"
     t.date     "end_date"
+    t.boolean  "holiday",             default: false, null: false
   end
 
   add_index "projects", ["billable"], name: "index_projects_on_billable", using: :btree

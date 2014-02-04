@@ -17,4 +17,8 @@ class Project < ActiveRecord::Base
   def allowance_for_office(office_id)
     project_offices.where(office_id: office_id).first.try(:allowance)
   end
+
+  def self.holiday_project
+    where(holiday: true).first
+  end
 end
