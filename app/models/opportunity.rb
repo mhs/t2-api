@@ -5,7 +5,7 @@ class Opportunity < ActiveRecord::Base
   before_validation :downcase_confidence
   before_validation :downcase_stage
 
-  attr_accessible :title, :description, :stage, :confidence, :amount, :expected_date_close, :next_step
+  attr_accessible :title, :description, :stage, :confidence, :amount, :expected_date_close, :next_step, :status
 
   has_many :opportunity_notes
 
@@ -16,6 +16,7 @@ class Opportunity < ActiveRecord::Base
 
   validates :confidence, inclusion: { in: %w(cold warm hot) }
   validates :stage, inclusion: { in: %w(idea contacted discovery scoped negotiation) }
+  validates :status, inclusion: { in: %w(won lost rejected) }, allow_blank: true
 
   private
 
