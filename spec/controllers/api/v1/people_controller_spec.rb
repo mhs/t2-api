@@ -6,13 +6,15 @@ describe Api::V1::PeopleController do
     JSON.parse(response.body)
   end
 
+  let(:person) { FactoryGirl.create(:person, skill_list: %w(ruby javascript)) }
+
+  before do
+    sign_in :user, person.user
+  end
+
   describe 'Retriving Similar People to a Person' do
 
-    let(:person) { FactoryGirl.create(:person, skill_list: %w(ruby javascript)) }
 
-    before do
-      sign_in :user, person.user
-    end
 
     describe 'Similar People' do
       before do
@@ -35,6 +37,23 @@ describe Api::V1::PeopleController do
 
         serialized_response.size.should eql(1)
       end
+    end
+  end
+
+  describe 'Allocating upcoming vacation to new office member' do
+    let(:person_params) { FactoryGirl.attributes_for(:person) }
+
+    it "creates allocation for existing holidays in the same office" do
+      person = mock(:person)
+      Person.stub(:create!).and_return(person)
+      person.should_receive(:allocate_upcoming_holidays!)
+
+      post :create, person: person_params
+    end
+
+    it "returns error json when error" do
+      post :create, person: {}
+      expect(serialized_response["errors"]).to_not be_empty
     end
   end
 end
