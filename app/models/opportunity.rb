@@ -15,7 +15,7 @@ class Opportunity < ActiveRecord::Base
   belongs_to :office
 
   validates :confidence, inclusion: { in: %w(cold warm hot) }
-  validates :stage, inclusion: { in: %w(on_hold new scoped won lost rejected) }
+  validates :stage, inclusion: { in: %w(idea contacted discovery scoped negotiation) }
 
   private
 

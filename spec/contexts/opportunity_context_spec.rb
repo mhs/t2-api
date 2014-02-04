@@ -21,7 +21,7 @@ describe 'OpportunityContext' do
       opportunity.title.should eq "#{person.name}'s new opportunity"
       opportunity.person.should eq person
       opportunity.confidence.should eq 'warm'
-      opportunity.stage.should eq 'new'
+      opportunity.stage.should eq 'idea'
       opportunity.office.id.should eq person.office.id
     end
 

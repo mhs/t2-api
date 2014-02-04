@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :opportunity do
     title { Faker::Lorem.sentence(1) }
-    stage { "new" }
+    stage { "idea" }
     confidence { "warm" }
     amount { 1000 }
     expected_date_close (Time.now + 10.days)
