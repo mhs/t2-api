@@ -41,6 +41,7 @@ group :development, :test do
   gem 'foreman'
   gem 'capybara'
   gem 'launchy'
+  gem 'railroady'
 end
 
 group :production do
