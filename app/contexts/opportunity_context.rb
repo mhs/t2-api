@@ -81,6 +81,7 @@ class OpportunityContext
     opportunity.title = opportunity.title || "#{@person.name}'s new opportunity"
     opportunity.confidence = opportunity.confidence || 'warm'
     opportunity.stage = opportunity.stage || 'idea'
+    opportunity.status = nil
     opportunity.person = @person
     opportunity.office = @person.office
   end

@@ -1,6 +1,6 @@
 class Opportunity::OpportunitySerializer < ActiveModel::Serializer
   attributes :id, :title, :description, :stage, :confidence, :amount, :expected_date_close, :next_step,
-    :owner, :company, :contact, :office, :opportunity_notes, :created, :updated
+    :owner, :company, :contact, :office, :opportunity_notes, :created, :updated, :status
 
   embed :ids, include: true
 

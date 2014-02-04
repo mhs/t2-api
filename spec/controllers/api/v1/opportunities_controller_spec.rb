@@ -65,9 +65,9 @@ describe Api::V1::OpportunitiesController do
       end
     end
   end
-  
+
   it 'update an opportunity' do
-    put :update, { id: Opportunity.all.last.id, opportunity: { confidence: 'warm', title: 'ux workshop', owner: another_person.id } }
+    put :update, { id: Opportunity.all.last.id, opportunity: { confidence: 'warm', title: 'ux workshop', status: 'won', owner: another_person.id } }
 
     opportunity = JSON.parse(response.body)
 
@@ -75,6 +75,7 @@ describe Api::V1::OpportunitiesController do
     opportunity["opportunity"]["stage"].should eq('idea')
     opportunity["opportunity"]["confidence"].should eq('warm')
     opportunity["opportunity"]["title"].should eq("ux workshop")
+    opportunity["opportunity"]["status"].should eq("won")
   end
 
   it 'should allow to destroy' do
