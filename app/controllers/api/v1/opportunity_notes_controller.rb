@@ -6,7 +6,7 @@ class Api::V1::OpportunityNotesController < ApplicationController
 
   def create
     if @opportunity.nil?
-      render json: { error: 'opportunity does not exist' }, status: 404
+      render json: { errors: 'opportunity does not exist' }, status: :unprocessable_entity
     else
       note = OpportunityNote.new(@opportunity_params)
       note.person = @owner || current_user.person
@@ -15,14 +15,14 @@ class Api::V1::OpportunityNotesController < ApplicationController
       if note.save
         render json: note, serializer: Opportunity::OpportunityNoteSerializer
       else
-        render json: { error: note.errors }, status: 400
+        render json: { errors: note.errors }, status: 400
       end
     end
   end
 
   def update
     if @opportunity_note.nil?
-      render json: {error: 'opportunity note does not exist'}, status: 404
+      render json: {error: 'opportunity note does not exist'}, status: :unprocessable_entity
     else
       @opportunity_note.opportunity = @opportunity unless @opportunity.nil?
       @opportunity_note.update_attributes(opportunity_note_params)
@@ -33,7 +33,7 @@ class Api::V1::OpportunityNotesController < ApplicationController
 
   def destroy
     if @opportunity_note.nil?
-      render json: { error: 'opportunity note does not exist' }, status: 404
+      render json: { errors: 'opportunity note does not exist' }, status: :unprocessable_entity
     else
       @opportunity_note.destroy
       render json: nil, status: :ok

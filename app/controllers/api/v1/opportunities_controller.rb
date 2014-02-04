@@ -16,7 +16,7 @@ class Api::V1::OpportunitiesController < ApplicationController
 
   def update
     context = OpportunityContext.new(current_user.person)
-    render json: context.update_opportunity(params[:id], params[:opportunity]), serializer: Opportunity::OpportunitySerializer, root: 'opportunity'
+    render json: context.update_opportunity(params[:id], params[:opportunity]), serializer: Opportunity::OpportunitySerializer
   end
 
   def destroy

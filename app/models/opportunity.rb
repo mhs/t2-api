@@ -20,10 +20,10 @@ class Opportunity < ActiveRecord::Base
   private
 
   def downcase_confidence
-    self.confidence.downcase! unless self.confidence.nil?
+    confidence.downcase! if confidence
   end
 
   def downcase_stage
-    self.stage.downcase! unless self.stage.nil?
+    stage.downcase! if stage
   end
 end
