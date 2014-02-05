@@ -210,4 +210,17 @@ describe Person do
       person.similar_people(1).should eql([@ben])
     end
   end
+
+  describe "#allocate_upcoming_holidays!" do
+    let(:office)           { FactoryGirl.create(:office) }
+    let!(:holiday_project) { FactoryGirl.create(:project, :holiday) }
+    let!(:past_holiday)    { Holiday.declare("Festivus", [office], 1.month.ago) }
+    let!(:future_holiday)  { Holiday.declare("Festivus", [office], 11.months.from_now) }
+    let(:person)           { FactoryGirl.create(:person, office: office) }
+
+    it "creates an allocation for future holidays and not past holidays" do
+      person.allocate_upcoming_holidays!
+      expect(person.allocations.count).to eql(1)
+    end
+  end
 end

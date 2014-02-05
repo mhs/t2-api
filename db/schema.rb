@@ -80,7 +80,6 @@ ActiveRecord::Schema.define(version: 20140204185717) do
     t.string   "name"
     t.date     "start_date"
     t.date     "end_date"
-    t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

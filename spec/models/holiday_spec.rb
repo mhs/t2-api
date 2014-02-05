@@ -2,11 +2,7 @@ require 'spec_helper'
 
 describe Holiday do
   before do
-    Project.create! do |p|
-      p.name = "Office Holiday"
-      p.holiday = true
-      p.vacation = true
-    end
+    FactoryGirl.create(:project, :holiday)
   end
 
   let(:person) do
