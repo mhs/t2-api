@@ -34,16 +34,6 @@ describe Allocation do
     FactoryGirl.build(:allocation, start_date: Date.today, end_date: 2.days.ago).should_not be_valid
   end
 
-  it 'should not let you make an allocation that exceeds the allowances total hours' do
-    person = FactoryGirl.create(:person)
-    project = FactoryGirl.create(:project)
-    proj_office = FactoryGirl.create(:project_office, allowance: 160, project: project, office: person.office)
-    start_date = [Date.today, Date.today.beginning_of_year].max
-
-    allocation = FactoryGirl.build(:allocation, start_date: start_date, end_date: start_date + 2.months, person: person, project: project)
-    expect(allocation).to_not be_valid
-  end
-
   describe "by_office Scope" do
     let(:office_a_person) { FactoryGirl.create(:person) }
     let(:office_b_person) { FactoryGirl.create(:person) }

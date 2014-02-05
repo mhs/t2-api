@@ -27,7 +27,6 @@ class Person < ActiveRecord::Base
   has_many_current :allocations
   belongs_to  :office
   belongs_to  :project
-  has_many    :project_allowances, inverse_of: :person
   has_many    :opportunity_notes
   has_many    :opportunities
 
@@ -56,7 +55,7 @@ class Person < ActiveRecord::Base
   scope :billable, -> { where("percent_billable > 0") }
   scope :by_office, lambda { |office| office ? where(office_id: office.id) : where(false) }
 
-  after_create :create_or_associate_user, :create_missing_project_allowances
+  after_create :create_or_associate_user
 
   def self.editable_attributes
     accessible_attributes.to_a - ['office', 'office_id']
@@ -72,16 +71,6 @@ class Person < ActiveRecord::Base
 
   def allocations_for_project(project_id)
     allocations.this_year.where(project_id: project_id)
-  end
-
-  def create_missing_project_allowances
-    ids = project_allowances.map(&:id).tap { |ids| ids << 0 if ids.empty? }
-    office.project_offices.has_allowance.where("id NOT IN (?)", ids).each do |project_office|
-      project_allowances.create(
-        hours: project_office.allowance,
-        project_id: project_office.project_id
-      )
-    end
   end
 
   def similar_people(limit=nil)

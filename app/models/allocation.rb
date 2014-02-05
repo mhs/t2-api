@@ -11,7 +11,6 @@ class Allocation < ActiveRecord::Base
   validates_date :end_date, on_or_after: :start_date
 
   validates :percent_allocated, inclusion: {in: 0..100}
-  validate :does_not_exceed_project_allowance
 
   scope :current, -> { includes(:project).where("projects.deleted_at is NULL").references(:project) }
   def self.between(start_date, end_date)
@@ -61,11 +60,6 @@ class Allocation < ActiveRecord::Base
   end
 
   private
-
-  def does_not_exceed_project_allowance
-    return unless person && project
-    errors.add(:base, "can't exceed project allowance") if AllowanceCalculator.new(person, project).exceeds_allowance? duration_in_hours
-  end
 
   def duration_in_days
     weekdays.count

@@ -5,10 +5,10 @@ class Api::V1::PeopleController < ApplicationController
   def index
     people = []
     Person.within_date_range(Date.today, Date.today) do
-      people = with_ids_from_params(Person.includes(:user, :project_allowances, :office, :allocations)).to_a
+      people = with_ids_from_params(Person.includes(:user, :office, :allocations)).to_a
     end
     # the above will omit people who have left the company; add them back
-    people += with_ids_from_params(Person.includes(:user, :project_allowances, :office).where('end_date < ?', Date.today))
+    people += with_ids_from_params(Person.includes(:user, :office).where('end_date < ?', Date.today))
     render json: people, each_serializer: PersonWithCurrentSerializer
   end
 
