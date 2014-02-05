@@ -210,19 +210,4 @@ describe Allocation do
     end
   end
 
-  describe '.for_person' do
-    let(:bob) { FactoryGirl.create(:person) }
-    let!(:bob_allocation) { FactoryGirl.create(:allocation, person: bob) }
-    let!(:somoneone_elses_allocation) { FactoryGirl.create(:allocation) }
-
-    it 'includes allocations for the specified person' do
-      Allocation.for_person(bob).should include(bob_allocation)
-      Allocation.for_person(bob.id).should include(bob_allocation)
-    end
-
-    it 'does not include allocations for other people' do
-      Allocation.for_person(bob).should_not include(somoneone_elses_allocation)
-    end
-  end
-
 end
