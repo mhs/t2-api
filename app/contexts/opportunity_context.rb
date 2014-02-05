@@ -3,6 +3,7 @@ class OpportunityContext
   def self.all
     persons = Person.where(role: ['Business Development', 'Principal', 'Managing Director', 'General & Administrative'])
     offices = Office.where("slug NOT SIMILAR TO '(dublin|headquarters|archived)'")
+    offices = Office.where(slug: %w(cincinnati columbus edinburgh montevideo new-york san-francisco singapore headquarters))
     CrmData.new(Opportunity.all, persons, offices, Company.all, Contact.all, OpportunityNote.all)
   end
 
@@ -12,7 +13,8 @@ class OpportunityContext
 
     unless params.nil?
       @relationship_params = prepare_opportunity_extra_params
-      params.delete_if { |k, v| [:created, :updated].include?(k)}
+      params.delete(:created)
+      params.delete(:updated)
     end
   end
 
