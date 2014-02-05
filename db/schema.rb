@@ -48,8 +48,8 @@ ActiveRecord::Schema.define(version: 20140204183222) do
 
   create_table "companies", force: true do |t|
     t.text     "name",       null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   add_index "companies", ["name"], name: "index_companies_on_name", unique: true, using: :btree
@@ -121,8 +121,8 @@ ActiveRecord::Schema.define(version: 20140204183222) do
   create_table "opportunity_notes", force: true do |t|
     t.text     "detail",         null: false
     t.integer  "person_id",      null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
     t.integer  "opportunity_id"
   end
 
