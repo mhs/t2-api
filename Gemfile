@@ -30,7 +30,6 @@ gem 'jquery-rails'
 gem 'validates_timeliness'
 
 group :development, :test do
-  gem 'heroku'
   gem 'rspec-rails'
   gem 'factory_girl_rails'
   gem 'ffaker'
