@@ -6,7 +6,11 @@ class Api::V1::OpportunitiesController < ApplicationController
 
   def show
     opportunity = Opportunity.find(params[:id])
-    render json: opportunity, serializer: Opportunity::OpportunitySerializer
+    if opportunity
+      render json: opportunity, serializer: Opportunity::OpportunitySerializer
+    else
+      render json: {errors: {not_found: 'there is no opportunity'}}, status: :not_found
+    end
   end
 
   def create

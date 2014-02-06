@@ -94,16 +94,16 @@ class OpportunityContext
   end
 
   def set_contact_company
+    return unless @opportunity.contact
+
     contact = @opportunity.contact
     company = @opportunity.company
 
-    unless contact.nil?
-      if !company.nil? and contact.company.nil?
-        contact.company = company
-        contact.save
-      elsif !contact.company.nil? and company.nil?
-        @opportunity.company = contact.company
-      end
+    if company and !contact.company
+      contact.company = company
+      contact.save
+    elsif contact.company and !company
+      @opportunity.company = contact.company
     end
   end
 

@@ -1,12 +1,8 @@
 class Api::V1::UnfiledNotesController < ApplicationController
   skip_before_filter :authenticate_user!, only: :create
+  http_basic_authenticate_with name: "crm_neo", password: "T2_crm_n30", only: :create
 
   before_filter :fetch_person_by_from_address, only: :create
-
-  def index
-    @notes = OpportunityNote.where(person_id: current_user.person.id).where(opportunity_id: nil).order(created_at: :desc)
-    render json: @notes, each_serializer: Opportunity::OpportunityNoteSerializer, root: 'opportunity_notes'
-  end
 
   def create
     if @person && @person.opportunity_notes.new(detail: unfiled_note_params["body-plain"]).save

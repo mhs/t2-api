@@ -5,27 +5,10 @@ describe Api::V1::UnfiledNotesController do
   let(:person) { FactoryGirl.create(:person, email: 'person@neo.com') }
   let(:another_person) { FactoryGirl.create(:person, email: 'another_person@neo.com') }
 
-  describe 'User must be logged in' do
-    before do
-      3.times do
-        FactoryGirl.create(:opportunity_note, person: person, opportunity: nil)
-      end
-
-      sign_in :user, person.user
-    end
-
-    it 'should return all unfiled notes related to the user' do
-      get :index
-
-      notes = JSON.parse(response.body)
-      notes['opportunity_notes'].size.should eq 3
-      notes['opportunity_notes'].first["owner"].should eql(person.id)
-    end
-  end
-
-  describe 'An unauthorized user' do
+  describe 'An unauthorized user with httpbasic' do
     before do
       another_person
+      @request.env["HTTP_AUTHORIZATION"] = "Basic " + Base64::encode64("crm_neo:T2_crm_n30")
     end
 
     it 'should allow if email is neo.com domain' do
