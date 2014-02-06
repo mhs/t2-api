@@ -1,18 +1,13 @@
 require 'weighted_set'
 
-class WeightCalculator
+class AllocationScope
   extend Memoist
 
-  attr_reader :allocations
+  attr_reader :allocation_relation
 
   def initialize(allocation_relation)
-    @allocations = allocation_relation
+    @allocation_relation = allocation_relation
   end
-
-  def vacations
-    allocation_sum(allocations.unassignable)
-  end
-  memoize :vacations
 
   def unassignable
     # Unsellable = ALWAYS overhead (e.g. the CEO)
@@ -26,7 +21,7 @@ class WeightCalculator
   memoize :unassignable
 
   def billing
-    billing_percents = allocation_sum(allocations.billable_and_assignable)
+    billing_percents = allocation_sum(allocation_relation.billable_and_assignable)
     result = {}
     billing_percents.each_pair do |person, billing_percent|
       result[person] = (billing_percent * (100 - vacations[person]))/100
@@ -34,6 +29,7 @@ class WeightCalculator
     WeightedSet.new(result).compact
   end
   memoize :billing
+
 
   private
 
@@ -44,5 +40,11 @@ class WeightCalculator
     end
     sums
   end
+
+  def vacations
+    allocation_sum(allocation_relation.unassignable)
+  end
+  memoize :vacations
+
 
 end

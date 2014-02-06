@@ -1,11 +1,11 @@
 require 'spec_helper'
-describe WeightCalculator do
+describe AllocationScope do
   let(:date) { Date.today }
   let(:office) { FactoryGirl.create(:office) }
   let(:project) { FactoryGirl.create(:project, vacation: false, billable: true, offices: [office]) }
   let(:vacation_project) { FactoryGirl.create(:project, vacation: true, billable: false, offices: [office]) }
   let(:allocation_relation) { Allocation.by_office(nil).on_date(date).includes(:person) }
-  let(:calc) { WeightCalculator.new allocation_relation }
+  let(:calc) { AllocationScope.new allocation_relation }
   let(:developer) { FactoryGirl.create(:person) }
   let(:pm) { FactoryGirl.create(:person, percent_billable: 75) }
   let(:staff) { FactoryGirl.create(:person, percent_billable: 0) }

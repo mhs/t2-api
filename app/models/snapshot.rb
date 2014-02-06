@@ -88,7 +88,7 @@ class Snapshot < ActiveRecord::Base
 
   def capture_data
     allocation_relation = Allocation.by_office(queried_office).on_date(snap_date).includes(:person)
-    calc = WeightCalculator.new(allocation_relation)
+    calc = AllocationScope.new(allocation_relation)
 
     # TODO: need to change the keys on these
     self.staff_weights = munge_weights(staff_billable_percents)
