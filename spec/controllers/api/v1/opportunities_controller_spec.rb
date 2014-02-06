@@ -35,12 +35,11 @@ describe Api::V1::OpportunitiesController do
     end
 
     it 'should include notes' do
-      pending 'not including notes yet'
       get :index
 
       opportunities = JSON.parse(response.body)
-      opportunities["opportunities"].first["opportunity_notes"].size.should eq(4)
-      opportunities["opportunities"].first["opportunity_notes"].first["detail"].should eq(OpportunityNote.first.detail)
+      opportunities["opportunity_notes"].size.should eq(4)
+      opportunities["opportunity_notes"].first["detail"].should eq(OpportunityNote.first.detail)
     end
   end
 
