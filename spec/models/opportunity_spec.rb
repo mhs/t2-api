@@ -51,4 +51,12 @@ describe Opportunity do
     contacted = Opportunity.new(stage: 'CONTACTED')
     contacted.valid?.should eq true
   end
+
+  it 'should have default order with created_at desc' do
+    op_b = FactoryGirl.create(:opportunity_note, created_at: 2.days.ago).id
+    op_a = FactoryGirl.create(:opportunity_note, created_at: 3.days.ago).id
+    op_c = FactoryGirl.create(:opportunity_note, created_at: 1.days.ago).id
+
+    OpportunityNote.all.map(&:id).should eql([op_c,op_b,op_a])
+  end
 end

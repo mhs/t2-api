@@ -26,7 +26,7 @@ class Opportunity::OpportunitySerializer < ActiveModel::Serializer
   end
 
   def opportunity_notes
-    object.opportunity_notes.select([:id, :created_at]).order("created_at desc").map(&:id)
+    object.opportunity_notes.select([:id, :created_at]).order(created_at: :desc).map(&:id)
   end
 
   def created
