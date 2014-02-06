@@ -105,6 +105,13 @@ class Snapshot < ActiveRecord::Base
     end
   end
 
+  def billable
+    result = staff_weights.select do |k, v|
+      v > 0
+    end
+    WeightedSet.new(result)
+  end
+
   private
 
   def munge_weights(weights)

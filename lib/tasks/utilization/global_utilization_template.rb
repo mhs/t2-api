@@ -13,10 +13,30 @@ class GlobalUtilizationTemplate
     end.size
   end
 
-  def billable_count
+  def pure_overhead_count
     @snapshot.staff_weights.select do |k, v|
-      v > 0
+      v == 0
     end.size
+  end
+
+  def billable_count
+    @snapshot.billable.size
+  end
+
+  def fully_billable_count
+    @snapshot.staff_weights.select do |k, v|
+      v == 100
+    end.size
+  end
+
+  def partially_billable_count
+    @snapshot.staff_weights.select do |k, v|
+      v.between?(1, 99)
+    end.size
+  end
+
+  def fte_billable_count
+    format(@snapshot.billable.total / 100.0)
   end
 
   def assignable_count
