@@ -14,12 +14,12 @@ class Utilization
   end
 
   def unassigned_percentage
-    (billable_percentage * vacation.sum(:percent_allocated)) / 100
+    (billable_percentage * vacation.sum(:percent_allocated)).to_f / 100
   end
   memoize :unassigned_percentage
 
   def billing_percentage
-    (billable_percentage * billable.sum(:percent_allocated)) / 100
+    (billable.sum(:percent_allocated) * (100 - vacation.sum(:percent_allocated))) / 100
   end
   memoize :billing_percentage
 
@@ -44,10 +44,6 @@ class Utilization
 
   def vacation
     allocations.unassignable
-  end
-
-  def partial_vacation
-    allocations.vacation.where("percent_allocated < 100 and percent_allocated > 0")
   end
 
   def billable
