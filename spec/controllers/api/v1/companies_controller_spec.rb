@@ -2,33 +2,21 @@
 
  describe Api::V1::CompaniesController do
 
-   describe 'Getting all Companies - potential clients' do
+  let(:person) { FactoryGirl.create(:person) }
 
-    let(:person) { FactoryGirl.create(:person) }
-
-     before do
-       5.times do
-         FactoryGirl.create(:company)
-       end
-
-       sign_in :user, person.user
+   before do
+     5.times do
+       FactoryGirl.create(:company)
      end
 
-     it "should display the entire list" do
-       get :index
+     sign_in :user, person.user
+   end
 
-       companies = JSON.parse(response.body)
-       companies["companies"].size.should eq(5)
-     end
+   it 'should allow to create a company' do
+     post :create, {company: {name: 'foo inc'}}
+     company = JSON.parse(response.body)
 
-     it "should display the entire list order asc" do
-       FactoryGirl.create(:company, name: 'zzzz')
-       FactoryGirl.create(:company, name: 'AAaa')
-       get :index
-
-       companies = JSON.parse(response.body)
-       companies["companies"].first["name"].should eq('AAaa')
-       companies["companies"].first["name"].should be < companies["companies"].last["name"]
-     end
+     company["company"]["name"].should eq "foo inc"
+     Company.count.should eq 6
    end
  end

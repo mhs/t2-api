@@ -1,11 +1,17 @@
 class Opportunity::OpportunityNoteSerializer < ActiveModel::Serializer
-  attributes :id, :detail, :owner
+  attributes :id, :detail, :owner, :opportunity, :created_at
+
+  root true
 
   def owner
-    {
-      id: object.person.id,
-      name: object.person.name,
-      email: object.person.email
-    }
+    object.person.id
+  end
+
+  def opportunity
+    object.opportunity_id
+  end
+
+  def created_at
+    object.created_at.strftime('%d-%m-%Y %H:%M')
   end
 end

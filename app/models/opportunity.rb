@@ -1,8 +1,11 @@
 class Opportunity < ActiveRecord::Base
+
+  has_paper_trail :class_name => 'Version'
+
   before_validation :downcase_confidence
   before_validation :downcase_stage
 
-  attr_accessible :title, :description, :stage, :confidence, :amount, :expected_date_close, :next_step
+  attr_accessible :title, :description, :stage, :confidence, :amount, :expected_date_close, :next_step, :status
 
   has_many :opportunity_notes
 
@@ -12,15 +15,16 @@ class Opportunity < ActiveRecord::Base
   belongs_to :office
 
   validates :confidence, inclusion: { in: %w(cold warm hot) }
-  validates :stage, inclusion: { in: %w(on_hold new scoped won lost rejected) }
+  validates :stage, inclusion: { in: %w(idea contacted discovery scoped negotiation) }
+  validates :status, inclusion: { in: %w(won lost rejected) }, allow_blank: true
 
   private
 
   def downcase_confidence
-    self.confidence.downcase! unless self.confidence.nil?
+    confidence.downcase! if confidence
   end
 
   def downcase_stage
-    self.stage.downcase! unless self.stage.nil?
+    stage.downcase! if stage
   end
 end
