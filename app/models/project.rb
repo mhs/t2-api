@@ -12,4 +12,8 @@ class Project < ActiveRecord::Base
 
   scope :assignable, -> { where(vacation: true) }
 
+  def self.holiday_project
+    where(holiday: true).first
+  end
+
 end

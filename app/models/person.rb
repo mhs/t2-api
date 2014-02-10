@@ -112,6 +112,12 @@ class Person < ActiveRecord::Base
     (start_date.nil? || start_date <= end_window) && (end_date.nil? || end_date >= start_window)
   end
 
+  def allocate_upcoming_holidays!
+    office.holidays.upcoming.each do |holiday|
+      holiday.add_person(self)
+    end
+  end
+
   private
 
   def create_or_associate_user
