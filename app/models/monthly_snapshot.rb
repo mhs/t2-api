@@ -16,7 +16,7 @@ class MonthlySnapshot < ActiveRecord::Base
   def self.on_date!(date, office_id=nil)
     date = date.beginning_of_month
     where(snap_date: date, office_id: office_id).first_or_initialize.tap do |snap|
-      snap.capture_data
+      snap.calculate
       snap.save!
     end
   end
@@ -38,7 +38,7 @@ class MonthlySnapshot < ActiveRecord::Base
     on_date!(Date.today.advance(months: 1), office_id)
   end
 
-  def capture_data
+  def calculate
     # collect all the daily snapshots needed and tabluate
     self.assignable_days = 0
     self.billing_days = 0
