@@ -54,7 +54,7 @@ class Person < ActiveRecord::Base
 
   scope :overhead, -> { where("percent_billable < 100") }
   scope :billable, -> { where("percent_billable > 0") }
-  scope :by_office, lambda { |office| office.id ? where(office_id: office.id) : where(false) }
+  scope :by_office, lambda { |office| office.try(:id) ? where(office: office) : where(false) }
 
   after_create :create_or_associate_user, :create_missing_project_allowances
 

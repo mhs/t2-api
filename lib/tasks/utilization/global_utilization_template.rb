@@ -20,7 +20,9 @@ class GlobalUtilizationTemplate
   end
 
   def billable_count
-    @snapshot.billable.size
+    @snapshot.staff_weights.select do |k, v|
+      v > 0
+    end.size
   end
 
   def fully_billable_count

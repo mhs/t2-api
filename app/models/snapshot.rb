@@ -11,7 +11,7 @@ class Snapshot < ActiveRecord::Base
   serialize :billing_weights, WeightedSet
 
   attr_accessible :snap_date, :utilization, :office_id
-  attr_accessor :assignable_weights, :non_billing_weights
+  attr_accessor :assignable_weights, :non_billing_weights, :billable
 
   belongs_to :office
 
@@ -77,6 +77,7 @@ class Snapshot < ActiveRecord::Base
     self.staff_weights        = person_named_keys(utilization_group.fetch(:billable_percentage))
     self.unassignable_weights = person_named_keys(utilization_group.fetch(:unassigned_percentage)).compact
     self.billing_weights      = person_named_keys(utilization_group.fetch(:billing_percentage)).compact
+    self.billable             = staff_weights.compact
     self.non_billing_weights  = person_named_keys(utilization_group.non_billing_weights)
     self.assignable_weights   = person_named_keys(utilization_group.assignable_weights)
     self.utilization          = utilization_group.utilization_percentage
