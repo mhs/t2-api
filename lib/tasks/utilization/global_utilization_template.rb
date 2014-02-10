@@ -38,7 +38,7 @@ class GlobalUtilizationTemplate
   end
 
   def fte_billable_count
-    format(@snapshot.billable.total / 100.0)
+    format(@snapshot.billable.total)
   end
 
   def assignable_count
