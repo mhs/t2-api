@@ -16,7 +16,7 @@ describe Api::V1::PeopleController do
     let(:person_params) { FactoryGirl.attributes_for(:person) }
 
     it "creates allocation for existing holidays in the same office" do
-      person = mock(:person)
+      person = double(:person)
       Person.stub(:create!).and_return(person)
       person.should_receive(:allocate_upcoming_holidays!)
 
