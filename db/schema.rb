@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140210200547) do
+ActiveRecord::Schema.define(version: 20140210213939) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -202,6 +202,8 @@ ActiveRecord::Schema.define(version: 20140210200547) do
     t.text     "unassignable_weights"
     t.text     "billing_weights"
     t.text     "assignable_weights"
+    t.text     "non_billing_weights"
+    t.text     "billable"
   end
 
   create_table "t2_applications", force: true do |t|
