@@ -9,9 +9,10 @@ class Snapshot < ActiveRecord::Base
   serialize :staff_weights, WeightedSet
   serialize :unassignable_weights, WeightedSet
   serialize :billing_weights, WeightedSet
+  serialize :assignable_weights, WeightedSet
 
   attr_accessible :snap_date, :utilization, :office_id
-  attr_accessor :assignable_weights, :non_billing_weights, :billable
+  attr_accessor :non_billing_weights, :billable
 
   belongs_to :office
 

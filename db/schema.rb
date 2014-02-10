@@ -11,10 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140120152908) do
+ActiveRecord::Schema.define(version: 20140210200547) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "hstore"
 
   create_table "allocations", force: true do |t|
     t.date     "start_date"
@@ -79,10 +80,10 @@ ActiveRecord::Schema.define(version: 20140120152908) do
   create_table "monthly_snapshots", force: true do |t|
     t.integer  "office_id"
     t.date     "snap_date"
-    t.decimal  "assignable_days", precision: 6, scale: 2
-    t.decimal  "billing_days",    precision: 6, scale: 2
-    t.datetime "created_at",                              null: false
-    t.datetime "updated_at",                              null: false
+    t.integer  "assignable_days", default: 0
+    t.integer  "billing_days",    default: 0
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
   end
 
   add_index "monthly_snapshots", ["office_id"], name: "index_monthly_snapshots_on_office_id", using: :btree
@@ -200,6 +201,7 @@ ActiveRecord::Schema.define(version: 20140120152908) do
     t.text     "staff_weights"
     t.text     "unassignable_weights"
     t.text     "billing_weights"
+    t.text     "assignable_weights"
   end
 
   create_table "t2_applications", force: true do |t|
