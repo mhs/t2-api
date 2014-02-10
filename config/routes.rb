@@ -35,11 +35,6 @@ T2Api::Application.routes.draw do
           get ":date" => :show
         end
       end
-      resources :companies, only: :index
-      resources :unfiled_notes, only: [:index, :create, :update, :destroy]
-      resources :opportunities, only: [:index, :show, :create, :update, :destroy] do
-        resources :opportunity_notes, only: [:create, :update, :destroy]
-      end
     end
   end
 

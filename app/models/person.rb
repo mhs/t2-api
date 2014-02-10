@@ -27,8 +27,6 @@ class Person < ActiveRecord::Base
   has_many_current :allocations
   belongs_to  :office
   belongs_to  :project
-  has_many    :opportunity_notes
-  has_many    :opportunities
 
   validates :name, presence: true
   validates :office, presence: true

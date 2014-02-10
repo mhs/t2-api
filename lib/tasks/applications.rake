@@ -7,8 +7,8 @@ namespace :applications do
     applications_attributes = [
       {url: "http://t2allocation.neo.com",       icon: "📊", title: "Allocations",  classes: "allocations"},
       {url: "http://t2utilization.neo.com",      icon: "📈", title: "Utilization"},
-      {url: "http://brockman.herokuapp.com",            icon: "", title: "Pipeline"},
-      {url: "http://t2people.neo.com",           icon: "👤", title: "Neons"}
+      {url: "http://brockman.herokuapp.com",     icon: "", title: "Pipeline"},
+      {url: "http://t2people.neo.com",           icon: "👤", title: "Neons"},
     ]
 
     applications_attributes.each_with_index do |attrs, index|
@@ -23,7 +23,7 @@ namespace :applications do
       {url: "http://t2allocation-staging.herokuapp.com",       icon: "📊", title: "Allocations",  classes: "allocations"},
       {url: "http://t2utilization-staging.herokuapp.com",      icon: "📈", title: "Utilization"},
       {url: "http://brockman.herokuapp.com",                   icon: "", title: "Pipeline"},
-      {url: "http://t2people-staging.herokuapp.com",           icon: "👤", title: "Neons"}
+      {url: "http://t2people-staging.herokuapp.com",           icon: "👤", title: "Neons"},
     ]
 
     applications_attributes.each_with_index do |attrs, index|
