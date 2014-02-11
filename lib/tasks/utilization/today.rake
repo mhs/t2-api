@@ -15,10 +15,7 @@ namespace :utilization do
     today_snapshot = Snapshot.today!
     puts_if_no_test GlobalUtilizationTemplate.new(today_snapshot).render()
 
-    # Per Office Utilization
-    excluded_offices = ["", "Dublin", "Headquarters", "Archived"]
-
-    offices = Office.where('name NOT IN (?)', excluded_offices)
+    offices = Office.reporting
 
     snapshots = offices.map { |office| Snapshot.on_date!(Date.today, office) }
 
