@@ -3,13 +3,13 @@ require File.expand_path(File.dirname(__FILE__) + '/utilization_body_template.rb
 require File.expand_path(File.dirname(__FILE__) + '/office_utilization_template.rb')
 require File.expand_path(File.dirname(__FILE__) + '/monthly_utilization_template.rb')
 require File.expand_path(File.dirname(__FILE__) + '/projected_utilization_template.rb')
-require File.expand_path(File.dirname(__FILE__) + '/../../utilization_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../../date_range_helper')
 
 namespace :utilization do
   desc "Spit out a report on utilization for Daniel"
   task "today" => :environment do
 
-    include UtilizationHelper
+    include DateRangeHelper
 
     # Global Utilization
     today_snapshot = Snapshot.today!

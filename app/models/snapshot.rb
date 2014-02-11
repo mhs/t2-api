@@ -1,10 +1,10 @@
-require 'utilization_helper'
+require 'date_range_helper'
 require 'weighted_set'
 
 class Snapshot < ActiveRecord::Base
 
   extend Memoist
-  extend UtilizationHelper
+  extend DateRangeHelper
 
   serialize :staff_weights, WeightedSet
   serialize :unassignable_weights, WeightedSet

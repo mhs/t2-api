@@ -1,9 +1,9 @@
-require 'utilization_helper'
+require 'date_range_helper'
 
 # TODO: half-days are not accounted for
 class MonthlySnapshot < ActiveRecord::Base
 
-  include UtilizationHelper
+  include DateRangeHelper
 
   belongs_to :office
 

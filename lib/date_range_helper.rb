@@ -1,4 +1,4 @@
-module UtilizationHelper
+module DateRangeHelper
   def with_week_days(days_count=21, &block)
     date_range = ((Date.today)..(days_count.days.from_now.to_date))
 

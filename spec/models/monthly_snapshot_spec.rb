@@ -1,9 +1,9 @@
 require 'spec_helper'
-require 'utilization_helper'
+require 'date_range_helper'
 
 describe MonthlySnapshot do
 
-  include UtilizationHelper
+  include DateRangeHelper
 
   let(:employee) {FactoryGirl.create(:person, :current)}
   let(:start_date) { Date.today.beginning_of_month.advance(days: 7).beginning_of_week }
