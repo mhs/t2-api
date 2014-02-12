@@ -103,6 +103,16 @@ describe Person do
       Person.employed_on_date(date).should include(employee)
     end
 
+    it "does include someone whose start date is on the given date" do
+      employee = FactoryGirl.create(:person, start_date: date)
+      Person.employed_on_date(date).should include(employee)
+    end
+
+    it "does include someone whose end date is on the given date" do
+      employee = FactoryGirl.create(:person, end_date: date)
+      Person.employed_on_date(date).should include(employee)
+    end
+
     it 'does not include someone whose end date is in the past' do
       non_employee = FactoryGirl.create(:person, end_date: 1.week.ago)
       Person.employed_on_date(date).should_not include(non_employee)

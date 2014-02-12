@@ -41,8 +41,8 @@ class Person < ActiveRecord::Base
   validates :percent_billable, inclusion: {in: 0..100}
 
   scope :employed_on_date, lambda { |d|
-    where("start_date is NULL or start_date < ?",d)
-    .where("end_date is NULL or end_date > ?", d)
+      where("people.start_date IS NULL OR people.start_date <= ?",d)
+     .where("people.end_date IS NULL OR people.end_date >= ?", d)
   }
 
   scope :employed_between, -> start_date, end_date do
