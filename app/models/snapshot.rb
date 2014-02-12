@@ -7,11 +7,14 @@ class Snapshot < ActiveRecord::Base
   include SnapshotFilters
 
   serialize :staff, FteWeightedSet
+  serialize :non_billable, FteWeightedSet
   serialize :unassignable, FteWeightedSet
   serialize :billing, FteWeightedSet
   serialize :assignable, FteWeightedSet
   serialize :non_billing, FteWeightedSet
   serialize :billable, FteWeightedSet
+  serialize :overallocated, FteWeightedSet
+
 
   attr_accessible :snap_date, :utilization, :office_id
 
@@ -77,10 +80,12 @@ class Snapshot < ActiveRecord::Base
 
   def calculate
     self.staff            = utilization_group.billable_percentages
+    self.non_billable     = utilization_group.non_billable_percentages
     self.unassignable     = utilization_group.unassigned_percentages
     self.billing          = utilization_group.billing_percentages
     self.non_billing      = utilization_group.non_billing_percentages
     self.assignable       = utilization_group.assignable_percentages
+    self.overallocated    = utilization_group.overallocated_percentages
     self.utilization      = utilization_group.utilization_percentage
   end
 end

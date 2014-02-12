@@ -11,6 +11,10 @@ class UtilizationGroup
     fetch(:billable_percentage)
   end
 
+  def non_billable_percentages
+    fetch(:non_billable_percentage).compact
+  end
+
   def unassigned_percentages
     fetch(:unassigned_percentage).compact
   end

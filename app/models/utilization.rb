@@ -14,6 +14,10 @@ class Utilization
   end
   memoize :billable_percentage
 
+  def non_billable_percentage
+    (100 - person.percent_billable).to_f
+  end
+  memoize :non_billable_percentage
 
   def unassigned_percentage
     (billable_percentage * vacation_allocation_percentage) / 100
@@ -75,6 +79,7 @@ class Utilization
 
   def output
     { billable_percentage: billable_percentage,
+      non_billable_percentage: non_billable_percentage,
       unassigned_percentage: unassigned_percentage,
       billing_percentage: billing_percentage,
       non_billing_percentage: non_billing_percentage,

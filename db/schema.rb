@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140211220504) do
+ActiveRecord::Schema.define(version: 20140212191053) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -195,8 +195,8 @@ ActiveRecord::Schema.define(version: 20140211220504) do
   create_table "snapshots", force: true do |t|
     t.text     "utilization"
     t.date     "snap_date"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
     t.integer  "office_id"
     t.text     "staff"
     t.text     "unassignable"
@@ -204,6 +204,8 @@ ActiveRecord::Schema.define(version: 20140211220504) do
     t.text     "assignable"
     t.text     "non_billing"
     t.text     "billable"
+    t.text     "overallocated"
+    t.text     "non_billable"
   end
 
   create_table "t2_applications", force: true do |t|
