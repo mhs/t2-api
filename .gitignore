@@ -26,3 +26,7 @@ zeus.json
 db/dumps
 doc/daily
 public/system
+doc/controllers_brief.svg
+doc/controllers_complete.svg
+doc/models_brief.svg
+doc/models_complete.svg

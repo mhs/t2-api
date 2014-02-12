@@ -26,11 +26,6 @@ describe PersonSerializer do
     person_serialized.bio.should eql(person.bio)
   end
 
-  it "should include similar people" do
-    pending "skill_list not implemented"
-    person_serialized.similar_people.count.should eql(5)
-  end
-
   it "should serialize avatars" do
     person_serialized.avatar.should be_kind_of(Hash)
     person_serialized.avatar.keys.should =~ [:thumb, :small, :medium]

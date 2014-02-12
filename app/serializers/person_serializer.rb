@@ -4,7 +4,6 @@ class PersonSerializer < ActiveModel::Serializer
   has_many :allocations, embed: :ids
   has_one :user, embed: :ids
   has_one :office, embed: :ids
-  # has_many :project_allowances, embed: :ids
 
   def avatar
     {

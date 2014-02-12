@@ -30,22 +30,6 @@ describe User do
       expect(found_user.authentication_token).to_not eq(nil)
     end
 
-    it "creates a new authorized user if from neo.com domain" do
-      pending "this behavior is wrong now"
-
-      new_email = auth_info.raw_info.email = 'neon@neo.com'
-
-      expect {
-        found_user = User.find_for_google_oauth2(auth)
-        expect(found_user.provider).to eq(provider)
-        expect(found_user.uid).to eq(uid)
-        expect(found_user.name).to eq('Neon')
-        expect(found_user.email).to eq(new_email)
-        expect(found_user.authentication_token).to_not eq(nil)
-      }.to change(User, :count).by(1)
-
-    end
-
     it "does nothing if a new authorized user isn't from a neo.com domain" do
        new_email = auth_info.raw_info.email = 'neon@totally_something_else.com'
 

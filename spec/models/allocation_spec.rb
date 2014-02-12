@@ -34,16 +34,6 @@ describe Allocation do
     FactoryGirl.build(:allocation, start_date: Date.today, end_date: 2.days.ago).should_not be_valid
   end
 
-  it 'should not let you make an allocation that exceeds the allowances total hours' do
-    person = FactoryGirl.create(:person)
-    project = FactoryGirl.create(:project)
-    proj_office = FactoryGirl.create(:project_office, allowance: 160, project: project, office: person.office)
-    start_date = [Date.today, Date.today.beginning_of_year].max
-
-    allocation = FactoryGirl.build(:allocation, start_date: start_date, end_date: start_date + 2.months, person: person, project: project)
-    expect(allocation).to_not be_valid
-  end
-
   describe "by_office Scope" do
     let(:office_a_person) { FactoryGirl.create(:person) }
     let(:office_b_person) { FactoryGirl.create(:person) }
@@ -217,21 +207,6 @@ describe Allocation do
     it 'does not include allocations for non-vacation projects' do
       allocation = FactoryGirl.create(:allocation)
       Allocation.vacation.should_not include(allocation)
-    end
-  end
-
-  describe '.for_person' do
-    let(:bob) { FactoryGirl.create(:person) }
-    let!(:bob_allocation) { FactoryGirl.create(:allocation, person: bob) }
-    let!(:somoneone_elses_allocation) { FactoryGirl.create(:allocation) }
-
-    it 'includes allocations for the specified person' do
-      Allocation.for_person(bob).should include(bob_allocation)
-      Allocation.for_person(bob.id).should include(bob_allocation)
-    end
-
-    it 'does not include allocations for other people' do
-      Allocation.for_person(bob).should_not include(somoneone_elses_allocation)
     end
   end
 
