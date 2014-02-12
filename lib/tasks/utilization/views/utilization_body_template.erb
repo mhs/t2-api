@@ -1,17 +1,36 @@
 <% snapshots.each do |snapshot| %>
-Non billable staff in T2 - <%= snapshot.overhead.size %> people
+Non Billable - <%= snapshot.non_billable.size %> people
 --------------------------------------------
-<%= person_rows(snapshot.overhead) %>
+* Percentage shown represents fraction of overhead
 
-Unassignable (vacation, etc.) - <%= snapshot.unassignable.size %> people
+<%= person_rows(snapshot.non_billable) %>
+
+
+Unassignable - <%= snapshot.unassignable.size %> people
 --------------------------------------------
+* Percentage shown represents fraction of billable time allocated to vacation, etc.
+
 <%= person_rows(snapshot.unassignable) %>
 
-Working, but not billing - <%= snapshot.non_billing.size %> people
+
+Non Billing - <%= snapshot.non_billing.size %> people
 --------------------------------------------
+* Percentage shown represents fraction of billable time allocated to projects, but not actually billing
+
 <%= person_rows(snapshot.non_billing) %>
 
-Billing today - <%= snapshot.billing.size %> people
+
+Billing - <%= snapshot.billing.size %> people
 --------------------------------------------
+* Percentage shown represents fraction of billable time allocated to projects
+
 <%= person_rows(snapshot.billing) %>
+
+
+Overallocated - <%= snapshot.overallocated.size %> people
+--------------------------------------------
+* Percentage shown represents additional capacity above billable capacity allocated to projects
+
+<%= person_rows(snapshot.overallocated, false) %>
+
 <% end %>

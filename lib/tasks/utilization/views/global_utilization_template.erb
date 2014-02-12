@@ -1,11 +1,11 @@
-
-Global Utilization Report
+Global Utilization Summary
 -------------------------
-<% snapshots.each do |snapshot|  %>
+<% snapshots.each do |snapshot|  -%>
 Global utilization for today is <%= snapshot.utilization %>%.
   - Currently there are <%= snapshot.staff.size %> staff members of which <%= snapshot.pure_billable.size %> are 100% billable, <%= snapshot.pure_overhead.size %> are 0% billable, and <%= snapshot.partially_billable.size %> are partially billable.
     - Based on billable time, these <%= snapshot.staff.size %> staff members equate to <%= snapshot.staff.to_fte %> FTEs of which <%= snapshot.assignable.to_fte %> are assignable and <%= snapshot.unassignable.to_fte %> are not.
     - Of the <%= snapshot.assignable.to_fte %> assignable FTEs, <%= snapshot.billing.to_fte %> are billing today.
   - Daily utilization is calculated as billing over assignable
     - For today, that is <%= snapshot.billing.to_fte %> / <%= snapshot.assignable.to_fte %> = <%= snapshot.utilization %>%
-  <% end %>
+<% end %>
+
