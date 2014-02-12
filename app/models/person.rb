@@ -74,6 +74,10 @@ class Person < ActiveRecord::Base
     allocations.this_year.where(project_id: project_id)
   end
 
+  def utilization(start_date=nil, end_date=nil)
+    Utilization.new(self, start_date, end_date).to_hash
+  end
+
   def create_missing_project_allowances
     ids = project_allowances.map(&:id).tap { |ids| ids << 0 if ids.empty? }
     office.project_offices.has_allowance.where("id NOT IN (?)", ids).each do |project_office|
