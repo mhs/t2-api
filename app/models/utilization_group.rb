@@ -7,26 +7,46 @@ class UtilizationGroup
     end
   end
 
+  def billable_percentages
+    fetch(:billable_percentage)
+  end
+
+  def unassigned_percentages
+    fetch(:unassigned_percentage).compact
+  end
+
+  def billing_percentages
+    fetch(:billing_percentage).compact
+  end
+
+  def assignable_percentages
+    fetch(:assignable_percentage).compact
+  end
+
+  def non_billing_percentages
+    fetch(:non_billing_percentage).compact
+  end
+
+  def overallocated_percentages
+    fetch(:overallocated_percentage).compact
+  end
+
+  def assignable_percentages
+    fetch(:assignable_percentage).compact
+  end
+
+  def utilization_percentage
+    return 0.0 if assignable_percentages.empty?
+    sprintf "%.1f", (100.0 * billing_percentages.total) / assignable_percentages.total
+  end
+
+
+  private
+
   def fetch(key)
     result = utilizations.each_with_object({}) do |u, hash|
       hash.merge!(u.to_hash(key))
     end
-    FteWeightedSet.new(result)
-  end
-
-  def assignable_weights
-    (fetch(:billable_percentage) - fetch(:unassigned_percentage)).compact
-  end
-
-  def non_billing_weights
-    (assignable_weights - fetch(:billing_percentage)).compact
-  end
-
-  def utilization_percentage
-    if assignable_weights.empty?
-      0.0
-    else
-      sprintf "%.1f", (100.0 * fetch(:billing_percentage).total) / assignable_weights.total
-    end
+    FteWeightedSet.new(result).person_named_keys
   end
 end

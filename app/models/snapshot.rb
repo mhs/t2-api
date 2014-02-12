@@ -76,11 +76,11 @@ class Snapshot < ActiveRecord::Base
   memoize :utilization_group
 
   def calculate
-    self.staff            = utilization_group.fetch(:billable_percentage).person_named_keys
-    self.unassignable     = utilization_group.fetch(:unassigned_percentage).compact.person_named_keys
-    self.billing          = utilization_group.fetch(:billing_percentage).compact.person_named_keys
-    self.non_billing      = utilization_group.non_billing_weights.person_named_keys
-    self.assignable       = utilization_group.assignable_weights.person_named_keys
+    self.staff            = utilization_group.billable_percentages
+    self.unassignable     = utilization_group.unassigned_percentages
+    self.billing          = utilization_group.billing_percentages
+    self.non_billing      = utilization_group.non_billing_percentages
+    self.assignable       = utilization_group.assignable_percentages
     self.utilization      = utilization_group.utilization_percentage
   end
 end
