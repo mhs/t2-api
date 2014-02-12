@@ -7,13 +7,13 @@ class UtilizationCount
 
   def initialize(snapshot)
     @date = snapshot.snap_date
-    @staff_count = snapshot.staff_weights.size
-    @billable_count = snapshot.staff_weights.total / 100.0
-    @overhead_count = @staff_count - @billable_count
-    @unassignable_count = snapshot.unassignable_weights.total / 100.0
-    @billing_count = snapshot.billing_weights.total / 100.0
-    @non_billing_count = snapshot.non_billing_weights.total / 100.0
-    @assignable_count = snapshot.assignable_weights.total / 100.0
+    @staff_count = snapshot.staff.size
+    @billable_count = snapshot.staff.to_fte
+    @overhead_count = snapshot.overhead.to_fte
+    @unassignable_count = snapshot.unassignable.to_fte
+    @billing_count = snapshot.billing.to_fte
+    @non_billing_count = snapshot.non_billing.to_fte
+    @assignable_count = snapshot.assignable.to_fte
     @id = snapshot.id
     @office_id = snapshot.office_id
   end

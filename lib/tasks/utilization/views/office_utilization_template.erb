@@ -1,0 +1,6 @@
+Per Office Utilization Report
+-----------------------------
+<% snapshots.each do |snapshot| -%>
+<%= "#{snapshot.office.name} - #{snapshot.billing.to_fte} / #{snapshot.assignable.to_fte} = #{snapshot.utilization}% (~ #{snapshot.billable.size} billable people)" %>
+<% end %>
+* Utilization = Billing FTEs / Assignable FTEs

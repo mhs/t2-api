@@ -1,17 +1,17 @@
 require 'date_range_helper'
-require 'weighted_set'
 
 class Snapshot < ActiveRecord::Base
 
   extend Memoist
   extend DateRangeHelper
+  include SnapshotFilters
 
-  serialize :staff_weights, WeightedSet
-  serialize :unassignable_weights, WeightedSet
-  serialize :billing_weights, WeightedSet
-  serialize :assignable_weights, WeightedSet
-  serialize :non_billing_weights, WeightedSet
-  serialize :billable, WeightedSet
+  serialize :staff, FteWeightedSet
+  serialize :unassignable, FteWeightedSet
+  serialize :billing, FteWeightedSet
+  serialize :assignable, FteWeightedSet
+  serialize :non_billing, FteWeightedSet
+  serialize :billable, FteWeightedSet
 
   attr_accessible :snap_date, :utilization, :office_id
 
@@ -76,21 +76,11 @@ class Snapshot < ActiveRecord::Base
   memoize :utilization_group
 
   def calculate
-    self.staff_weights        = person_named_keys(utilization_group.fetch(:billable_percentage))
-    self.unassignable_weights = person_named_keys(utilization_group.fetch(:unassigned_percentage)).compact
-    self.billing_weights      = person_named_keys(utilization_group.fetch(:billing_percentage)).compact
-    self.non_billing_weights  = person_named_keys(utilization_group.non_billing_weights)
-    self.assignable_weights   = person_named_keys(utilization_group.assignable_weights)
-    self.billable             = staff_weights.compact
-    self.utilization          = utilization_group.utilization_percentage
+    self.staff            = utilization_group.fetch(:billable_percentage).person_named_keys
+    self.unassignable     = utilization_group.fetch(:unassigned_percentage).compact.person_named_keys
+    self.billing          = utilization_group.fetch(:billing_percentage).compact.person_named_keys
+    self.non_billing      = utilization_group.non_billing_weights.person_named_keys
+    self.assignable       = utilization_group.assignable_weights.person_named_keys
+    self.utilization      = utilization_group.utilization_percentage
   end
-
-
-  private
-
-  def person_named_keys(weights)
-    # convert a WeightedSet with Person objects to key of Person#name for the serialization format
-    weights.transform_keys { |person| person.name }
-  end
-
 end

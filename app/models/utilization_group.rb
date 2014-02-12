@@ -1,5 +1,3 @@
-require 'weighted_set'
-
 class UtilizationGroup
   attr_accessor :utilizations
 
@@ -13,7 +11,7 @@ class UtilizationGroup
     result = utilizations.each_with_object({}) do |u, hash|
       hash.merge!(u.to_hash(key))
     end
-    WeightedSet.new(result)
+    FteWeightedSet.new(result)
   end
 
   def assignable_weights

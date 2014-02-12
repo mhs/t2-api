@@ -1,0 +1,17 @@
+<% snapshots.each do |snapshot| %>
+Non billable staff in T2 - <%= snapshot.overhead.size %> people
+--------------------------------------------
+<%= person_rows(snapshot.overhead) %>
+
+Unassignable (vacation, etc.) - <%= snapshot.unassignable.size %> people
+--------------------------------------------
+<%= person_rows(snapshot.unassignable) %>
+
+Working, but not billing - <%= snapshot.non_billing.size %> people
+--------------------------------------------
+<%= person_rows(snapshot.non_billing) %>
+
+Billing today - <%= snapshot.billing.size %> people
+--------------------------------------------
+<%= person_rows(snapshot.billing) %>
+<% end %>

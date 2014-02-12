@@ -16,6 +16,6 @@ class MonthlyUtilizationTemplate
   end
 end
 
-filename = File.expand_path(File.dirname(__FILE__) + '/monthly_utilization_template.erb')
+filename = File.expand_path(File.dirname(__FILE__) + '/views/monthly_utilization_template.erb')
 erb = ERB.new(File.read(filename),0,'>')
 erb.def_method(MonthlyUtilizationTemplate, 'render()', filename)

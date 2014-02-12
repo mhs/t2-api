@@ -32,12 +32,20 @@ class MonthlySnapshot < ActiveRecord::Base
   end
 
   def calculate
+    reset_aggregates
     with_week_days_in(snap_date) do |date|
       Snapshot.on_date!(date, office_id).tap do |snapshot|
-        self.billing_days += snapshot.billing_weights.total / 100.0
-        self.assignable_days += snapshot.assignable_weights.total / 100.0
+        self.billing_days += snapshot.billing.to_fte
+        self.assignable_days += snapshot.assignable.to_fte
       end
     end
+  end
+
+  private
+
+  def reset_aggregates
+    self.billing_days    = 0.0
+    self.assignable_days = 0.0
   end
 
 end
