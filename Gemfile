@@ -17,7 +17,8 @@ gem 'haml'
 gem 'acts-as-taggable-on'
 gem 'paperclip'
 gem 'aws-sdk'
-gem 'protected_attributes' # TODO: remove this and replace with strong params
+gem 'protected_attributes'
+gem 'terminal-table'
 
 group :assets do
   gem 'sass-rails'
@@ -34,7 +35,6 @@ group :development, :test do
   gem 'factory_girl_rails'
   gem 'ffaker'
   gem 'pry-rails'
-  # gem 'pry-plus'
   gem 'taps'
   gem 'sqlite3'
   gem 'foreman'
@@ -46,5 +46,5 @@ group :development, :test do
 end
 
 group :production do
-    gem 'thin'
+  gem 'thin'
 end

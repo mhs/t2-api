@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140212191053) do
+ActiveRecord::Schema.define(version: 20140213201755) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -77,6 +77,7 @@ ActiveRecord::Schema.define(version: 20140212191053) do
     t.decimal  "billing_days",    precision: 6, scale: 2, default: 0.0
     t.datetime "created_at",                                            null: false
     t.datetime "updated_at",                                            null: false
+    t.decimal  "utilization",     precision: 6, scale: 2, default: 0.0
   end
 
   add_index "monthly_snapshots", ["office_id"], name: "index_monthly_snapshots_on_office_id", using: :btree

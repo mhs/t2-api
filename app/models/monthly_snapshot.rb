@@ -19,6 +19,11 @@ class MonthlySnapshot < ActiveRecord::Base
     end
   end
 
+  def office
+    oid = read_attribute(:office_id)
+    oid.present? ? Office.find(oid) : Office::SummaryOffice.new
+  end
+
   def self.one_per_month(office_id=nil)
     MonthlySnapshot.order("snap_date ASC").where(office_id: office_id)
   end
@@ -39,7 +44,9 @@ class MonthlySnapshot < ActiveRecord::Base
         self.assignable_days += snapshot.assignable.to_fte
       end
     end
+    self.utilization = assignable_days.zero? ? 0.0 : (billing_days/assignable_days * 100)
   end
+
 
   private
 

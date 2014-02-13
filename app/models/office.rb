@@ -24,6 +24,10 @@ class Office < ActiveRecord::Base
     active.standard
   end
 
+  def summary?
+    false
+  end
+
   class SummaryOffice
     def name
       "Overview"
@@ -35,6 +39,10 @@ class Office < ActiveRecord::Base
 
     def slug
       name.downcase
+    end
+
+    def summary?
+      true
     end
   end
 end

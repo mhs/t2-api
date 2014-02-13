@@ -24,12 +24,4 @@ module DateRangeHelper
   def with_week_days_in(month=nil, &block)
     week_days(month).each(&block)
   end
-
-  # FIXME: Output should not be displayed under Test env.
-  # There should be a beetter way to do this :)
-  def puts_if_no_test(content)
-    unless Rails.env.test?
-      puts content
-    end
-  end
 end

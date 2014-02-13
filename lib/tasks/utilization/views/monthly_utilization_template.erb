@@ -1,11 +1,13 @@
-<%= @report_title %>
-
-<%= divider %>
-
-<%= format_row('Total', @summary_snapshot) %>
-<%= divider %>
-
-<% @monthly_snapshots.each do |snapshot| %>
-<%= format_row(snapshot.office.name, snapshot) %>
-<% end %>
-
+<% title = monthly_snapshot_title(snapshots.first) -%>
+<% explanation = [{value: "* Calculated as Billing FTEs / Assignable FTEs", colspan: 2}]  -%>
+<% output = Terminal::Table.new(title: title, headings: ["Office", "Utilization Percentage*"]) do |t| -%>
+  <% snapshots.each do |snapshot| -%>
+    <% column_1 = snapshot.office.name -%>
+    <% column_2 = "#{to_percent(snapshot.billing_days)} / #{to_percent(snapshot.assignable_days)} =  #{to_percent(snapshot.utilization)}%" -%>
+    <% t.add_row [column_1, { value: column_2, alignment: :right }] -%>
+    <% t.add_separator if snapshot.office.summary? -%>
+  <% end -%>
+  <% t.add_separator -%>
+  <% t.add_row explanation -%>
+<% end -%>
+<%= display(output) %>
