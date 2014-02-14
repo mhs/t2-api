@@ -1,0 +1,12 @@
+
+<% output = Terminal::Table.new do |t| -%>
+  <% snapshots.each do |snapshot|  -%>
+    <% t.title = "Global utilization for today is #{snapshot.utilization}%"  -%>
+    <% t.add_row ["Currently there are #{snapshot.staff.size} staff members of which #{snapshot.pure_billable.size} are 100% billable, #{snapshot.pure_overhead.size} are 0% billable, and #{snapshot.partially_billable.size} are partially billable."] -%>
+    <% t.add_row [" - Based on billable time, these #{snapshot.staff.size} staff members equate to #{to_percent(snapshot.staff.to_fte)} FTEs of which #{to_percent(snapshot.assignable.to_fte)} are assignable and #{to_percent(snapshot.unassignable.to_fte)} are not."] -%>
+    <% t.add_row [" - Of the #{to_percent(snapshot.assignable.to_fte)} assignable FTEs, #{to_percent(snapshot.billing.to_fte)} are billing today."] -%>
+    <% t.add_row [" - Daily utilization is calculated as billing over assignable."] -%>
+    <% t.add_row ["   - For today, that is #{to_percent(snapshot.billing.to_fte)} / #{to_percent(snapshot.assignable.to_fte)} = #{to_percent(snapshot.utilization)}%"] -%>
+  <% end -%>
+<% end -%>
+<%= display(output) %>

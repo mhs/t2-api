@@ -1,6 +1,0 @@
-Per Office Utilization Report
------------------------------
-<% @snapshots.each do |snapshot| %>
-<%= office_name(snapshot) %> - <%= "#{billing(snapshot)} / #{assignable(snapshot)}".ljust(14, ' ') %> = <%= snapshot.utilization %>%
-<% end %>
-

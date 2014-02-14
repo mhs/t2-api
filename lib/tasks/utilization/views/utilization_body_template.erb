@@ -1,0 +1,37 @@
+<% snapshots.each do |snapshot| -%>
+  <% output = Terminal::Table.new do |t| -%>
+      <% explanation = ["* Percentage is Billing FTEs / Assignable FTEs and shown if < 100%"]  -%>
+      <% t.title = "Non Billable - #{snapshot.non_billable.size} people" %>
+      <% t.rows = person_rows(snapshot.non_billable) + [ :separator, explanation ]-%>
+  <% end -%>
+  <%= display(output) %>
+
+  <% output = Terminal::Table.new do |t| -%>
+      <% explanation = ["* Percentage is billable time allocated to vacation, etc. and shown if < 100%"]  -%>
+      <% t.title = "Unassignable - #{snapshot.unassignable.size} people" %>
+      <% t.rows = person_rows(snapshot.unassignable) + [ :separator, explanation ]-%>
+  <% end -%>
+  <%= display(output) %>
+
+  <% output = Terminal::Table.new do |t| -%>
+      <% explanation = ["* Percentage is billable time allocated to projects, but not actually billing and only shown if < 100%"]  -%>
+      <% t.title = "Non Billing - #{snapshot.non_billing.size} people" %>
+      <% t.rows = person_rows(snapshot.non_billing) + [ :separator, explanation ]-%>
+  <% end -%>
+  <%= display(output) %>
+
+  <% output = Terminal::Table.new do |t| -%>
+      <% explanation = ["* Percentage is billable time allocated to projects and shown if < 100%"]  -%>
+      <% t.title = "Billing - #{snapshot.billing.size} people" %>
+      <% t.rows = person_rows(snapshot.billing) + [ :separator, explanation ]-%>
+  <% end -%>
+  <%= display(output) %>
+
+  <% output = Terminal::Table.new do |t| -%>
+      <% explanation = ["* Percentage is capacity above billable capacity allocated to projects"]  -%>
+      <% t.title = "Overallocated - #{snapshot.overallocated.size} people" %>
+      <% t.rows = person_rows(snapshot.overallocated, false) + [ :separator, explanation ]-%>
+  <% end -%>
+  <%= display(output) %>
+<% end -%>
+

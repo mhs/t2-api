@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140210223321) do
+ActiveRecord::Schema.define(version: 20140213201755) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -73,10 +73,11 @@ ActiveRecord::Schema.define(version: 20140210223321) do
   create_table "monthly_snapshots", force: true do |t|
     t.integer  "office_id"
     t.date     "snap_date"
-    t.decimal  "assignable_days", precision: 6, scale: 2
-    t.decimal  "billing_days",    precision: 6, scale: 2
-    t.datetime "created_at",                              null: false
-    t.datetime "updated_at",                              null: false
+    t.decimal  "assignable_days", precision: 6, scale: 2, default: 0.0
+    t.decimal  "billing_days",    precision: 6, scale: 2, default: 0.0
+    t.datetime "created_at",                                            null: false
+    t.datetime "updated_at",                                            null: false
+    t.decimal  "utilization",     precision: 6, scale: 2, default: 0.0
   end
 
   add_index "monthly_snapshots", ["office_id"], name: "index_monthly_snapshots_on_office_id", using: :btree
@@ -154,12 +155,17 @@ ActiveRecord::Schema.define(version: 20140210223321) do
   create_table "snapshots", force: true do |t|
     t.text     "utilization"
     t.date     "snap_date"
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
     t.integer  "office_id"
-    t.text     "staff_weights"
-    t.text     "unassignable_weights"
-    t.text     "billing_weights"
+    t.text     "staff"
+    t.text     "unassignable"
+    t.text     "billing"
+    t.text     "assignable"
+    t.text     "non_billing"
+    t.text     "billable"
+    t.text     "overallocated"
+    t.text     "non_billable"
   end
 
   create_table "t2_applications", force: true do |t|

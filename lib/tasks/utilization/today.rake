@@ -1,49 +1,39 @@
-require File.expand_path(File.dirname(__FILE__) + '/global_utilization_template.rb')
-require File.expand_path(File.dirname(__FILE__) + '/utilization_body_template.rb')
-require File.expand_path(File.dirname(__FILE__) + '/office_utilization_template.rb')
-require File.expand_path(File.dirname(__FILE__) + '/monthly_utilization_template.rb')
-require File.expand_path(File.dirname(__FILE__) + '/projected_utilization_template.rb')
-require File.expand_path(File.dirname(__FILE__) + '/../../utilization_helper')
+require File.expand_path(File.dirname(__FILE__) + '/report_template.rb')
+require File.expand_path(File.dirname(__FILE__) + '/../../date_range_helper')
 
 namespace :utilization do
   desc "Spit out a report on utilization for Daniel"
   task "today" => :environment do
+    include DateRangeHelper
 
-    include UtilizationHelper
-
-    # Global Utilization
+    # global utilization
     today_snapshot = Snapshot.today!
-    puts_if_no_test GlobalUtilizationTemplate.new(today_snapshot).render()
+    ReportTemplate.new('views/global_utilization_template.erb').render([today_snapshot])
 
-    # Per Office Utilization
-    excluded_offices = ["", "Dublin", "Headquarters", "Archived"]
+    offices = Office.reporting
 
-    offices = Office.where('name NOT IN (?)', excluded_offices)
-
+    # per office utilization
     snapshots = offices.map { |office| Snapshot.on_date!(Date.today, office) }
+    ReportTemplate.new('views/office_utilization_template.erb').render(snapshots)
 
-    puts_if_no_test OfficeUtilizationTemplate.new(snapshots).render()
-
-    # Global 3 weeks utilization forecast
+    # projected utilization
     projection_snapshots = []
     with_week_days 21 do |date|
       projection_snapshots << Snapshot.on_date!(date)
     end
+    ReportTemplate.new('views/projected_utilization_template.erb').render(projection_snapshots)
 
-    puts_if_no_test ProjectedUtilizationTemplate.new(projection_snapshots).render()
+    # current monthly utilization by office
+    current_summary_snapshot  = MonthlySnapshot.today!
+    current_monthly_snapshots = offices.map { |office| MonthlySnapshot.today!(office) }.unshift(current_summary_snapshot)
+    ReportTemplate.new('views/monthly_utilization_template.erb').render(current_monthly_snapshots)
 
-    # current monthly utilization
-    summary_snapshot = MonthlySnapshot.today!
-    monthly_snapshots = offices.map { |office| MonthlySnapshot.today!(office) }
-    puts_if_no_test MonthlyUtilizationTemplate.new(summary_snapshot, monthly_snapshots).render()
+    # future month utilization by office
+    future_summary_snapshot  = MonthlySnapshot.next_month!
+    future_monthly_snapshots = offices.map { |office| MonthlySnapshot.next_month!(office) }.unshift(future_summary_snapshot)
+    ReportTemplate.new('views/monthly_utilization_template.erb').render(future_monthly_snapshots)
 
-    # projected monthly utilization
-    summary_snapshot = MonthlySnapshot.next_month!
-    monthly_snapshots = offices.map { |office| MonthlySnapshot.next_month!(office) }
-    t = "Projected Monthly Utilization Report"
-    puts_if_no_test MonthlyUtilizationTemplate.new(summary_snapshot, monthly_snapshots, t).render()
-
-    # Body that includes actual people list
-    puts_if_no_test UtilizationBodyTemplate.new(today_snapshot).render()
+    # people list
+    ReportTemplate.new('views/utilization_body_template.erb').render([today_snapshot])
   end
 end

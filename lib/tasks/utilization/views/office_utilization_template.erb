@@ -1,0 +1,12 @@
+<% output = Terminal::Table.new(title: "Per Office Utilization Report", headings: ["Office", "Utilization Percentage*", "Billable People"]) do |t| -%>
+  <% explanation = [{value: "* Calculated as Billing FTEs / Assignable FTEs", colspan: 3}]  -%>
+  <% snapshots.each do |snapshot| -%>
+    <% column_1 = snapshot.office.name -%>
+    <% column_2 = "#{to_percent(snapshot.billing.to_fte)} / #{to_percent(snapshot.assignable.to_fte)} =  #{to_percent(snapshot.utilization)}%" -%>
+    <% column_3 = "#{snapshot.billing.size} billing of #{snapshot.assignable.size} assignable" -%>
+    <% t.add_row [column_1, { value: column_2, alignment: :right }, column_3] -%>
+  <% end -%>
+  <% t.add_separator -%>
+  <% t.add_row explanation -%>
+<% end -%>
+<%= display(output) %>

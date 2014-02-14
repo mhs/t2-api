@@ -1,30 +1,29 @@
-require 'utilization_helper'
-require 'weighted_set'
+require 'date_range_helper'
 
 class Snapshot < ActiveRecord::Base
 
   extend Memoist
-  extend UtilizationHelper
+  extend DateRangeHelper
+  include SnapshotFilters
 
-  serialize :staff_weights, WeightedSet
-  serialize :unassignable_weights, WeightedSet
-  serialize :billing_weights, WeightedSet
+  serialize :staff, FteWeightedSet
+  serialize :non_billable, FteWeightedSet
+  serialize :unassignable, FteWeightedSet
+  serialize :billing, FteWeightedSet
+  serialize :assignable, FteWeightedSet
+  serialize :non_billing, FteWeightedSet
+  serialize :billable, FteWeightedSet
+  serialize :overallocated, FteWeightedSet
 
-  def assignable_weights
-    (staff_weights - unassignable_weights).compact
-  end
-  memoize :assignable_weights
-
-  def non_billing_weights
-    (assignable_weights - billing_weights).compact
-  end
-  memoize :non_billing_weights
 
   attr_accessible :snap_date, :utilization, :office_id
+
   belongs_to :office
+
   scope :by_date, lambda {|date| where(snap_date: date) }
   scope :by_office_id, lambda {|office_id| where(office_id: office_id) }
   scope :future, lambda { where('snap_date >= ?', Date.today) }
+
   validates_uniqueness_of :snap_date, scope: :office_id
 
   def self.one_per_day(office_id=nil)
@@ -43,7 +42,7 @@ class Snapshot < ActiveRecord::Base
     snap_scope = by_date(date).by_office_id(office_id)
     snap_scope.first_or_initialize.tap do |snap|
       break snap unless snap.new_record?
-      snap.capture_data
+      snap.calculate
       snap.save!
     end
   end
@@ -60,55 +59,33 @@ class Snapshot < ActiveRecord::Base
     by_date(Date.today).order("created_at ASC").last
   end
 
-  alias_method :old_office, :office
-
-  def office
-    old_office || Office::SummaryOffice.new
-  end
-
   def recalculate!
-    capture_data
+    calculate
     save!
   end
 
-  def staff_billable_percents
-    people = Person.by_office(queried_office).employed_on_date(snap_date)
-    result = {}
-    # TODO: this is wrong, will not show people who aren't allocated
-    people.each do |person|
-      result[person] = person.percent_billable
-    end
-    WeightedSet.new(result)
-  end
-  memoize :staff_billable_percents
-
-  def queried_office
-    office.id ? office : nil
+  def people
+    Person.by_office(office).employed_on_date(snap_date)
   end
 
-  def capture_data
-    allocation_relation = Allocation.by_office(queried_office).on_date(snap_date).includes(:person)
-    calc = WeightCalculator.new(allocation_relation)
-
-    # TODO: need to change the keys on these
-    self.staff_weights = munge_weights(staff_billable_percents)
-    self.unassignable_weights = munge_weights(calc.unassignable)
-    self.billing_weights = munge_weights(calc.billing)
-    self.utilization = calculate_utilization
+  def office
+    oid = read_attribute(:office_id)
+    oid.present? ? Office.find(oid) : Office::SummaryOffice.new
   end
 
-  def calculate_utilization
-    if assignable_weights.empty?
-      0.0
-    else
-      sprintf "%.1f", (100.0 * billing_weights.total) / assignable_weights.total
-    end
+  def utilization_group
+    UtilizationGroup.new(people, snap_date)
   end
+  memoize :utilization_group
 
-  private
-
-  def munge_weights(weights)
-    # convert a WeightedSet with Person objects as keys to the serialization format
-    weights.transform_keys { |person| person.name }
+  def calculate
+    self.staff            = utilization_group.billable_percentages
+    self.non_billable     = utilization_group.non_billable_percentages
+    self.unassignable     = utilization_group.unassigned_percentages
+    self.billing          = utilization_group.billing_percentages
+    self.non_billing      = utilization_group.non_billing_percentages
+    self.assignable       = utilization_group.assignable_percentages
+    self.overallocated    = utilization_group.overallocated_percentages
+    self.utilization      = utilization_group.utilization_percentage
   end
 end

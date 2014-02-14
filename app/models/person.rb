@@ -38,8 +38,8 @@ class Person < ActiveRecord::Base
   validates :percent_billable, inclusion: {in: 0..100}
 
   scope :employed_on_date, lambda { |d|
-    where("start_date is NULL or start_date < ?",d)
-    .where("end_date is NULL or end_date > ?", d)
+      where("people.start_date IS NULL OR people.start_date <= ?",d)
+     .where("people.end_date IS NULL OR people.end_date >= ?", d)
   }
 
   scope :employed_between, -> start_date, end_date do
@@ -51,7 +51,7 @@ class Person < ActiveRecord::Base
 
   scope :overhead, -> { where("percent_billable < 100") }
   scope :billable, -> { where("percent_billable > 0") }
-  scope :by_office, lambda { |office| office ? where(office_id: office.id) : where(false) }
+  scope :by_office, lambda { |office| office.try(:id) ? where(office: office) : where(false) }
 
   after_create :create_or_associate_user
 
@@ -69,6 +69,10 @@ class Person < ActiveRecord::Base
 
   def allocations_for_project(project_id)
     allocations.this_year.where(project_id: project_id)
+  end
+
+  def utilization(start_date=nil, end_date=nil)
+    Utilization.new(self, start_date, end_date).to_hash
   end
 
   def similar_people(limit=nil)
