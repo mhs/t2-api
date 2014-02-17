@@ -1,0 +1,8 @@
+- snapshots.each do |snapshot|
+  %h1== Global utilization for today is #{number_to_percentage(snapshot.utilization, precision: 2)}.
+  %p== Currently there are #{snapshot.staff.size} staff members of which #{snapshot.pure_billable.size} are 100% billable, #{snapshot.pure_overhead.size} are 0% billable, and #{snapshot.partially_billable.size} are partially billable.
+  %ul
+    %li== Based on billable time, these #{snapshot.staff.size} staff members equate to #{number_to_percentage(snapshot.staff.to_fte, precision: 2)} FTEs of which #{number_to_percentage(snapshot.assignable.to_fte, precision: 2)} are assignable and #{number_to_percentage(snapshot.unassignable.to_fte, precision: 2)} are not.
+    %li== Of the #{number_to_percentage(snapshot.assignable.to_fte, precision: 2)} assignable FTEs, #{number_to_percentage(snapshot.billing.to_fte, precision: 2)} are billing today.
+    %li== Daily utilization is calculated as billing over assignable.
+    %li== For today, that is #{number_to_percentage(snapshot.billing.to_fte, precision: 2)} / #{number_to_percentage(snapshot.assignable.to_fte, precision: 2)} = #{number_to_percentage(snapshot.utilization, precision: 2)}

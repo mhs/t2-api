@@ -13,12 +13,11 @@ gem 'rack-cors', require: 'rack/cors'
 gem 'memoist'
 gem 'devise'
 gem 'omniauth-google-oauth2'
-gem 'haml'
+gem 'haml', '~> 4.0.5'
 gem 'acts-as-taggable-on'
 gem 'paperclip'
 gem 'aws-sdk'
 gem 'protected_attributes'
-gem 'terminal-table'
 
 group :assets do
   gem 'sass-rails'
@@ -43,6 +42,7 @@ group :development, :test do
   gem 'awesome_print'
   gem 'byebug'
   gem 'railroady'
+  gem 'letter_opener'
 end
 
 group :production do

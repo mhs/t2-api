@@ -1,0 +1,16 @@
+%h1= monthly_snapshot_title(snapshots.first)
+%table
+  %thead
+    %tr
+      %th Office
+      %th Utilization Percentage*
+  %tbody
+    - snapshots.each do |snapshot|
+      %tr
+        %td= snapshot.office.name
+        %td== #{number_with_precision(snapshot.billing_days, precision: 2)} / #{number_with_precision(snapshot.assignable_days, precision: 2)} = #{number_to_percentage(snapshot.utilization, precision: 2)}
+        -# TODO Style overview separately from other offices
+  %tfoot
+    %tr
+      %td{colspan: 2} *Calculated as Billing FTEs / Assignable FTEs
+
