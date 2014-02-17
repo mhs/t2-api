@@ -1,6 +1,6 @@
 %div
-  = render partial: 'global', locals: { snapshots: @global }
-  = render partial: 'projected', locals: { snapshots: @projected }
-  = render partial: 'monthly', locals: { snapshots: @current_month }
-  = render partial: 'monthly', locals: { snapshots: @future_month }
-  = render partial: 'people', locals: { snapshots: @global }
+  = render partial: 'global', locals: { snapshots: @report.global }
+  = render partial: 'projected', locals: { snapshots: @report.projected }
+  = render partial: 'monthly', locals: { snapshots: @report.current_month }
+  = render partial: 'monthly', locals: { snapshots: @report.next_month }
+  = render partial: 'people', locals: { snapshots: @report.global }
