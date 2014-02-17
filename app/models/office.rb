@@ -11,6 +11,7 @@ class Office < ActiveRecord::Base
   has_many_current :allocations, :through => :people
 
   SPECIAL_OFFICES = ["Headquarters", "Archived"]
+  US_OFFICES = ["Cincinnati", "Columbus", "San Francisco", "New York"]
 
   def self.active
     where(deleted_at: nil)
@@ -18,6 +19,10 @@ class Office < ActiveRecord::Base
 
   def self.standard
     where.not(name: SPECIAL_OFFICES)
+  end
+
+  def self.us
+    where(name: US_OFFICES)
   end
 
   def self.reporting
