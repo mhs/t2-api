@@ -11,6 +11,8 @@ namespace :db do
     puts "creating backup of t2-staging..."
     sysputs "heroku pgbackups:capture -a t2-staging --expire"
     restore_url = `heroku pgbackups:url -a t2api`
+    puts "resetting staging database"
+    sysputs "heroku pg:reset HEROKU_POSTGRESQL_ONYX_URL -a t2-staging --confirm"
     puts "copying data..."
     sysputs "heroku pgbackups:restore HEROKU_POSTGRESQL_ONYX_URL -a t2-staging --confirm t2-staging '#{restore_url}'"
     # puts "obscuring project names..."
