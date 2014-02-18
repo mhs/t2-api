@@ -18,6 +18,10 @@ gem 'acts-as-taggable-on'
 gem 'paperclip'
 gem 'aws-sdk'
 gem 'protected_attributes'
+gem 'bourbon', '~> 3.1.8'
+gem 'bitters', '~> 0.9.2'
+gem 'nokogiri', '~> 1.6.1'
+gem 'premailer-rails', '~> 1.7.0'
 
 group :assets do
   gem 'sass-rails'

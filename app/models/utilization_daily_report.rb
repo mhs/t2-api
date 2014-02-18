@@ -1,5 +1,6 @@
 class UtilizationDailyReport
   include DateRangeHelper
+  extend Memoist
 
   def offices
     @offices ||= Office.reporting
@@ -8,6 +9,7 @@ class UtilizationDailyReport
   def global
     [Snapshot.today!]
   end
+  memoize :global
 
   def projected(weekdays=21)
     projected = []

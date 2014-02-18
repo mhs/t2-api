@@ -1,15 +1,20 @@
 - snapshots.each do |snapshot|
-  %h1== Non Billable - #{snapshot.non_billable.size} people
-  = render partial: 'people_list', locals: {set: snapshot.non_billable, explanation: "* Percentage is Billing FTEs / Assignable FTEs and shown if < 100%" }
+  %section
+    %h2== Non Billable - #{snapshot.non_billable.size} people
+    = render partial: 'people_list', locals: {set: snapshot.non_billable, explanation: "* Percentage is Billing FTEs / Assignable FTEs and shown if < 100%" }
 
-  %h1== Unassignable - #{snapshot.unassignable.size} people
-  = render partial: 'people_list', locals: {set: snapshot.unassignable, explanation: "* Percentage is billable time allocated to vacation, etc. and shown if < 100%" }
+  %section
+    %h2== Unassignable - #{snapshot.unassignable.size} people
+    = render partial: 'people_list', locals: {set: snapshot.unassignable, explanation: "* Percentage is billable time allocated to vacation, etc. and shown if < 100%" }
 
-  %h1== Non Billing - #{snapshot.non_billing.size} people
-  = render partial: 'people_list', locals: {set: snapshot.non_billing, explanation: "* Percentage is billable time allocated to projects, but not actually billing and only shown if < 100%" }
+  %section
+    %h2== Non Billing - #{snapshot.non_billing.size} people
+    = render partial: 'people_list', locals: {set: snapshot.non_billing, explanation: "* Percentage is billable time allocated to projects, but not actually billing and only shown if < 100%" }
 
-  %h1== Billing - #{snapshot.non_billing.size} people
-  = render partial: 'people_list', locals: {set: snapshot.billing, explanation: "* Percentage is billable time allocated to projects and shown if < 100%" }
+  %section
+    %h2== Billing - #{snapshot.non_billing.size} people
+    = render partial: 'people_list', locals: {set: snapshot.billing, explanation: "* Percentage is billable time allocated to projects and shown if < 100%" }
 
-  %h1== Overallocted - #{snapshot.overallocated.size} people
-  = render partial: 'people_list', locals: {set: snapshot.overallocated, suppress: false, explanation: "* Percentage is capacity above billable capacity allocated to projects" }
+  %section
+    %h2== Overallocted - #{snapshot.overallocated.size} people
+    = render partial: 'people_list', locals: {set: snapshot.overallocated, suppress: false, explanation: "* Percentage is capacity above billable capacity allocated to projects" }

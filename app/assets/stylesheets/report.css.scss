@@ -1,0 +1,28 @@
+
+@import 'bourbon';
+@import 'bitters/bitters';
+
+.mailer {
+  section {
+    margin: 60px 0;
+  }
+
+  .left {
+    text-align: left;
+  }
+
+  h2 {
+    margin-bottom: 10px;
+  }
+
+  ul.default {
+    @extend %default-ul;
+  }
+
+  tfoot {
+    color: #999;
+    td {
+      padding-left: 20px;
+    }
+  }
+}
