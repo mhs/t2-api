@@ -3,7 +3,7 @@ class UtilizationMailer < ActionMailer::Base
 
   def daily(recipients="bot@neo.com")
     @report = UtilizationDailyReport.new
-    mail to: recipients, from: from("daily+utilization"), subject: subject("Daily Utilization")
+    mail to: recipients, from: from("daily+utilization"), subject: subject("Daily Utilization For #{Date.today.to_s(:long)}")
   end
 
 
@@ -15,6 +15,6 @@ class UtilizationMailer < ActionMailer::Base
   end
 
   def from(f)
-    "bot+#{f}@neo.com"
+    "T2 Utilizaton <bot+#{f}@neo.com>"
   end
 end
