@@ -26,7 +26,6 @@ gem 'premailer-rails', '~> 1.7.0'
 group :assets do
   gem 'sass-rails'
   gem 'coffee-rails'
-
   gem 'uglifier', '>= 1.0.3'
 end
 
@@ -47,6 +46,10 @@ group :development, :test do
   gem 'byebug'
   gem 'railroady'
   gem 'letter_opener'
+end
+
+group :development, :staging do
+  gem 'mail_safe', '~>0.3.1'
 end
 
 group :production do
