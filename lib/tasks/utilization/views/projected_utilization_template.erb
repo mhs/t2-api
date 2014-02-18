@@ -1,8 +1,0 @@
-<% output = Terminal::Table.new(title: "Projected Utilization For Next 3 Weeks", headings: ["Date", "Utilization"]) do |t| -%>
-  <% snapshots.each do |snapshot| -%>
-    <% column_1 = snapshot.snap_date -%>
-    <% column_2 = "#{to_percent(snapshot.utilization)}%" -%>
-    <% t.add_row [column_1, column_2] -%>
-  <% end -%>
-<% end -%>
-<%= display(output) %>

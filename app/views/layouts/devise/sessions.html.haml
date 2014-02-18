@@ -1,19 +1,11 @@
 !!!
 %html
   %head
-    %title t2
+    %title T2 Login
     = stylesheet_link_tag    "application", :media => "all"
-    %script{:src => "//use.typekit.net/kdf1jpv.js", :type => "text/javascript"}
-    %link{:href => "//get.pictos.cc/fonts/1717/9", :rel => "stylesheet", :type => "text/css"}/
-    :javascript
-      try{Typekit.load();}catch(e){}
     = csrf_meta_tags
-  %body
-    %div{:role => "singleton"}
-      %header{:role => "primary"}
-        %h3
-          %strong t2
-          %span the neo allocation tool
+  %body.sessions
+    %div.login
+      %h1 t2
+      %h4 Neo Allocation Tool
       = yield
-      %footer{:role => "primary"}
-        %p.copyright &copy #{Date.today.year} #{link_to "neo", "http://neo.com"}
