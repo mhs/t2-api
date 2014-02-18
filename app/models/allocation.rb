@@ -10,7 +10,7 @@ class Allocation < ActiveRecord::Base
   validates :person_id, :project_id, :start_date, :end_date, presence: true
   validates_date :end_date, on_or_after: :start_date
 
-  validates :percent_allocated, inclusion: {in: 0..100}
+  validates :percent_allocated, inclusion: {in: 0..100, message: "must be between 0 and 100"}
 
   scope :current, -> { includes(:project).where("projects.deleted_at is NULL").references(:project) }
   def self.between(start_date, end_date)
