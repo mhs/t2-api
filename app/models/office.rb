@@ -30,7 +30,7 @@ class Office < ActiveRecord::Base
 
   class SummaryOffice
     def name
-      "Overview"
+      "Company-wide"
     end
 
     def id

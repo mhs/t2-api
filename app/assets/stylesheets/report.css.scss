@@ -11,6 +11,10 @@
     text-align: left;
   }
 
+  .right {
+    text-align: right;
+  }
+
   h2 {
     margin-bottom: 10px;
   }
@@ -19,10 +23,22 @@
     @extend %default-ul;
   }
 
-  tfoot {
-    color: #999;
-    td {
-      padding-left: 20px;
+  table {
+    td, th {
+      padding-left: 5px;
+      padding-right: 5px;
+    }
+
+    tr.company-wide {
+      font-weight: bold;
+      background: #f3f8ce;
+    }
+
+    tfoot {
+      color: #999;
+      td {
+        padding-left: 20px;
+      }
     }
   }
 }

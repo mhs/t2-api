@@ -3,14 +3,15 @@
   %thead
     %tr
       %th Office
-      %th Utilization Percentage*
+      %th.right Utilization
+      %th Percentage*
   %tbody
     - snapshots.each do |snapshot|
-      %tr
+      %tr{class: snapshot.office.name.parameterize}
         %td= snapshot.office.name
-        %td== #{number_with_precision(snapshot.billing_days, precision: 2)} / #{number_with_precision(snapshot.assignable_days, precision: 2)} = #{number_to_percentage(snapshot.utilization, precision: 2)}
-        -# TODO Style overview separately from other offices
+        %td.right== #{number_with_precision(snapshot.billing_days, precision: 2)} / #{number_with_precision(snapshot.assignable_days, precision: 2)}
+        %td = #{number_to_percentage(snapshot.utilization, precision: 2)}
   %tfoot
     %tr
-      %td{colspan: 2} * Calculated as Billing FTEs / Assignable FTEs
+      %td{colspan: 3} * Calculated as Billing FTEs / Assignable FTEs
 
