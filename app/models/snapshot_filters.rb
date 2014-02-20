@@ -8,7 +8,7 @@ module SnapshotFilters
   def overhead
     staff.select do |person, billable_percent|
       billable_percent != 100
-    end
+    end.invert_percentages
   end
 
   def billable

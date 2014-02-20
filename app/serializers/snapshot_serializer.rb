@@ -1,4 +1,6 @@
 class SnapshotSerializer < ActiveModel::Serializer
-  attributes :id, :snap_date, :utilization, :staff,
-    :unassignable, :assignable, :billing, :non_billing, :office_id
+  attributes :id, :snap_date,
+             :staff, :non_billable, :unassignable, :billing, :non_billing,
+             :overhead, :assignable, :overallocated, :billable,
+             :utilization
 end
