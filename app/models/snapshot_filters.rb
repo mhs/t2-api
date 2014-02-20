@@ -6,9 +6,9 @@ module SnapshotFilters
   end
 
   def overhead
-    staff.select do |person, billable_percent|
-      billable_percent != 100
-    end.invert_percentages
+    non_billable.select do |person, overhead_percent|
+      overhead_percent != 0
+    end
   end
 
   def billable

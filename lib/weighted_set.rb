@@ -58,13 +58,6 @@ class WeightedSet < DelegateClass(Hash)
     self.class.new(this.transform_keys(&block))
   end
 
-  def transform_values
-    result = self.each do |k,v|
-      self[k] = yield v
-    end
-    self.class.new(result)
-  end
-
   # serialization API for ActiveRecord
 
   def self.load(s)
