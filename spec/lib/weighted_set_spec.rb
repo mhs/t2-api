@@ -96,5 +96,18 @@ describe WeightedSet do
         expect(w).to eq(w2)
       end
     end
+
+    describe "transform_values" do
+      let(:set) { WeightedSet.new({ 1 => 100, 2 => 50 }) }
+      subject { set.transform_values { |v| v * 2 } }
+
+      it "transforms each value according to the block" do
+        expect(subject.values.sort).to eq([100, 200])
+      end
+
+      it "does not mutate existing collection" do
+        expect(subject).to_not eq(set)
+      end
+    end
   end
 end
