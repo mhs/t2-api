@@ -19,6 +19,10 @@ class UtilizationDailyReport
     projected
   end
 
+  def today
+    offices.map { |office| Snapshot.on_date!(Date.today, office.id) }
+  end
+
   def current_month
     [MonthlySnapshot.today!] + offices.map { |office| MonthlySnapshot.today!(office) }
   end

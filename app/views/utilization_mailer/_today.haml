@@ -1,0 +1,19 @@
+%h2 Office Utilization for #{Date.today.to_s(:long)}
+%table
+  %thead
+    %tr
+      %th Office
+      %th.aligned-center Utilization Percentage*
+      %th.center Billable People
+  %tbody
+    - snapshots.each do |snapshot|
+      %tr{class: snapshot.office.name.parameterize}
+        %td= snapshot.office.name
+        %td.aligned-center
+          #{number_with_precision(snapshot.billing.to_fte, precision: 2)} / #{number_with_precision(snapshot.assignable.to_fte, precision: 2)}
+          \= #{number_to_percentage(snapshot.utilization, precision: 2)}
+        %td.center #{snapshot.assignable.count}
+  %tfoot
+    %tr
+      %td{colspan: 3} * Calculated as Billing FTEs / Assignable FTEs
+

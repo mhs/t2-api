@@ -1,5 +1,6 @@
 %div
   .section= render partial: 'global', locals: { snapshots: @report.global }
+  .section= render partial: 'today', locals: { snapshots: @report.today }
   .section= render partial: 'projected', locals: { snapshots: @report.projected }
   .section= render partial: 'monthly', locals: { snapshots: @report.current_month }
   .section= render partial: 'monthly', locals: { snapshots: @report.next_month }
