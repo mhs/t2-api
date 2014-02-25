@@ -37,6 +37,7 @@ module T2Api
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
+    config.i18n.enforce_available_locales = true
 
     # Configure the default encoding used in templates for Ruby 1.9.
     config.encoding = "utf-8"
@@ -46,6 +47,8 @@ module T2Api
 
     # Enable escaping HTML in JSON.
     config.active_support.escape_html_entities_in_json = true
+
+    I18n.enforce_available_locales = false
 
     # Use SQL instead of Active Record's schema dumper when creating the database.
     # This is necessary if your schema can't be completely dumped by the schema dumper,
@@ -64,5 +67,21 @@ module T2Api
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
+
+    # Mail is protected from being sent in non-production environment using Mailsafe gem
+    config.action_mailer.default_url_options   = { :host => 'neo.com' }
+    config.action_mailer.perform_deliveries    = true
+    config.action_mailer.raise_delivery_errors = true
+    config.action_mailer.delivery_method       = :smtp
+    config.action_mailer.smtp_settings = {
+      :address              => "smtp.mandrillapp.com",
+      :port                 => 25,
+      :enable_starttls_auto => true,
+      :user_name            => "bot@neo.com",
+      :password             => "Xmx_aXZK1JkIY_Rb58fYvg",
+      :authentication       => 'login',
+      :domain               => 'neo.com'
+    }
+
   end
 end

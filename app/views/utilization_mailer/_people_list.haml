@@ -1,0 +1,8 @@
+%table
+  %tbody
+    - set.sort_by{ |name, _| name }.each do |name, percent|
+      %tr
+        %td= person_utilization(name, percent, local_assigns[:suppress].nil? ? true : false)
+  %tfoot
+    %tr
+      %td= explanation

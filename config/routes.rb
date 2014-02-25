@@ -12,7 +12,6 @@ T2Api::Application.routes.draw do
       resource :profile
       resources :skills, only: [:index]
       resources :projects, only: [:index, :show, :update, :create, :destroy]
-      resources :slots, only: [:index, :show]
       resources :allocations, only: [:index, :show, :update, :create, :destroy]
       resources :allocation_bundles, only: [:index]
       resources :people, only: [:index, :show, :update, :create] do
@@ -35,11 +34,6 @@ T2Api::Application.routes.draw do
         collection do
           get ":date" => :show
         end
-      end
-      resources :companies, only: :index
-      resources :unfiled_notes, only: [:index, :create, :update, :destroy]
-      resources :opportunities, only: [:index, :show, :create, :update, :destroy] do
-        resources :opportunity_notes, only: [:create, :update, :destroy]
       end
     end
   end

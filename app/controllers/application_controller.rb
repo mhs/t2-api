@@ -3,6 +3,11 @@ class ApplicationController < ActionController::Base
   prepend_before_filter :get_auth_token
   before_filter :authenticate_user_from_token!
   before_filter :authenticate_user!
+  # This filter should be called by PaperTrail but it is called before authentication
+  # happen so current_user is nil, that is why we are manually calling it to ensure it
+  # happen after authentication.
+  # prepend_before_filter for authentication seems to broke the authentication somehow,
+  # that is why we are taking this approach.
 
   def navbar
   end

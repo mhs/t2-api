@@ -1,0 +1,52 @@
+@import 'bourbon'
+@import 'colors'
+
+*
+  +box-sizing(border-box)
+
+html, body, h1, h2, h3, h4, h5, h6
+  font-family: 'Montserrat', sans-serif
+
+html, body
+  position: relative
+  height: 100%
+  min-height: 100%
+
+body.sessions
+  +linear-gradient($lightBlue, $darkBlue)
+
+  .login
+    +position(absolute, 50% 0 0 50%)
+    +transform(translateY(-50%) translateX(-50%))
+    padding: 40px 80px
+    text-align: center
+    border-radius: 4px
+    +linear-gradient($white, $darkWhite)
+    box-shadow: 0 1px 3px $darkerBlue
+
+    +animation(fadein 1s)
+
+    h1
+      font-size: 5em
+      color: $darkGrey
+
+    h4
+      color: $lightGrey
+      margin-bottom: 40px
+
+    .action
+      +linear-gradient($lightBlue, $darkBlue)
+      width: 200px
+      margin: auto
+      border: 1px solid $darkBlue
+      border-bottom: 1px solid darken($darkBlue, 10%)
+      border-radius: 4px
+      padding: 8px 20px 6px
+
+      a
+        color: #fff
+        text-shadow: 0 1px 1px $darkerBlue
+
++keyframes(fadein)
+  0%
+    opacity: 0

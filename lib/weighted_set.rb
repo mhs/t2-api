@@ -43,6 +43,10 @@ class WeightedSet < DelegateClass(Hash)
     self.class.new(result)
   end
 
+  def select
+    self.class.new(super)
+  end
+
   def ==(other)
     # this is tricky because Hash respects order but we don't want to
     other.is_a?(self.class) &&

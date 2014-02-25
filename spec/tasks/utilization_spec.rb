@@ -1,9 +1,9 @@
 require 'spec_helper'
-require 'utilization_helper'
+require 'date_range_helper'
 require 'rake'
 
 describe 'Utilization Rake Tasks' do
-  include UtilizationHelper
+  include DateRangeHelper
   before do
     FactoryGirl.create(:person)
     FactoryGirl.create(:office)

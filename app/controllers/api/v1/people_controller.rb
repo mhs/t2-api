@@ -5,10 +5,10 @@ class Api::V1::PeopleController < ApplicationController
   def index
     people = []
     Person.within_date_range(Date.today, Date.today) do
-      people = with_ids_from_params(Person.includes(:user, :project_allowances, :office, :allocations)).to_a
+      people = with_ids_from_params(Person.includes(:user, :office, :allocations)).to_a
     end
     # the above will omit people who have left the company; add them back
-    people += with_ids_from_params(Person.includes(:user, :project_allowances, :office).where('end_date < ?', Date.today))
+    people += with_ids_from_params(Person.includes(:user, :office).where('end_date < ?', Date.today))
     render json: people, each_serializer: PersonWithCurrentSerializer
   end
 
@@ -17,36 +17,22 @@ class Api::V1::PeopleController < ApplicationController
   end
 
   def create
-    attrs = params[:person].slice(*Person.editable_attributes)
-    avatar = attrs.delete(:avatar)
-    # null out blanks
-    attrs.each do |k, v|
-      attrs[k] = nil if v.blank?
-    end
-    if avatar && !avatar.is_a?(Hash)
-      attrs[:avatar] = avatar
-    end
-    person = Person.new(attrs)
-    person.office_id = params[:person][:office_id].to_i
-    if person.save
+    person = nil
+    begin
+      Person.transaction do
+        person = Person.create!(person_params)
+        person.allocate_upcoming_holidays!
+      end
+
       render json: person
-    else
-      render json: { errors: person.errors }, status: :unprocessable_entity
+    rescue ActiveRecord::RecordInvalid => e
+      render json: { errors: e.record.errors }, status: :unprocessable_entity
     end
   end
 
   def update
     # TODO: return 422 + sensible payload on errors
-    attrs = params[:person].slice(*Person.editable_attributes)
-    avatar = attrs.delete(:avatar)
-    # null out blanks
-    attrs.each do |k, v|
-      attrs[k] = nil if v.blank?
-    end
-    if avatar && !avatar.is_a?(Hash)
-      attrs[:avatar] = avatar
-    end
-    if @person.update_attributes(attrs)
+    if @person.update_attributes(person_params)
       render json: @person
     else
       render json: { errors: @person.errors }, status: :unprocessable_entity
@@ -67,4 +53,24 @@ class Api::V1::PeopleController < ApplicationController
   def fetch_person
     @person = Person.find params[:id]
   end
+
+  def person_params
+    attrs = if params[:action] == "create"
+              params[:person].slice(*Person.accessible_attributes)
+            else
+              params[:person].slice(*Person.editable_attributes)
+            end
+
+    avatar = attrs.delete(:avatar)
+    # null out blanks
+    attrs.each do |k, v|
+      attrs[k] = nil if v.blank?
+    end
+    if avatar && !avatar.is_a?(Hash)
+      attrs[:avatar] = avatar
+    end
+
+    attrs
+  end
+
 end

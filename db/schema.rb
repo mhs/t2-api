@@ -11,10 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140120152908) do
+ActiveRecord::Schema.define(version: 20140213201755) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "hstore"
 
   create_table "allocations", force: true do |t|
     t.date     "start_date"
@@ -45,21 +46,6 @@ ActiveRecord::Schema.define(version: 20140120152908) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "companies", force: true do |t|
-    t.text     "name",       null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "companies", ["name"], name: "index_companies_on_name", unique: true, using: :btree
-
-  create_table "contacts", force: true do |t|
-    t.string  "name"
-    t.string  "email"
-    t.string  "phone"
-    t.integer "company_id"
-  end
-
   create_table "delayed_jobs", force: true do |t|
     t.integer  "priority",   default: 0
     t.integer  "attempts",   default: 0
@@ -76,17 +62,31 @@ ActiveRecord::Schema.define(version: 20140120152908) do
 
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
 
+  create_table "holidays", force: true do |t|
+    t.string   "name"
+    t.date     "start_date"
+    t.date     "end_date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "monthly_snapshots", force: true do |t|
     t.integer  "office_id"
     t.date     "snap_date"
-    t.decimal  "assignable_days", precision: 6, scale: 2
-    t.decimal  "billing_days",    precision: 6, scale: 2
-    t.datetime "created_at",                              null: false
-    t.datetime "updated_at",                              null: false
+    t.decimal  "assignable_days", precision: 6, scale: 2, default: 0.0
+    t.decimal  "billing_days",    precision: 6, scale: 2, default: 0.0
+    t.datetime "created_at",                                            null: false
+    t.datetime "updated_at",                                            null: false
+    t.decimal  "utilization",     precision: 6, scale: 2, default: 0.0
   end
 
   add_index "monthly_snapshots", ["office_id"], name: "index_monthly_snapshots_on_office_id", using: :btree
   add_index "monthly_snapshots", ["snap_date"], name: "index_monthly_snapshots_on_snap_date", using: :btree
+
+  create_table "office_holidays", force: true do |t|
+    t.integer "office_id"
+    t.integer "holiday_id"
+  end
 
   create_table "offices", force: true do |t|
     t.string   "name"
@@ -96,28 +96,6 @@ ActiveRecord::Schema.define(version: 20140120152908) do
     t.string   "slug"
     t.datetime "deleted_at"
     t.integer  "position"
-  end
-
-  create_table "opportunities", force: true do |t|
-    t.string   "title"
-    t.string   "stage"
-    t.string   "confidence",          default: "warm"
-    t.decimal  "amount",              default: 0.0
-    t.datetime "expected_date_close"
-    t.integer  "person_id",                            null: false
-    t.integer  "company_id"
-    t.integer  "contact_id"
-    t.text     "description"
-    t.integer  "office_id"
-    t.string   "next_step"
-  end
-
-  create_table "opportunity_notes", force: true do |t|
-    t.text     "detail",         null: false
-    t.integer  "person_id",      null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "opportunity_id"
   end
 
   create_table "people", force: true do |t|
@@ -148,19 +126,9 @@ ActiveRecord::Schema.define(version: 20140120152908) do
   add_index "people", ["office_id"], name: "index_people_on_office_id", using: :btree
   add_index "people", ["start_date"], name: "index_people_on_start_date", using: :btree
 
-  create_table "project_allowances", force: true do |t|
-    t.integer "hours"
-    t.integer "project_id"
-    t.integer "person_id"
-  end
-
-  add_index "project_allowances", ["person_id"], name: "index_project_allowances_on_person_id", using: :btree
-  add_index "project_allowances", ["project_id"], name: "index_project_allowances_on_project_id", using: :btree
-
   create_table "project_offices", force: true do |t|
     t.integer "project_id", null: false
     t.integer "office_id",  null: false
-    t.integer "allowance"
   end
 
   add_index "project_offices", ["project_id", "office_id"], name: "index_project_offices_on_project_id_and_office_id", unique: true, using: :btree
@@ -178,28 +146,26 @@ ActiveRecord::Schema.define(version: 20140120152908) do
     t.datetime "deleted_at"
     t.date     "start_date"
     t.date     "end_date"
+    t.boolean  "holiday",             default: false, null: false
   end
 
   add_index "projects", ["billable"], name: "index_projects_on_billable", using: :btree
   add_index "projects", ["binding"], name: "index_projects_on_binding", using: :btree
 
-  create_table "slots", force: true do |t|
-    t.integer  "project_id"
-    t.date     "start_date"
-    t.date     "end_date"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "snapshots", force: true do |t|
     t.text     "utilization"
     t.date     "snap_date"
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
     t.integer  "office_id"
-    t.text     "staff_weights"
-    t.text     "unassignable_weights"
-    t.text     "billing_weights"
+    t.text     "staff"
+    t.text     "unassignable"
+    t.text     "billing"
+    t.text     "assignable"
+    t.text     "non_billing"
+    t.text     "billable"
+    t.text     "overallocated"
+    t.text     "non_billable"
   end
 
   create_table "t2_applications", force: true do |t|
@@ -244,5 +210,16 @@ ActiveRecord::Schema.define(version: 20140120152908) do
   end
 
   add_index "users", ["authentication_token"], name: "index_users_on_authentication_token", unique: true, using: :btree
+
+  create_table "versions", force: true do |t|
+    t.string   "item_type",  null: false
+    t.integer  "item_id",    null: false
+    t.string   "event",      null: false
+    t.string   "whodunnit"
+    t.text     "object"
+    t.datetime "created_at"
+  end
+
+  add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
 
 end

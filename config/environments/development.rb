@@ -29,4 +29,9 @@ T2Api::Application.configure do
   config.assets.debug = true
 
   config.eager_load = false
+
+  # Mailer
+  config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.delivery_method = :letter_opener
+  config.action_mailer.default_url_options = { :host => 'localhost:3000' }
 end

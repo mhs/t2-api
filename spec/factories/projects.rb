@@ -24,5 +24,9 @@ FactoryGirl.define do
     trait :vacation do
       vacation true
     end
+
+    trait :holiday do
+      holiday true
+    end
   end
 end

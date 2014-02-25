@@ -32,6 +32,7 @@ describe Snapshot do
   end
 
   describe '.on_date!' do
+    let(:office) { FactoryGirl.create(:office) }
     let(:snapshot) {Snapshot.on_date!(Date.today)}
     let(:employee) {FactoryGirl.create(:person, :current)}
 
@@ -44,8 +45,8 @@ describe Snapshot do
     end
 
     it 'creates a snapshot for the given office' do
-      snapshot = Snapshot.on_date!(Date.today, 1)
-      snapshot.office_id.should eql(1)
+      snapshot = Snapshot.on_date!(Date.today, office.id)
+      snapshot.office_id.should eql(office.id)
       snapshot.should be_persisted
     end
 
@@ -59,7 +60,7 @@ describe Snapshot do
     end
 
     it 'captures currently employed staff' do
-      snapshot.staff_weights.should_not be_empty
+      snapshot.staff.should_not be_empty
     end
 
     it 'defaults the office to the entire company' do
@@ -84,7 +85,7 @@ describe Snapshot do
       end
 
       it 'should update captured data' do
-        Snapshot.on_date!(Date.today).billing_weights.size.should eql(2)
+        Snapshot.on_date!(Date.today).billing.size.should eql(2)
       end
     end
   end
@@ -104,7 +105,7 @@ describe Snapshot do
     end
   end
 
-  describe '.capture_data' do
+  describe '.calculate' do
     let(:office)           { FactoryGirl.create(:office) }
     let(:date)             { 1.month.ago.to_date }
     let(:snapshot)         { Snapshot.new(snap_date: date) }
@@ -118,7 +119,7 @@ describe Snapshot do
       pairs.flatten.each_slice(2) do |(k, v)|
         res[k] = v
       end
-      WeightedSet.new res
+      FteWeightedSet.new res
     end
 
     def allocation_for(person, options={})
@@ -128,24 +129,24 @@ describe Snapshot do
     context "with a developer and a staff member" do
       let!(:dev) { FactoryGirl.create(:person, office: office) }
       let!(:pm) { FactoryGirl.create(:person, office: office, percent_billable: 50) }
-      let!(:staff) { FactoryGirl.create(:person, :unsellable, office: office) }
-      let(:staff_weights) { wset pw(dev), pw(pm), pw(staff) }
-      let(:unassignable_weights) { wset pw(staff) }
-      let(:assignable_weights) { wset pw(dev), pw(pm) }
+      let!(:ceo) { FactoryGirl.create(:person, :unsellable, office: office) }
+      let(:staff) { wset pw(dev), pw(pm), pw(ceo) }
+      let(:unassignable) { wset pw(ceo) }
+      let(:assignable) { wset pw(dev), pw(pm) }
 
-      it 'should fetch staff_weights, assignable_weights' do
-        snapshot.capture_data
-        expect(snapshot.staff_weights).to eq(staff_weights)
-        expect(snapshot.assignable_weights).to eq(assignable_weights)
+      it 'should fetch staff, assignable' do
+        snapshot.calculate
+        expect(snapshot.staff).to eq(staff)
+        expect(snapshot.assignable).to eq(assignable)
       end
 
       context "with an allocation for the developer" do
         let!(:alloc) { allocation_for(dev) }
 
         it "the pm should not be billing and staff isn't included." do
-          snapshot.capture_data
-          expect(snapshot.billing_weights).to eq(wset(dev.name, 100))
-          expect(snapshot.non_billing_weights).to eq(wset(pm.name, 50))
+          snapshot.calculate
+          expect(snapshot.billing).to eq(wset(dev.name, 100))
+          expect(snapshot.non_billing).to eq(wset(pm.name, 50))
         end
       end
 
@@ -156,8 +157,8 @@ describe Snapshot do
         end
 
         it "shows the dev as unassignable" do
-          snapshot.capture_data
-          expect(snapshot.unassignable_weights).to eq(wset(dev.name, 100))
+          snapshot.calculate
+          expect(snapshot.unassignable).to eq(wset(dev.name, 100))
         end
       end
 
@@ -168,10 +169,10 @@ describe Snapshot do
           allocation_for(dev)
           allocation_for(other_guy)
           snapshot.office = office
-          snapshot.capture_data
+          snapshot.calculate
 
-          expect(snapshot.staff_weights).to eq(staff_weights)
-          expect(snapshot.billing_weights).not_to include(other_guy.name)
+          expect(snapshot.staff).to eq(staff)
+          expect(snapshot.billing).not_to include(other_guy.name)
         end
       end
 
@@ -189,7 +190,7 @@ describe Snapshot do
         })
 
         snapshot.office = office
-        snapshot.capture_data
+        snapshot.calculate
 
         # Since there are three people in the snapshot's office
         # but one of them is only 50% billable and only one has
