@@ -24,4 +24,12 @@ module DateRangeHelper
   def with_week_days_in(month=nil, &block)
     week_days(month).each(&block)
   end
+
+  def weekday?(date=Date.today)
+    (1..5).cover?(date.wday)
+  end
+
+  def weekend?(date=Date.today)
+    [0, 6].include?(date.wday)
+  end
 end
