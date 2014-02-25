@@ -3,7 +3,6 @@ source 'https://rubygems.org'
 ruby '2.0.0'
 
 gem 'rake'
-gem 'rails_12factor', group: :production
 gem 'rails', '~> 4.0'
 gem 'pg'
 gem 'active_model_serializers'
@@ -18,6 +17,11 @@ gem 'acts-as-taggable-on'
 gem 'paperclip'
 gem 'aws-sdk'
 gem 'protected_attributes' # TODO: remove this and replace with strong params
+
+group :production do
+  gem 'rails_12factor'
+  gem 'newrelic_rpm'
+end
 
 group :assets do
   gem 'sass-rails'
