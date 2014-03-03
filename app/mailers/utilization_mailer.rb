@@ -15,6 +15,6 @@ class UtilizationMailer < ActionMailer::Base
   end
 
   def from(f)
-    "T2 Utilizaton <bot+#{f}@neo.com>"
+    "T2 Utilization <bot+#{f}@neo.com>"
   end
 end
