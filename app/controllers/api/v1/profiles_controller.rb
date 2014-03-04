@@ -15,6 +15,6 @@ class Api::V1::ProfilesController < ApplicationController
   private
 
   def fetch_person
-    @person = current_user.person
+    @person = current_user.set_person
   end
 end
