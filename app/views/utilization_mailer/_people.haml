@@ -12,7 +12,7 @@
     = render partial: 'people_list', locals: {set: snapshot.non_billing, explanation: "* Percentage is billable time allocated to projects, but not actually billing and only shown if < 100%" }
 
   .section
-    %h2== Billing - #{snapshot.non_billing.size} people
+    %h2== Billing - #{snapshot.billing.size} people
     = render partial: 'people_list', locals: {set: snapshot.billing, explanation: "* Percentage is billable time allocated to projects and shown if < 100%" }
 
   .section
