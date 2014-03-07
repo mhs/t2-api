@@ -7,6 +7,9 @@ class User < ActiveRecord::Base
 
   before_create :set_date_format_if_unset
 
+  NO_PERSON_NAME = "Temp User"
+  NO_PERSON_OFFICE = 9 
+
   def self.find_for_google_oauth2(auth, signed_in_resource=nil)
     # try to find user by auth info
     user = User.where(provider: auth.provider, uid: auth.uid).first
@@ -53,6 +56,14 @@ class User < ActiveRecord::Base
       {key: :month_first, value: "Month First"},
       {key: :day_first, value: "Day First"}
     ]
+  end
+
+  def set_person
+    if self.person
+       self.person
+    else
+       Person.new(name: NO_PERSON_NAME, office_id: self.office_id ? self.office_id : NO_PERSON_OFFICE)
+    end
   end
 
   private
