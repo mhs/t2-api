@@ -3,7 +3,6 @@ source 'https://rubygems.org'
 ruby '2.0.0'
 
 gem 'rake'
-gem 'rails_12factor', group: :production
 gem 'rails', '~> 4.0'
 gem 'pg'
 gem 'active_model_serializers'
@@ -23,6 +22,11 @@ gem 'bitters', '~> 0.9.2'
 gem 'nokogiri', '~> 1.6.1'
 gem 'premailer-rails', '~> 1.7.0'
 gem 'heroku'
+
+group :production do
+  gem 'rails_12factor'
+  gem 'newrelic_rpm'
+end
 
 group :assets do
   gem 'sass-rails'
