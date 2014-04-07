@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140213201755) do
+ActiveRecord::Schema.define(version: 20140407190545) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,10 +25,11 @@ ActiveRecord::Schema.define(version: 20140213201755) do
     t.boolean  "billable"
     t.boolean  "binding"
     t.text     "notes"
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
     t.integer  "slot_id"
-    t.integer  "percent_allocated", default: 100, null: false
+    t.integer  "percent_allocated", default: 100,   null: false
+    t.boolean  "provisional",       default: false
   end
 
   add_index "allocations", ["billable"], name: "index_allocations_on_billable", using: :btree
@@ -147,6 +148,7 @@ ActiveRecord::Schema.define(version: 20140213201755) do
     t.date     "start_date"
     t.date     "end_date"
     t.boolean  "holiday",             default: false, null: false
+    t.boolean  "provisional",         default: false
   end
 
   add_index "projects", ["billable"], name: "index_projects_on_billable", using: :btree

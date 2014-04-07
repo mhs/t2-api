@@ -1,5 +1,5 @@
 class Allocation < ActiveRecord::Base
-  attr_accessible :notes, :start_date, :end_date, :billable, :binding, :person, :person_id, :project, :project_id, :percent_allocated
+  attr_accessible :notes, :start_date, :end_date, :billable, :binding, :provisional, :person, :person_id, :project, :project_id, :percent_allocated
 
   TIME_WINDOW = 20 # weeks
 

@@ -1,7 +1,7 @@
 class Project < ActiveRecord::Base
   include HasManyCurrent
 
-  attr_accessible :name, :notes, :billable, :binding, :slug, :client_principal_id, :vacation, :start_date, :end_date, :office_ids
+  attr_accessible :name, :notes, :billable, :binding, :provisional, :slug, :client_principal_id, :vacation, :start_date, :end_date, :office_ids
 
   has_one   :client_principal, class_name: "Person"
   has_many  :project_offices
