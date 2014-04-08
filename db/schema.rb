@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140407190545) do
+ActiveRecord::Schema.define(version: 20140408213041) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -157,8 +157,8 @@ ActiveRecord::Schema.define(version: 20140407190545) do
   create_table "snapshots", force: true do |t|
     t.text     "utilization"
     t.date     "snap_date"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
     t.integer  "office_id"
     t.text     "staff"
     t.text     "unassignable"
@@ -168,9 +168,10 @@ ActiveRecord::Schema.define(version: 20140407190545) do
     t.text     "billable"
     t.text     "overallocated"
     t.text     "non_billable"
+    t.boolean  "includes_provisional", default: false
   end
 
-  add_index "snapshots", ["snap_date", "office_id"], name: "index_snapshots_on_snap_date_and_office_id", unique: true, using: :btree
+  add_index "snapshots", ["snap_date", "office_id", "includes_provisional"], name: "unique_snapshots_index", unique: true, using: :btree
 
   create_table "t2_applications", force: true do |t|
     t.string   "url"
