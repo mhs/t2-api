@@ -22,5 +22,9 @@ FactoryGirl.define do
     trait :billable do
       billable true
     end
+
+    trait :provisional do
+      provisional true
+    end
   end
 end

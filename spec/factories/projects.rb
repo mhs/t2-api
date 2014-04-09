@@ -20,13 +20,16 @@ FactoryGirl.define do
       binding false
     end
 
-
     trait :vacation do
       vacation true
     end
 
     trait :holiday do
       holiday true
+    end
+
+    trait :provisional do
+      provisional true
     end
   end
 end

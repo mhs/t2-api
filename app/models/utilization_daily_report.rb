@@ -14,13 +14,13 @@ class UtilizationDailyReport
   def projected(weekdays=21)
     projected = []
     with_week_days(weekdays) do |date|
-      projected << Snapshot.on_date!(date)
+      projected << [Snapshot.on_date!(date), Snapshot.on_date!(date, includes_provisional: true)]
     end
     projected
   end
 
   def today
-    offices.map { |office| Snapshot.on_date!(Date.today, office.id) }
+    offices.map { |office| Snapshot.on_date!(Date.today, office_id: office.id) }
   end
 
   def current_month

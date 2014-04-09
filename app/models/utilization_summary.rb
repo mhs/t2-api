@@ -5,11 +5,11 @@ class UtilizationSummary
     snap_date = params[:snap_date] || Date.today
     summary_start_date = params[:summary_start_date] || snap_date - 2.weeks
     summary_end_date = params[:summary_end_date] || snap_date + 2.weeks
-    @snapshot = Snapshot.on_date!(snap_date, @office_id)
+    @snapshot = Snapshot.on_date!(snap_date, office_id: @office_id)
     context_snapshots = Office.standard.map do |office|
-      Snapshot.on_date!(snap_date, office.id)
+      Snapshot.on_date!(snap_date, office_id: office.id)
     end
-    context_snapshots << Snapshot.on_date!(snap_date, nil)
+    context_snapshots << Snapshot.on_date!(snap_date, office_id: nil)
 
     @by_office_utilizations = context_snapshots.map do |snap|
       {name: snap.office.name, utilization: snap.utilization.to_f}

@@ -7,7 +7,7 @@ describe DailyReport do
     let(:daily_report) { DailyReport.on_date(Date.today) }
 
     before do
-      @snapshot = Snapshot.on_date!(Date.today, office)
+      @snapshot = Snapshot.on_date!(Date.today, office_id: office.id)
     end
 
     it 'should be kind of DailyReport' do

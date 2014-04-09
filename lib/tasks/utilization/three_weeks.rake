@@ -12,7 +12,7 @@ namespace :utilization do
 
     with_week_days do |date|
       Office.all.each do |office|
-        Snapshot.on_date!(date, office.id)
+        Snapshot.on_date!(date, office_id: office.id)
       end
     end
   end
