@@ -16,7 +16,7 @@ class DailyReport
   def self.on_date(date)
     new(date).tap do |daily_report|
       Office.all.each do |office|
-        daily_report.snapshots << Snapshot.on_date(date, office.id)
+        daily_report.snapshots << Snapshot.on_date(date, office_id: office.id)
       end
     end
   end

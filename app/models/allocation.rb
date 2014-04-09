@@ -41,7 +41,7 @@ class Allocation < ActiveRecord::Base
   scope :with_start_date, lambda { |d| where("allocations.start_date <= ?", d.to_date + TIME_WINDOW.weeks).where("allocations.end_date >= ?", d.to_date).current }
   scope :vacation, -> { current.where(:projects => { vacation: true }) }
   scope :by_office, lambda { |office| office ? joins(:office).where("people.office_id" => office.id) : where(false) }
-  scope :include_provisional, lambda { |x| x ? where(nil) : where(:provisional => false) }
+  scope :includes_provisional, lambda { |x| x ? where(nil) : where(provisional: false) }
 
   scope :billable_and_assignable, -> { billable.assignable }
 

@@ -66,7 +66,7 @@ class Snapshot < ActiveRecord::Base
   end
 
   def utilization_group
-    UtilizationGroup.new(people: people, start_date: snap_date, include_provisional: includes_provisional)
+    UtilizationGroup.new(people: people, start_date: snap_date, includes_provisional: includes_provisional)
   end
   memoize :utilization_group
 

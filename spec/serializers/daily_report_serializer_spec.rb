@@ -6,7 +6,7 @@ describe DailyReportSerializer do
   let(:serialized_daily_report) { DailyReportSerializer.new(daily_report) }
 
   before do
-    Snapshot.on_date!(Date.today, FactoryGirl.create(:office))
+    Snapshot.on_date!(Date.today, office_id: FactoryGirl.create(:office).id)
   end
 
   it "should serialize with report_date" do
