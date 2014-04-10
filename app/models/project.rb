@@ -10,10 +10,20 @@ class Project < ActiveRecord::Base
 
   acts_as_paranoid
 
+  after_update :update_provisional_allocations
+
   scope :assignable, -> { where(vacation: true) }
 
   def self.holiday_project
     where(holiday: true).first
   end
 
+  protected
+
+  def update_provisional_allocations
+    # if we have changed from provisional to not, update the
+    # allocations to match
+    return unless !provisional? && provisional_was
+    allocations.update_all(provisional: false)
+  end
 end
