@@ -24,7 +24,12 @@ class UtilizationDailyReport
   end
 
   def current_month
-    [MonthlySnapshot.today!] + offices.map { |office| MonthlySnapshot.today!(office) }
+    overall = [[MonthlySnapshot.current_month!, MonthlySnapshot.current_month!(includes_provisional: true)]]
+    per_office = offices.map do |office|
+      [MonthlySnapshot.current_month!(office_id: office.id),
+       MonthlySnapshot.current_month!(office_id: office.id, includes_provisional: true)]
+    end
+    overall + per_office
   end
 
   def next_month

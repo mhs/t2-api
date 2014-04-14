@@ -24,8 +24,8 @@ class MonthlySnapshot < ActiveRecord::Base
     MonthlySnapshot.order("snap_date ASC").where(office_id: office_id)
   end
 
-  def self.today!(office_id=nil)
-    on_date!(Date.today, office_id: office_id)
+  def self.current_month!(includes_provisional: false, office_id: nil)
+    on_date!(Date.today, includes_provisional: includes_provisional, office_id: office_id)
   end
 
   def self.next_month!(includes_provisional: false, office_id: nil)

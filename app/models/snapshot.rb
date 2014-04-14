@@ -40,7 +40,7 @@ class Snapshot < ActiveRecord::Base
 
   # TODO: thread with includes_provisional
   def self.for_weekdays_between!(start_date, end_date, office_id=nil)
-    week_days_between(start_date, end_date).map { |d| on_date! d, office_id }
+    week_days_between(start_date, end_date).map { |d| on_date!(d, office_id: office_id) }
   end
 
   def self.today!
