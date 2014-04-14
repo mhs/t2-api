@@ -4,6 +4,9 @@ namespace :utilization do
     Snapshot.future.each do |s|
       s.recalculate!
     end
+    MonthlySnapshot.future.each do |s|
+      s.recalculate!
+    end
   end
 
   desc "recalculate all snapshots"

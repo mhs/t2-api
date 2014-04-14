@@ -1,16 +1,22 @@
-%h2= monthly_snapshot_title(snapshots.first)
+%h2= monthly_snapshot_title(snapshots.first.first)
 %table
   %thead
     %tr
       %th Office
-      %th.right Utilization
-      %th Percentage*
+      %th.right Booked
+      %th %*
+      %th.right Projected
+      %th %*
   %tbody
-    - snapshots.each do |snapshot|
+    - snapshots.each do |(snapshot, projected_snapshot)|
       %tr{class: snapshot.office.name.parameterize}
         %td= snapshot.office.name
+
         %td.right== #{number_with_precision(snapshot.billing_days, precision: 2)} / #{number_with_precision(snapshot.assignable_days, precision: 2)}
         %td = #{number_to_percentage(snapshot.utilization, precision: 2)}
+
+        %td.right== #{number_with_precision(projected_snapshot.billing_days, precision: 2)} / #{number_with_precision(projected_snapshot.assignable_days, precision: 2)}
+        %td = #{number_to_percentage(projected_snapshot.utilization, precision: 2)}
   %tfoot
     %tr
       %td{colspan: 3} * Calculated as Billing FTEs / Assignable FTEs

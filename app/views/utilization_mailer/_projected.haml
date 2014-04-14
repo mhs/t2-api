@@ -1,12 +1,14 @@
-%h2 Projected Utilization For Next 3 Weeks
+%h2 Utilization Forecast For Next 3 Weeks
 %table
   %thead
     %tr
       %th Date
-      %th Utilization
+      %th Booked Utilization
+      %th Projected Utilization
   %tbody
-    - snapshots.each do |snapshot|
+    - snapshots.each do |(snapshot, projected_snapshot)|
       %tr
         %td= snapshot.snap_date
         %td= number_to_percentage(snapshot.utilization, precision: 2)
+        %td= number_to_percentage(projected_snapshot.utilization, precision: 2)
 

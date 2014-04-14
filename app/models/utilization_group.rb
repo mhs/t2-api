@@ -1,9 +1,9 @@
 class UtilizationGroup
   attr_accessor :utilizations
 
-  def initialize(people, start_date=nil, end_date=nil)
+  def initialize(people:, **args)
     @utilizations = people.uniq.map do |p|
-      Utilization.new(p, start_date, end_date)
+      Utilization.new(person: p, **args)
     end
   end
 
@@ -40,10 +40,9 @@ class UtilizationGroup
   end
 
   def utilization_percentage
-    return 0.0 if assignable_percentages.empty?
+    return "0.0" if assignable_percentages.empty?
     sprintf "%.1f", (100.0 * billing_percentages.total) / assignable_percentages.total
   end
-
 
   private
 

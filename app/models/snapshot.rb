@@ -22,33 +22,25 @@ class Snapshot < ActiveRecord::Base
 
   scope :by_date, lambda {|date| where(snap_date: date) }
   scope :by_office_id, lambda {|office_id| where(office_id: office_id) }
+  scope :by_provisional, lambda {|provisional| where(includes_provisional: provisional) }
   scope :future, lambda { where('snap_date >= ?', Date.today) }
 
-  validates_uniqueness_of :snap_date, scope: :office_id
+  validates_uniqueness_of :snap_date, scope: [:office_id, :includes_provisional]
 
-  def self.one_per_day(office_id=nil)
-    snaps = {}
-    Snapshot.order("snap_date ASC").by_office_id(office_id).each do |snap|
-      snaps[snap.snap_date] = snap
-    end
-    snaps.values
+  def self.on_date(date, includes_provisional: false, office_id: nil)
+    by_date(date).by_office_id(office_id).by_provisional(includes_provisional).first
   end
 
-  def self.on_date(date, office_id=nil)
-    by_date(date).by_office_id(office_id).first
-  end
-
-  def self.on_date!(date, office_id=nil)
-    snap_scope = by_date(date).by_office_id(office_id)
-    snap_scope.first_or_initialize.tap do |snap|
-      break snap unless snap.new_record?
+  def self.on_date!(date, includes_provisional: false, office_id: nil)
+    snap_scope = by_date(date).by_provisional(includes_provisional).by_office_id(office_id)
+    snap_scope.first_or_create! do |snap|
       snap.calculate
-      snap.save!
     end
   end
 
+  # TODO: thread with includes_provisional
   def self.for_weekdays_between!(start_date, end_date, office_id=nil)
-    week_days_between(start_date, end_date).map { |d| on_date! d, office_id }
+    week_days_between(start_date, end_date).map { |d| on_date!(d, office_id: office_id) }
   end
 
   def self.today!
@@ -74,7 +66,7 @@ class Snapshot < ActiveRecord::Base
   end
 
   def utilization_group
-    UtilizationGroup.new(people, snap_date)
+    UtilizationGroup.new(people: people, start_date: snap_date, includes_provisional: includes_provisional)
   end
   memoize :utilization_group
 

@@ -24,7 +24,7 @@ class Api::V1::ProjectsController < ApplicationController
   def update
     project = Project.find(params[:id])
     if project.update_attributes(params[:project])
-      render json: project, status: :ok
+      render json: project, status: :ok, serializer: UpdatedProjectSerializer
     else
       render json: { errors: project.errors }, status: :unprocessable_entity
     end

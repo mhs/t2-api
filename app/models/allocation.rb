@@ -1,5 +1,5 @@
 class Allocation < ActiveRecord::Base
-  attr_accessible :notes, :start_date, :end_date, :billable, :binding, :person, :person_id, :project, :project_id, :percent_allocated
+  attr_accessible :notes, :start_date, :end_date, :billable, :binding, :provisional, :person, :person_id, :project, :project_id, :percent_allocated
 
   TIME_WINDOW = 20 # weeks
 
@@ -33,7 +33,7 @@ class Allocation < ActiveRecord::Base
   end
 
   scope :on_date, lambda { |d| for_date(d).current }
-  scope :this_year, lambda { between(Date.today.beginning_of_year, Date.today.end_of_year).current }
+  scope :this_year, -> { between(Date.today.beginning_of_year, Date.today.end_of_year).current }
   scope :assignable, -> { current.includes(:project).where(:projects => { vacation: false }) }
   scope :unassignable, -> { current.includes(:project).where(:projects => { vacation: true }) }
   scope :billable, -> { where(billable: true) }
@@ -41,6 +41,7 @@ class Allocation < ActiveRecord::Base
   scope :with_start_date, lambda { |d| where("allocations.start_date <= ?", d.to_date + TIME_WINDOW.weeks).where("allocations.end_date >= ?", d.to_date).current }
   scope :vacation, -> { current.where(:projects => { vacation: true }) }
   scope :by_office, lambda { |office| office ? joins(:office).where("people.office_id" => office.id) : where(false) }
+  scope :includes_provisional, lambda { |x| x ? where(nil) : where(provisional: false) }
 
   scope :billable_and_assignable, -> { billable.assignable }
 

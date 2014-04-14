@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140407154245) do
+ActiveRecord::Schema.define(version: 20140409202316) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,10 +25,11 @@ ActiveRecord::Schema.define(version: 20140407154245) do
     t.boolean  "billable"
     t.boolean  "binding"
     t.text     "notes"
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
     t.integer  "slot_id"
-    t.integer  "percent_allocated", default: 100, null: false
+    t.integer  "percent_allocated", default: 100,   null: false
+    t.boolean  "provisional",       default: false
   end
 
   add_index "allocations", ["billable"], name: "index_allocations_on_billable", using: :btree
@@ -73,14 +74,16 @@ ActiveRecord::Schema.define(version: 20140407154245) do
   create_table "monthly_snapshots", force: true do |t|
     t.integer  "office_id"
     t.date     "snap_date"
-    t.decimal  "assignable_days", precision: 6, scale: 2, default: 0.0
-    t.decimal  "billing_days",    precision: 6, scale: 2, default: 0.0
-    t.datetime "created_at",                                            null: false
-    t.datetime "updated_at",                                            null: false
-    t.decimal  "utilization",     precision: 6, scale: 2, default: 0.0
+    t.decimal  "assignable_days",      precision: 6, scale: 2, default: 0.0
+    t.decimal  "billing_days",         precision: 6, scale: 2, default: 0.0
+    t.datetime "created_at",                                                   null: false
+    t.datetime "updated_at",                                                   null: false
+    t.decimal  "utilization",          precision: 6, scale: 2, default: 0.0
+    t.boolean  "includes_provisional",                         default: false
   end
 
   add_index "monthly_snapshots", ["office_id"], name: "index_monthly_snapshots_on_office_id", using: :btree
+  add_index "monthly_snapshots", ["snap_date", "office_id", "includes_provisional"], name: "unique_monthly_snapshots_index", unique: true, using: :btree
   add_index "monthly_snapshots", ["snap_date"], name: "index_monthly_snapshots_on_snap_date", using: :btree
 
   create_table "office_holidays", force: true do |t|
@@ -147,6 +150,7 @@ ActiveRecord::Schema.define(version: 20140407154245) do
     t.date     "start_date"
     t.date     "end_date"
     t.boolean  "holiday",             default: false, null: false
+    t.boolean  "provisional",         default: false
   end
 
   add_index "projects", ["billable"], name: "index_projects_on_billable", using: :btree
@@ -155,8 +159,8 @@ ActiveRecord::Schema.define(version: 20140407154245) do
   create_table "snapshots", force: true do |t|
     t.text     "utilization"
     t.date     "snap_date"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
     t.integer  "office_id"
     t.text     "staff"
     t.text     "unassignable"
@@ -166,9 +170,10 @@ ActiveRecord::Schema.define(version: 20140407154245) do
     t.text     "billable"
     t.text     "overallocated"
     t.text     "non_billable"
+    t.boolean  "includes_provisional", default: false
   end
 
-  add_index "snapshots", ["snap_date", "office_id"], name: "index_snapshots_on_snap_date_and_office_id", unique: true, using: :btree
+  add_index "snapshots", ["snap_date", "office_id", "includes_provisional"], name: "unique_snapshots_index", unique: true, using: :btree
 
   create_table "t2_applications", force: true do |t|
     t.string   "url"

@@ -14,23 +14,6 @@ describe Snapshot do
     end
   end
 
-  describe '.one_per_day' do
-    it 'is empty if there are no snapshots' do
-      Snapshot.one_per_day.should be_empty
-    end
-
-    it 'returns the snapshot for today' do
-      Snapshot.today!
-      Snapshot.one_per_day.should_not be_empty
-    end
-
-    it 'returns only the most recent snapshot for the day' do
-      Snapshot.today!
-      Snapshot.today!
-      Snapshot.one_per_day.size.should eql(1)
-    end
-  end
-
   describe '.on_date!' do
     let(:office) { FactoryGirl.create(:office) }
     let(:snapshot) {Snapshot.on_date!(Date.today)}
@@ -45,7 +28,7 @@ describe Snapshot do
     end
 
     it 'creates a snapshot for the given office' do
-      snapshot = Snapshot.on_date!(Date.today, office.id)
+      snapshot = Snapshot.on_date!(Date.today, office_id: office.id)
       snapshot.office_id.should eql(office.id)
       snapshot.should be_persisted
     end
@@ -176,31 +159,71 @@ describe Snapshot do
         end
       end
 
-      it 'should return the right utilization ratio' do
-        # This person will be present but will not have
-        # an allocation. It should be taken into account
-        # in the utilization ration calculation.
-        FactoryGirl.create(:person, office: office)
+      context "booked utilization" do
+        it 'should return the right utilization ratio' do
+          # This person will be present but will not have
+          # an allocation. It should be taken into account
+          # in the utilization ration calculation.
+          FactoryGirl.create(:person, office: office)
 
-        allocation_for(dev)
-        FactoryGirl.create(:allocation, :active, :billable, {
-          person: FactoryGirl.create(:person),
-          start_date: date - 2.days,
-          end_date: date + 2.days
-        })
+          allocation_for(dev)
+          FactoryGirl.create(:allocation, :active, :billable, {
+            person: FactoryGirl.create(:person),
+            start_date: date - 2.days,
+            end_date: date + 2.days
+          })
 
-        snapshot.office = office
-        snapshot.calculate
+          snapshot.office = office
+          snapshot.calculate
 
-        # Since there are three people in the snapshot's office
-        # but one of them is only 50% billable and only one has
-        # an allocation, the utilization should be:
-        #
-        # billing          100 + 0 + 0
-        # -------     =  ---------------- = 40%
-        # assignable      100 + 100 + 50
-        #
-        snapshot.utilization.should eql("40.0")
+          # Since there are three people in the snapshot's office
+          # but one of them is only 50% billable and only one has
+          # an allocation, the utilization should be:
+          #
+          # billing          100 + 0 + 0
+          # -------     =  ---------------- = 40%
+          # assignable      100 + 100 + 50
+          #
+          snapshot.utilization.should eql("40.0")
+        end
+      end
+
+      context "projected utilization" do
+        it "returns a utilization ratio that includes provisional allocation if requested" do
+          # This person will be present but will not have
+          # an allocation. It should be taken into account
+          # in the utilization ration calculation.
+          FactoryGirl.create(:person, office: office)
+          allocation_for(dev, provisional: true)
+
+          snapshot.office = office
+          snapshot.includes_provisional = true
+          snapshot.calculate
+
+          # Since there are three people in the snapshot's office
+          # but one of them is only 50% billable and only one has
+          # an allocation, the utilization should be:
+          #
+          # billing          100 + 0 + 0
+          # -------     =  ---------------- = 40%
+          # assignable      100 + 100 + 50
+          #
+          snapshot.utilization.should eql("40.0")
+        end
+
+        it "returns a utilization ratio that ignores provisional allocation otherwise" do
+          # This person will be present but will not have
+          # an allocation. It should be taken into account
+          # in the utilization ration calculation.
+          FactoryGirl.create(:person, office: office)
+          allocation_for(dev, provisional: true)
+
+          snapshot.office = office
+          snapshot.includes_provisional = false
+          snapshot.calculate
+
+          snapshot.utilization.should eql("0.0")
+        end
       end
     end
   end
