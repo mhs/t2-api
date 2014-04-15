@@ -1,9 +1,9 @@
 class Overlap
 
-  attr_reader :person_id, :start_date, :end_date, :allocations, :percent_allocated
+  attr_reader :person, :start_date, :end_date, :allocations, :percent_allocated
 
-  def initialize(person_id:, start_date:, end_date:, allocations: [], percent_allocated: 0)
-    @person_id = person_id
+  def initialize(person:, start_date:, end_date:, allocations: [], percent_allocated: 0)
+    @person = person
     @start_date = start_date
     @end_date = end_date
     raise ArgumentError, "you done goofed" if end_date < start_date
@@ -12,7 +12,7 @@ class Overlap
   end
 
   def ==(other)
-    self.person_id == other.person_id &&
+    self.person == other.person &&
       self.start_date === other.start_date &&
       self.end_date === other.end_date &&
       self.percent_allocated == other.percent_allocated
@@ -76,7 +76,7 @@ class Overlap
 
   def attributes
     {
-      person_id: person_id,
+      person: person,
       start_date: start_date,
       end_date: end_date,
       allocations: allocations,

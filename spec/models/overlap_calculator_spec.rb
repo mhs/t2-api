@@ -1,10 +1,10 @@
 require 'spec_helper'
 describe OverlapCalculator do
 
-  let(:person_id) { 42 }
+  let(:person) { double(id: 42) }
   let(:start_date) { Date.today.beginning_of_week }
   let(:end_date) { day(14) }
-  let(:initial_overlap) { Overlap.new(person_id: person_id, start_date: start_date, end_date: end_date) }
+  let(:initial_overlap) { Overlap.new(person: person, start_date: start_date, end_date: end_date) }
   let(:result) { OverlapCalculator.new(initial_overlap, allocations).overlaps }
 
   def day(offset)
