@@ -36,7 +36,19 @@ class Overlap
 
   def conflicting?
     return false unless allocations.size > 1
-    percent_allocated > person.percent_billable || allocations.any?(&:vacation)
+    percent_allocated > person.percent_billable ||
+      allocations.any?(&:vacation)
+  end
+
+  def available?
+    percent_allocated < person.percent_billable
+  end
+
+  def to_availability
+    Availability.new(person_id: person.id,
+                     start_date: start_date,
+                     end_date: end_date,
+                     percent_allocated: person.percent_billable - percent_allocated)
   end
 
   private

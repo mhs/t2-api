@@ -89,5 +89,49 @@ describe OverlapCalculator do
       end
     end
   end
+
+  describe "availabilities" do
+    let(:result) { subject.availabilities }
+
+    context "no allocations mean total availability" do
+      let(:allocations) { [] }
+
+      it "returns an availability for the entire time range" do
+        expect(result.size).to eq(1)
+        expect(result.first.start_date).to eq(start_date)
+        expect(result.first.end_date).to eq(end_date)
+      end
+    end
+
+    context "not available when allocated" do
+      let(:allocations) { [double(start_date: day(0), end_date: day(2), percent_allocated: 100)] }
+
+      it "returns an availability for the unallocated region" do
+        expect(result.size).to eq(1)
+        expect(result.first.start_date).to eq(day(3))
+        expect(result.first.end_date).to eq(initial_overlap.end_date)
+      end
+    end
+
+    context "partially available when partially allocated" do
+      let(:allocations) { [double(start_date: day(0), end_date: day(2), percent_allocated: 75)] }
+
+      it "returns two things" do
+        expect(result.size).to eq(2)
+      end
+
+      it "returns a partial availability for the allocated region" do
+        expect(result.first.start_date).to eq(initial_overlap.start_date)
+        expect(result.first.end_date).to eq(day(2))
+        expect(result.first.percent_allocated).to eq(25)
+      end
+
+      it "returns an availability for the unallocated region" do
+        expect(result.second.start_date).to eq(day(3))
+        expect(result.second.end_date).to eq(initial_overlap.end_date)
+        expect(result.second.percent_allocated).to eq(100)
+      end
+    end
+  end
 end
 

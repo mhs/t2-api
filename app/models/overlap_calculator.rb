@@ -26,4 +26,8 @@ class OverlapCalculator
     overlaps.select(&:conflicting?)
   end
 
+  def availabilities
+    overlaps.select(&:available?).map(&:to_availability)
+  end
+
 end
