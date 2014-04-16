@@ -10,6 +10,10 @@ class Availability
     AvailabilitySerializer
   end
 
+  def id
+    "#{person_id}-#{start_date}-#{end_date}-#{percent_allocated}"
+  end
+
   def ==(other)
     self.person_id == other.person_id &&
       self.start_date === other.start_date &&

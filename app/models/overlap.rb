@@ -1,4 +1,5 @@
 class Overlap
+  extend Memoist
 
   attr_reader :person, :start_date, :end_date, :allocations, :percent_allocated
 
@@ -6,10 +7,16 @@ class Overlap
     @person = person
     @start_date = start_date
     @end_date = end_date
-    raise ArgumentError, "you done goofed" if end_date < start_date
+    # raise ArgumentError, "you done goofed" if end_date < start_date
+    binding.pry if end_date < start_date
     @allocations = allocations
     @percent_allocated = percent_allocated
   end
+
+  def id
+    "#{person.id}-#{start_date}-#{end_date}-#{allocations.map(&:id).join('-')}-#{percent_allocated}"
+  end
+  memoize :id
 
   def ==(other)
     self.person == other.person &&
@@ -37,7 +44,7 @@ class Overlap
   def conflicting?
     return false unless allocations.size > 1
     percent_allocated > person.percent_billable ||
-      allocations.any?(&:vacation)
+      allocations.any?(&:vacation?)
   end
 
   def available?
@@ -50,6 +57,12 @@ class Overlap
                      end_date: end_date,
                      percent_allocated: person.percent_billable - percent_allocated)
   end
+
+  def active_model_serializer
+    ConflictSerializer
+  end
+
+  alias read_attribute_for_serialization send
 
   private
 

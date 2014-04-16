@@ -29,6 +29,7 @@ describe OverlapCalculator do
 
       # |---|||-|-||--|
       it "returns 7 regions" do
+        binding.pry
         expect(result.size).to eq(7)
       end
 
