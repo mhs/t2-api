@@ -34,6 +34,11 @@ class Overlap
     ].compact
   end
 
+  def conflicting?
+    return false unless allocations.size > 1
+    percent_allocated > person.percent_billable || allocations.any?(&:vacation)
+  end
+
   private
 
   def attributes

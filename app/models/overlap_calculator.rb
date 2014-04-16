@@ -1,7 +1,11 @@
 class OverlapCalculator
+  extend Memoist
 
   attr_reader :allocations
 
+  # NOTE: non-binding (non-exclusive) allocations never conflict
+  #       do not pass them to this method
+  #
   def initialize(initial_overlap, allocations)
     @initial_overlap = initial_overlap
     @allocations = allocations
@@ -15,6 +19,11 @@ class OverlapCalculator
       end
     end
     result
+  end
+  memoize :overlaps
+
+  def conflicts
+    overlaps.select(&:conflicting?)
   end
 
 end
