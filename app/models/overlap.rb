@@ -19,20 +19,6 @@ class Overlap
       self.allocations == other.allocations
   end
 
-  def similar(**args)
-    # NOTE: this is tricky.
-    #       * If overlaps_for generates an invalid region
-    #         (start_date > end_date) then omit it.
-    #       * If overlaps_for generates a region outside our
-    #         bounds, limit the endpoints
-    #
-    new_attributes = attributes.merge(args)
-    new_attributes[:start_date] = [new_attributes[:start_date], start_date].max
-    new_attributes[:end_date] = [new_attributes[:end_date], end_date].min
-    return if new_attributes[:start_date] > new_attributes[:end_date]
-    self.class.new(**new_attributes)
-  end
-
   def overlaps_for(alloc)
     # NOTE: this avoids the multi-way branch by always assuming that
     #       alloc is in the middle. If that isn't the case, some of the
@@ -48,7 +34,7 @@ class Overlap
     ].compact
   end
 
-  protected
+  private
 
   def attributes
     {
@@ -59,4 +45,19 @@ class Overlap
       percent_allocated: percent_allocated
     }
   end
+
+  def similar(**args)
+    # NOTE: this is tricky.
+    #       * If overlaps_for generates an invalid region
+    #         (start_date > end_date) then omit it.
+    #       * If overlaps_for generates a region outside our
+    #         bounds, limit the endpoints
+    #
+    new_attributes = attributes.merge(args)
+    new_attributes[:start_date] = [new_attributes[:start_date], start_date].max
+    new_attributes[:end_date] = [new_attributes[:end_date], end_date].min
+    return if new_attributes[:start_date] > new_attributes[:end_date]
+    self.class.new(**new_attributes)
+  end
+
 end
