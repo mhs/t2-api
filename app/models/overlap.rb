@@ -20,56 +20,32 @@ class Overlap
   end
 
   def similar(**args)
-    self.class.new(**attributes.merge(args))
+    # NOTE: this is tricky.
+    #       * If overlaps_for generates an invalid region
+    #         (start_date > end_date) then omit it.
+    #       * If overlaps_for generates a region outside our
+    #         bounds, limit the endpoints
+    #
+    new_attributes = attributes.merge(args)
+    new_attributes[:start_date] = [new_attributes[:start_date], start_date].max
+    new_attributes[:end_date] = [new_attributes[:end_date], end_date].min
+    return if new_attributes[:start_date] > new_attributes[:end_date]
+    self.class.new(**new_attributes)
   end
 
   def overlaps_for(alloc)
-    return [self] if alloc.end_date < start_date || alloc.start_date > end_date
-
-    if alloc.start_date <= start_date && alloc.end_date >= end_date
-      #  self:   |----|
-      #  alloc: |------|
-      [
-        similar(percent_allocated: percent_allocated + alloc.percent_allocated,
-                allocations: allocations + [alloc])
-      ]
-    elsif alloc.start_date <= start_date
-      #  self:  |----|
-      # alloc: |----|
-      [
-        similar(end_date: alloc.end_date,
-                percent_allocated: percent_allocated + alloc.percent_allocated,
-                allocations: allocations + [alloc]),
-        similar(start_date: alloc.end_date + 1.day)
-      ]
-    elsif alloc.end_date >= end_date
-      #  self: |----|
-      # alloc:  |----|
-      [
-        similar(end_date: alloc.start_date - 1.day),
-        similar(start_date: alloc.start_date,
-                percent_allocated: percent_allocated + alloc.percent_allocated,
-                allocations: allocations + [alloc]),
-      ]
-    else
-      #  self: |-------|
-      # alloc:   |---|
-      # we know the following:
-      # alloc.start_date > start_date (from the tests above)
-      # alloc.end_date < end_date (from the tests above)
-      # alloc.end_date >= start_date (from the initial guard)
-      # alloc.start_date <= end_date (from the initial guard
-      # so:
-      # start_date < alloc.start_date <= alloc.end_date < end_date
-      [
-        similar(end_date: alloc.start_date - 1.day),
-        similar(start_date: alloc.start_date,
-                end_date: alloc.end_date,
-                percent_allocated: percent_allocated + alloc.percent_allocated,
-                allocations: allocations + [alloc]),
-        similar(start_date: alloc.end_date + 1.day)
-      ]
-    end
+    # NOTE: this avoids the multi-way branch by always assuming that
+    #       alloc is in the middle. If that isn't the case, some of the
+    #       calls to 'similar' will return nil and be compacted away.
+    #
+    [
+      similar(end_date: alloc.start_date - 1.day),
+      similar(start_date: alloc.start_date,
+              end_date: alloc.end_date,
+              percent_allocated: percent_allocated + alloc.percent_allocated,
+              allocations: allocations + [alloc]),
+      similar(start_date: alloc.end_date + 1.day)
+    ].compact
   end
 
   protected
