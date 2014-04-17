@@ -1,4 +1,6 @@
 class Api::V1::AllocationsController < ApplicationController
+  before_filter :extract_window, only: [:create]
+
   # GET /allocations.json
   def index
     relation = with_ids_from_params(Allocation.all)
@@ -19,7 +21,8 @@ class Api::V1::AllocationsController < ApplicationController
   def create
     allocation = Allocation.new(params[:allocation])
     if allocation.save
-      render json: allocation, status: :created
+      allocation_with_overlaps = AllocationWithOverlaps.new(allocation, window_start: @window_start, window_end: @window_end)
+      render json: allocation_with_overlaps, status: :created
     else
       render json: { errors: allocation.errors }, status: :unprocessable_entity
     end
@@ -40,5 +43,12 @@ class Api::V1::AllocationsController < ApplicationController
     allocation = Allocation.find(params[:id])
     allocation.destroy
     render json: nil, status: :ok
+  end
+
+  private
+
+  def extract_window
+    @window_start = Date.parse(params[:allocation].delete(:window_start_date))
+    @window_end = Date.parse(params[:allocation].delete(:window_end_date))
   end
 end
