@@ -14,7 +14,7 @@ class Overlap
   end
 
   def id
-    "#{person.id}-#{start_date}-#{end_date}-#{allocations.map(&:id).join('-')}-#{percent_allocated}"
+    "#{person.id}_#{start_date}_#{end_date}_#{percent_allocated}_#{allocations.map(&:id).join('_')}"
   end
   memoize :id
 

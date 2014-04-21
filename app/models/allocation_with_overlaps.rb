@@ -1,5 +1,5 @@
 class AllocationWithOverlaps < DelegateClass(Allocation)
-  attr_reader :conflicts, :person
+  attr_reader :person
 
   def initialize(allocation, window_start:, window_end:)
     super(allocation)
@@ -13,16 +13,19 @@ class AllocationWithOverlaps < DelegateClass(Allocation)
     @allocations_hash = @person.allocations.within(window_start, window_end).index_by(&:id)
     @conflicts.each do |conflict|
       conflict.allocations.each do |alloc|
+        __setobj__(@allocations_hash[alloc.id]) if alloc.id == allocation.id # no identity map :(
         @allocations_hash[alloc.id].conflicts << conflict
       end
     end
   end
 
   def allocations
-    [__getobj__] + (@allocations_hash.values - [__getobj__])
+    [self] + (@allocations_hash.values - [__getobj__])
   end
 
   def active_model_serializer
     AllocationWithOverlapsSerializer
   end
+
+  alias read_attribute_for_serialization send
 end

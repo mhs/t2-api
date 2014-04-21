@@ -108,8 +108,8 @@ class Person < ActiveRecord::Base
     AvailabilityCalculator.new(allocations_within_range, initial_availability).availabilities
   end
 
-  def conflicts_for(start_date, end_date)
-    overlap_calculator_for(start_date, end_date).conflicts
+  def conflicts_for(start_date, end_date, allocations_within_range=nil)
+    overlap_calculator_for(start_date, end_date, allocations_within_range).conflicts
   end
 
   def skill_list=(v)
@@ -129,11 +129,11 @@ class Person < ActiveRecord::Base
 
   private
 
-  def overlap_calculator_for(start_date, end_date)
+  def overlap_calculator_for(start_date, end_date, allocations_within_range=nil)
     min_start_date = self.start_date.nil? ? start_date : [self.start_date,start_date].max
     max_end_date = self.end_date.nil? ? end_date : [self.end_date,end_date].min
 
-    allocations_within_range = allocations.bound.within(start_date, end_date)
+    allocations_within_range ||= allocations.bound.within(start_date, end_date)
     initial_region = Overlap.new(person: self, start_date: min_start_date, end_date: max_end_date)
 
     OverlapCalculator.new(initial_region, allocations_within_range)

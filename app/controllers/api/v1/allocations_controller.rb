@@ -5,15 +5,27 @@ class Api::V1::AllocationsController < ApplicationController
   def index
     relation = with_ids_from_params(Allocation.all)
     if (start_date = params[:startDate])
-      render json: relation.with_start_date(start_date)
+      # TODO: who the hell is using this?
+      results = relation.with_start_date(start_date).to_a
     else
-      render json: relation
+      results = relation.to_a
     end
+    if params[:window_start_date]
+      window_start = Date.parse(params[:window_start_date])
+      window_end = Date.parse(params[:window_end_date])
+      results.each do |allocation|
+        conflicts = allocation.person.conflicts_for(window_start, window_end)
+        conflicts.select! { |c| c.allocations.map(&:id).include?(allocation.id) }
+        allocation.conflicts = conflicts
+      end
+    end
+    render json: results
   end
 
   # GET /allocations/1.json
   def show
     allocation = Allocation.find(params[:id])
+    # TODO: this is terrible, put it someplace better
     render json: allocation
   end
 
@@ -22,7 +34,7 @@ class Api::V1::AllocationsController < ApplicationController
     allocation = Allocation.new(params[:allocation])
     if allocation.save
       allocation_with_overlaps = AllocationWithOverlaps.new(allocation, window_start: @window_start, window_end: @window_end)
-      render json: allocation_with_overlaps, status: :created
+      render json: allocation_with_overlaps.allocations, status: :created
     else
       render json: { errors: allocation.errors }, status: :unprocessable_entity
     end
