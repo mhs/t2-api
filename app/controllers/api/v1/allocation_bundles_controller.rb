@@ -1,4 +1,4 @@
-class Api::V1::AllocationBundlesController < ApplicationController
+class Api::V1::AllocationBundlesController < Api::V1::BaseController
 
   def index
     start_date = Date.parse params[:start_date]

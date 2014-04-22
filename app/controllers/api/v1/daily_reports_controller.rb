@@ -1,4 +1,4 @@
-class Api::V1::DailyReportsController < ApplicationController
+class Api::V1::DailyReportsController < Api::V1::BaseController
 
   # GET: /api/v1/daily_reports/YYYYMMDD
   def show

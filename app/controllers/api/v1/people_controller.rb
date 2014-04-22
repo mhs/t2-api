@@ -1,4 +1,4 @@
-class Api::V1::PeopleController < ApplicationController
+class Api::V1::PeopleController < Api::V1::BaseController
 
   before_filter :fetch_person, only: [:show, :update, :similar]
 

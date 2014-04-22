@@ -1,4 +1,4 @@
-class Api::V1::AvailabilitiesController < ApplicationController
+class Api::V1::AvailabilitiesController < Api::V1::BaseController
   def index
 
     start_date = Date.parse(params[:start_date])

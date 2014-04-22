@@ -1,4 +1,4 @@
-class Api::V1::ConflictsController < ApplicationController
+class Api::V1::ConflictsController < Api::V1::BaseController
 
   def index
     # conflict ids are in params[:ids]

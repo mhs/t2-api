@@ -1,4 +1,4 @@
-class Api::V1::SnapshotsController < ApplicationController
+class Api::V1::SnapshotsController < Api::V1::BaseController
   # TODO: deal with provisional allocations
   def index
     office_id = params[:office_id]

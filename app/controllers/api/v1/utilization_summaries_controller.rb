@@ -1,4 +1,4 @@
-class Api::V1::UtilizationSummariesController < ApplicationController
+class Api::V1::UtilizationSummariesController < Api::V1::BaseController
   def index
     office_id = params[:office_id].blank? ? nil : params[:office_id].to_i
     snap_date = params[:snap_date].blank? ? nil : Date.parse(params[:snap_date])
