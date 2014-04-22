@@ -112,6 +112,17 @@ class Person < ActiveRecord::Base
     overlap_calculator_for(start_date, end_date, allocations_within_range).conflicts
   end
 
+  def allocations_with_conflicts_for(start_date, end_date)
+    conflicts = conflicts_for(start_date, end_date)
+    allocations_hash = allocations.within(start_date, end_date).index_by(&:id)
+    conflicts.each do |conflict|
+      conflict.allocations.each do |alloc|
+        allocations_hash[alloc.id].conflicts << conflict
+      end
+    end
+    allocations_hash.values
+  end
+
   def skill_list=(v)
     # DO NOTHING
     # something's b0rked with ActsAsTaggableOn::Tag and mass assignment

@@ -16,7 +16,6 @@ class Api::V1::AllocationsController < Api::V1::BaseController
   # GET /allocations/1.json
   def show
     allocation = Allocation.find(params[:id])
-    # TODO: this is terrible, put it someplace better
     render json: allocation
   end
 
@@ -24,8 +23,11 @@ class Api::V1::AllocationsController < Api::V1::BaseController
   def create
     allocation = Allocation.new(params[:allocation])
     if allocation.save
-      allocation_with_overlaps = AllocationWithOverlaps.new(allocation, window_start: window_start, window_end: window_end)
-      render json: allocation_with_overlaps.allocations, status: :created
+      with_conflicts = allocation.person.allocations_with_conflicts_for(window_start, window_end)
+      new_with_conflicts = with_conflicts.find { |a| a.id == allocation.id }
+      # NOTE: Ember Data wants the new record in the first spot in the array
+      with_conflicts = [new_with_conflicts] + (with_conflicts - [new_with_conflicts])
+      render json: with_conflicts, status: :created
     else
       render json: { errors: allocation.errors }, status: :unprocessable_entity
     end
@@ -35,8 +37,7 @@ class Api::V1::AllocationsController < Api::V1::BaseController
   def update
     allocation = Allocation.find(params[:id])
     if allocation.update_attributes(params[:allocation])
-      allocation_with_overlaps = AllocationWithOverlaps.new(allocation, window_start: window_start, window_end: window_end)
-      render json: allocation_with_overlaps.allocations, status: :ok
+      render json: allocation.person.allocations_with_conflicts_for(window_start, window_end), status: :ok
     else
       render json: { errors: allocation.errors }, status: :unprocessable_entity
     end
@@ -47,13 +48,7 @@ class Api::V1::AllocationsController < Api::V1::BaseController
     allocation = Allocation.find(params[:id])
     person = allocation.person
     allocation.destroy
-    live_allocation = person.allocations.within(window_start, window_end).first
-    if live_allocation
-      allocation_with_overlaps = AllocationWithOverlaps.new(live_allocation, window_start: window_start, window_end: window_end)
-      render json: allocation_with_overlaps.allocations, status: :ok
-    else
-      render json: nil, status: :ok
-    end
+    render json: person.allocations_with_conflicts_for(window_start, window_end), status: :ok
   end
 
 end
