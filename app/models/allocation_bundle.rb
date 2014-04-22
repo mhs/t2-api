@@ -38,6 +38,11 @@ class AllocationBundle
     @conflicts
   end
 
+  def availabilities
+    people.flat_map { |person| person.availabilities_for(start_date, end_date) }
+  end
+  memoize :availabilities
+
   alias read_attribute_for_serialization send
 
   def active_model_serializer

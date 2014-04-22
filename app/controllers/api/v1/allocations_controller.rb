@@ -27,7 +27,10 @@ class Api::V1::AllocationsController < Api::V1::BaseController
       new_with_conflicts = with_conflicts.find { |a| a.id == allocation.id }
       # NOTE: Ember Data wants the new record in the first spot in the array
       with_conflicts = [new_with_conflicts] + (with_conflicts - [new_with_conflicts])
-      render json: with_conflicts, status: :created
+      availabilities = allocation.person.availabilities_for(window_start, window_end).map do |a|
+        AvailabilitySerializer.new(a, root: false).as_json
+      end
+      render json: with_conflicts, meta: availabilities, meta_key: :availabilities, status: :created
     else
       render json: { errors: allocation.errors }, status: :unprocessable_entity
     end
