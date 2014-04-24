@@ -152,6 +152,7 @@ ActiveRecord::Schema.define(version: 20140429143404) do
     t.date     "end_date"
     t.boolean  "holiday",             default: false, null: false
     t.boolean  "provisional",         default: false
+    t.boolean  "investment_fridays",  default: false
   end
 
   add_index "projects", ["billable"], name: "index_projects_on_billable", using: :btree

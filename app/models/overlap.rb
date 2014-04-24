@@ -8,7 +8,6 @@ class Overlap
     @start_date = start_date
     @end_date = end_date
     # raise ArgumentError, "you done goofed" if end_date < start_date
-    binding.pry if end_date < start_date
     @allocations = allocations
     @percent_allocated = percent_allocated
   end
@@ -41,6 +40,18 @@ class Overlap
     ].compact
   end
 
+  def has_holiday?
+    allocations.any?(&:holiday?)
+  end
+
+  def vacation?
+    allocations.any?(&:vacation?)
+  end
+
+  def allocation_for(project)
+    allocations.select { |a| a.project_id == project.id }.first
+  end
+
   def conflicting?
     return false unless allocations.size > 1
     percent_allocated > person.percent_billable ||
@@ -56,6 +67,13 @@ class Overlap
                      start_date: start_date,
                      end_date: end_date,
                      percent_allocated: person.percent_billable - percent_allocated)
+  end
+
+  def split_by_day
+    # TODO: weekends GTFO
+    (start_date..end_date).to_a.map do |dt|
+      similar(start_date: dt, end_date: dt)
+    end
   end
 
   def active_model_serializer

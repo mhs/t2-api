@@ -132,8 +132,6 @@ class Person < ActiveRecord::Base
     end
   end
 
-  private
-
   def overlap_calculator_for(start_date, end_date, allocations_within_range=nil)
     min_start_date = self.start_date.nil? ? start_date : [self.start_date,start_date].max
     max_end_date = self.end_date.nil? ? end_date : [self.end_date,end_date].min
@@ -144,6 +142,8 @@ class Person < ActiveRecord::Base
     OverlapCalculator.new(initial_region, allocations_within_range)
   end
   memoize :overlap_calculator_for
+
+  private
 
   def create_or_associate_user
     self.user = User.find_or_create_by!(:email => email.downcase) do |u|

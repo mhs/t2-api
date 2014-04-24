@@ -22,6 +22,10 @@ class OverlapCalculator
   end
   memoize :overlaps
 
+  def overlaps_by_day
+    overlaps.flat_map { |o| o.split_by_day }
+  end
+
   def conflicts
     overlaps.select(&:conflicting?)
   end

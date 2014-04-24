@@ -56,6 +56,10 @@ class Allocation < ActiveRecord::Base
     project.vacation?
   end
 
+  def holiday?
+    project.holiday?
+  end
+
   def conflicts
     @conflicts ||= []
   end
