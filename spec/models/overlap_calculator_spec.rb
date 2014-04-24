@@ -29,7 +29,6 @@ describe OverlapCalculator do
 
       # |---|||-|-||--|
       it "returns 7 regions" do
-        binding.pry
         expect(result.size).to eq(7)
       end
 
@@ -43,7 +42,7 @@ describe OverlapCalculator do
     let(:result) { subject.conflicts }
 
     context "with no conflicts" do
-      let(:allocations) { [double(start_date: day(2), end_date: day(3), percent_allocated: 100, vacation: false)] }
+      let(:allocations) { [double(start_date: day(2), end_date: day(3), percent_allocated: 100, :"vacation?" => false)] }
 
       it "returns an empty array" do
         expect(result).to be_empty
@@ -53,9 +52,9 @@ describe OverlapCalculator do
     context "with a single conflict" do
       let(:allocations) do
         [
-          double(start_date: day(0), end_date: day(2), percent_allocated: 100, vacation: false),
-          double(start_date: day(1), end_date: day(1), percent_allocated: 100, vacation: false),
-          double(start_date: day(3), end_date: day(3), percent_allocated: 100, vacation: false)
+          double(start_date: day(0), end_date: day(2), percent_allocated: 100, :"vacation?" => false),
+          double(start_date: day(1), end_date: day(1), percent_allocated: 100, :"vacation?" => false),
+          double(start_date: day(3), end_date: day(3), percent_allocated: 100, :"vacation?" => false)
         ]
       end
 
@@ -67,8 +66,8 @@ describe OverlapCalculator do
     context "with a partial-allocation not-really-a-conflict" do
       let(:allocations) do
         [
-          double(start_date: day(0), end_date: day(3), percent_allocated: 50, vacation: false),
-          double(start_date: day(0), end_date: day(2), percent_allocated: 25, vacation: false)
+          double(start_date: day(0), end_date: day(3), percent_allocated: 50, :"vacation?" => false),
+          double(start_date: day(0), end_date: day(2), percent_allocated: 25, :"vacation?" => false)
         ]
       end
 
@@ -80,8 +79,8 @@ describe OverlapCalculator do
     context "vacation conflicts with everything" do
       let(:allocations) do
         [
-          double(start_date: day(0), end_date: day(0), percent_allocated: 50, vacation: true),
-          double(start_date: day(0), end_date: day(1), percent_allocated: 50, vacation: false),
+          double(start_date: day(0), end_date: day(0), percent_allocated: 50, :"vacation?" => true),
+          double(start_date: day(0), end_date: day(1), percent_allocated: 50, :"vacation?" => false),
         ]
       end
 
