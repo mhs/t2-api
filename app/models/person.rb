@@ -26,6 +26,7 @@ class Person < ActiveRecord::Base
 
   belongs_to  :user, inverse_of: :person
   has_many_current :allocations
+  has_many :revenue_items, inverse_of: :person
   belongs_to  :office
   belongs_to  :project
 

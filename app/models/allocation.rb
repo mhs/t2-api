@@ -7,6 +7,7 @@ class Allocation < ActiveRecord::Base
   belongs_to :person
   belongs_to :project
   has_one :office, through: :person
+  has_many :revenue_items, inverse_of: :allocation
 
   validates :person_id, :project_id, :start_date, :end_date, presence: true
   validates_date :end_date, on_or_after: :start_date

@@ -3,9 +3,10 @@ class Project < ActiveRecord::Base
 
   attr_accessible :name, :notes, :billable, :binding, :provisional, :slug, :client_principal_id, :vacation, :start_date, :end_date, :office_ids
 
-  has_one   :client_principal, class_name: "Person"
-  has_many  :project_offices
-  has_many  :offices, through: :project_offices
+  has_one :client_principal, class_name: "Person"
+  has_many :project_offices
+  has_many :offices, through: :project_offices
+  has_many :revenue_items, inverse_of: :project
   has_many_current :allocations
   has_many_current :people, through: :allocations
 
@@ -36,6 +37,7 @@ class Project < ActiveRecord::Base
   end
 
   # TODO: do we need to filter by office? by role?
+  # TODO: Refactor this into better objs
   def revenue_for(start_date:, end_date:, includes_provisional: false)
     # TODO: filter these by which allocations belong to us
     Allocation.includes_provisional(includes_provisional).within_date_range(start_date, end_date) do
@@ -58,7 +60,8 @@ class Project < ActiveRecord::Base
             else
               # TODO: handle people who have non-billing allocations (needed?)
               allocation = overlap.allocation_for(self)
-              (rate * allocation.percent_allocated)/100
+              vacation_percentage = overlap.vacation_percentage
+              (100 - vacation_percentage) * (rate * allocation.percent_allocated)/100
             end
           end.sum
         end.sum

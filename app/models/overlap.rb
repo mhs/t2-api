@@ -48,6 +48,10 @@ class Overlap
     allocations.any?(&:vacation?)
   end
 
+  def vacation_percentage
+    [allocations.select(&:vacation?).sum(&:percent_allocated), 100].min
+  end
+
   def allocation_for(project)
     allocations.select { |a| a.project_id == project.id }.first
   end
