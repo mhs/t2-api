@@ -1,4 +1,4 @@
-class Api::V1::PtoRequestsController < ApplicationController
+class Api::V1::PtoRequestsController < Api::V1::BaseController
 
   def index
     person = Person.find params[:person_id]

@@ -4,8 +4,10 @@ class AllocationBundleSerializer < ActiveModel::Serializer
 
   has_many :offices
   has_many :allocations
+  has_many :availabilities
   has_many :projects
   has_many :people
+  has_many :conflicts
 
   def id
     1

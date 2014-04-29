@@ -1,4 +1,4 @@
-class Api::V1::UtilizationCountsController < ApplicationController
+class Api::V1::UtilizationCountsController < Api::V1::BaseController
   def index
     office_id = params[:office_id].to_i
     office_id = nil if office_id == 0

@@ -1,6 +1,7 @@
 class Allocation < ActiveRecord::Base
   attr_accessible :notes, :start_date, :end_date, :billable, :binding, :provisional, :person, :person_id, :project, :project_id, :percent_allocated
 
+  attr_accessor :conflicts # used by the serialization code
   TIME_WINDOW = 20 # weeks
 
   belongs_to :person
@@ -53,6 +54,10 @@ class Allocation < ActiveRecord::Base
 
   def vacation?
     project.vacation?
+  end
+
+  def conflicts
+    @conflicts ||= []
   end
 
   private

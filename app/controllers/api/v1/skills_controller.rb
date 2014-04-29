@@ -1,4 +1,4 @@
-class Api::V1::SkillsController < ApplicationController
+class Api::V1::SkillsController < Api::V1::BaseController
 
   # GET /api/v1/skills
   #

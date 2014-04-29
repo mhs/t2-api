@@ -1,5 +1,6 @@
 class Person < ActiveRecord::Base
   include HasManyCurrent
+  extend Memoist
 
   ROLES = [
     'Apprentice',
@@ -97,14 +98,23 @@ class Person < ActiveRecord::Base
     end
   end
 
-  def availabilities_for(start_date, end_date)
-    min_start_date = self.start_date.nil? ? start_date : [self.start_date,start_date].max
-    max_end_date = self.end_date.nil? ? end_date : [self.end_date,end_date].min
+  def availabilities_for(start_date, end_date, allocations_within_range=nil)
+    overlap_calculator_for(start_date, end_date, allocations_within_range).availabilities
+  end
 
-    allocations_within_range = allocations.bound.within(start_date, end_date)
-    initial_availability = Availability.new(person_id: id, start_date: min_start_date, end_date: max_end_date, percent_allocated: percent_billable)
+  def conflicts_for(start_date, end_date, allocations_within_range=nil)
+    overlap_calculator_for(start_date, end_date, allocations_within_range).conflicts
+  end
 
-    AvailabilityCalculator.new(allocations_within_range, initial_availability).availabilities
+  def allocations_with_conflicts_for(start_date, end_date)
+    conflicts = conflicts_for(start_date, end_date)
+    allocations_hash = allocations.within(start_date, end_date).index_by(&:id)
+    conflicts.each do |conflict|
+      conflict.allocations.each do |alloc|
+        allocations_hash[alloc.id].conflicts << conflict
+      end
+    end
+    allocations_hash.values
   end
 
   def skill_list=(v)
@@ -123,6 +133,17 @@ class Person < ActiveRecord::Base
   end
 
   private
+
+  def overlap_calculator_for(start_date, end_date, allocations_within_range=nil)
+    min_start_date = self.start_date.nil? ? start_date : [self.start_date,start_date].max
+    max_end_date = self.end_date.nil? ? end_date : [self.end_date,end_date].min
+
+    allocations_within_range ||= allocations.bound.within(start_date, end_date)
+    initial_region = Overlap.new(person: self, start_date: min_start_date, end_date: max_end_date)
+
+    OverlapCalculator.new(initial_region, allocations_within_range)
+  end
+  memoize :overlap_calculator_for
 
   def create_or_associate_user
     self.user = User.find_or_create_by!(:email => email.downcase) do |u|

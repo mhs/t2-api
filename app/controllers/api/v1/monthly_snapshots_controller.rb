@@ -1,4 +1,4 @@
-class Api::V1::MonthlySnapshotsController < ApplicationController
+class Api::V1::MonthlySnapshotsController < Api::V1::BaseController
   def index
     @snapshots = MonthlySnapshot.one_per_month
     render json: @snapshots

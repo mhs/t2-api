@@ -13,6 +13,7 @@ T2Api::Application.routes.draw do
       resources :skills, only: [:index]
       resources :projects, only: [:index, :show, :update, :create, :destroy]
       resources :allocations, only: [:index, :show, :update, :create, :destroy]
+      resources :conflicts, only: [:index]
       resources :allocation_bundles, only: [:index]
       resources :people, only: [:index, :show, :update, :create] do
         resources :pto_requests, only: [:index, :create, :update, :destroy]
