@@ -74,10 +74,10 @@ class Overlap
   end
 
   def split_by_day
-    # TODO: weekends GTFO
     (start_date..end_date).to_a.map do |dt|
+      next if dt.saturday? || dt.sunday?
       similar(start_date: dt, end_date: dt)
-    end
+    end.compact
   end
 
   def active_model_serializer

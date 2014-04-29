@@ -36,39 +36,6 @@ class Project < ActiveRecord::Base
     }[role]
   end
 
-  # TODO: do we need to filter by office? by role?
-  # TODO: Refactor this into better objs
-  def revenue_for(start_date:, end_date:, includes_provisional: false)
-    # TODO: filter these by which allocations belong to us
-    Allocation.includes_provisional(includes_provisional).within_date_range(start_date, end_date) do
-      # TODO: uniq should really be in the association
-      people.uniq.map do |person|
-        rate = rate_for(person.role)
-        overlaps_by_week = person.overlap_calculator_for(start_date, end_date).overlaps_by_day.group_by { |o| o.start_date.cweek }
-        overlaps_by_week.map do |week, overlaps|
-          holiday_in_week = overlaps.any?(&:has_holiday?)
-          really_investment_fridays = investment_fridays? && !holiday_in_week
-          overlaps.map do |overlap|
-            if !overlap.allocation_for(self)
-              # not ours
-              0.0
-            elsif overlap.vacation? || overlap.has_holiday?
-              # TODO: handle partial-day vacation
-              0.0
-            elsif overlap.start_date.friday? && really_investment_fridays
-              0.0
-            else
-              # TODO: handle people who have non-billing allocations (needed?)
-              allocation = overlap.allocation_for(self)
-              vacation_percentage = overlap.vacation_percentage
-              (100 - vacation_percentage) * (rate * allocation.percent_allocated)/100
-            end
-          end.sum
-        end.sum
-      end.sum
-    end
-  end
-
   protected
 
   def update_provisional_allocations

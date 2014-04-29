@@ -13,22 +13,6 @@ class RevenueItem < ActiveRecord::Base
 
   store_accessor :details, :holiday_in_week, :investment_fridays, :vacation_percentage, :percent_allocated, :base_rate
 
-  def self.create_from_overlaps!(daily_overlaps:[], holiday_in_week: false)
-    daily_overlaps.flat_map do |overlap|
-      next [] if overlap.has_holiday?
-      day = overlap.start_date
-      vacation_percentage = overlap.vacation_percentage
-      # TODO: what happens with collisions?
-      overlap.allocations.map do |allocation|
-        for_allocation(allocation,
-          day: day,
-          vacation_percentage: vacation_percentage,
-          holiday_in_week: holiday_in_week
-        )
-      end
-    end
-  end
-
   def self.for_allocation!(allocation, day:, vacation_percentage: 0, holiday_in_week: false)
     person = allocation.person
     project = allocation.project
