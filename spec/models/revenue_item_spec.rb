@@ -27,17 +27,10 @@ describe RevenueItem do
   let(:normal_rate) { project.rate_for(person.role) }
 
   let(:revenue) do
-    RevenueItem.create! do |ri|
-      ri.allocation = allocation
-      ri.office = office
-      ri.person = person
-      ri.project = project
-      ri.day = day
-      ri.role = person.role
-      ri.provisional = allocation.provisional
-      ri.vacation_percentage = vacation_percentage
-      ri.holiday_in_week = holiday_in_week
-    end.amount
+    RevenueItem.for_allocation(allocation,
+                               day: day,
+                               vacation_percentage: vacation_percentage,
+                               holiday_in_week: holiday_in_week).amount
   end
 
   describe "create_from_overlaps!" do

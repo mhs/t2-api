@@ -8,9 +8,8 @@ class CreateRevenueItems < ActiveRecord::Migration
       t.string  :role, null: false
       t.date    :day, null: false
       t.boolean :provisional, default: false
-      t.boolean :holiday_in_week, default: false
-      t.integer :vacation_percentage, default: 0
       t.decimal :amount, scale: 2, precision: 10, default: 0.0
+      t.hstore  :details
       t.timestamps
     end
 
