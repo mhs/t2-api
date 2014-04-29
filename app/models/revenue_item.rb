@@ -17,7 +17,6 @@ class RevenueItem < ActiveRecord::Base
     daily_overlaps.flat_map do |overlap|
       next [] if overlap.has_holiday?
       day = overlap.start_date
-      is_friday = day.friday?
       vacation_percentage = overlap.vacation_percentage
       # TODO: what happens with collisions?
       overlap.allocations.map do |allocation|
@@ -30,16 +29,18 @@ class RevenueItem < ActiveRecord::Base
     end
   end
 
-  def self.for_allocation(allocation, day:, vacation_percentage: 0, holiday_in_week: false)
+  def self.for_allocation!(allocation, day:, vacation_percentage: 0, holiday_in_week: false)
     person = allocation.person
     project = allocation.project
-    # TODO: what if one already exists? Need to update it.
-    create!({
+    result = find_or_initialize_by({
       :allocation => allocation,
+      :day => day
+    })
+    return result if result.persisted? && day < Date.today
+    result.update!({
       :office => allocation.office,
       :person => person,
       :project => allocation.project,
-      :day => day,
       :role => person.role,
       :base_rate => project.rate_for(person.role),
       :provisional => allocation.provisional,
@@ -48,6 +49,7 @@ class RevenueItem < ActiveRecord::Base
       :investment_fridays => project.investment_fridays?,
       :percent_allocated => allocation.percent_allocated
     })
+    result
   end
 
   # hstore turns values into strings, fix that

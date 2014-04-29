@@ -26,51 +26,94 @@ describe RevenueItem do
   end
   let(:normal_rate) { project.rate_for(person.role) }
 
+  let(:revenue_item) do
+    RevenueItem.for_allocation!(allocation,
+                                day: day,
+                                vacation_percentage: vacation_percentage,
+                                holiday_in_week: holiday_in_week)
+  end
   let(:revenue) do
-    RevenueItem.for_allocation(allocation,
-                               day: day,
-                               vacation_percentage: vacation_percentage,
-                               holiday_in_week: holiday_in_week).amount
+    revenue_item.amount
   end
 
-  describe "create_from_overlaps!" do
+  describe "#for_allocation!" do
 
-    context "a person assigned to one project" do
+    context "creating a new revenue item" do
+      context "a person assigned to one project" do
 
-      context "on a regular day" do
-        it "gets one day of revenue" do
-          expect(revenue).to eq(normal_rate)
-        end
-      end
-
-      context "on investment friday" do
-        let(:investment_fridays) { true }
-        let(:day) { Date.today.beginning_of_week + 4.days }
-
-        it "gets no revenue" do
-          expect(revenue).to eq(0.0)
-        end
-
-        context "when there's a holiday that week" do
-          let(:holiday_in_week) { true }
-
+        context "on a regular day" do
           it "gets one day of revenue" do
             expect(revenue).to eq(normal_rate)
           end
         end
-      end
 
-      context "who is on vacation" do
-        let(:vacation_percentage) { 100 }
+        context "on investment friday" do
+          let(:investment_fridays) { true }
+          let(:day) { Date.today.beginning_of_week + 4.days }
 
-        it "gets no revenue" do
-          expect(revenue).to eq(0.0)
+          it "gets no revenue" do
+            expect(revenue).to eq(0.0)
+          end
+
+          context "when there's a holiday that week" do
+            let(:holiday_in_week) { true }
+
+            it "gets one day of revenue" do
+              expect(revenue).to eq(normal_rate)
+            end
+          end
         end
 
-        context "for a half-day" do
-          let(:vacation_percentage) { 50 }
-          it "gets half revenue" do
-            expect(revenue).to eq(normal_rate / 2)
+        context "who is on vacation" do
+          let(:vacation_percentage) { 100 }
+
+          it "gets no revenue" do
+            expect(revenue).to eq(0.0)
+          end
+
+          context "for a half-day" do
+            let(:vacation_percentage) { 50 }
+            it "gets half revenue" do
+              expect(revenue).to eq(normal_rate / 2)
+            end
+          end
+        end
+      end
+    end
+
+    context "updating an existing revenue item" do
+
+      context "its underlying allocation changes" do
+
+        context "future allocation" do
+          let(:day) { (Date.today + 1.week).beginning_of_week }
+
+          it "updates the existing revenue item" do
+            old_item = revenue_item
+            allocation.update(percent_allocated: 50)
+            new_item = RevenueItem.for_allocation!(allocation,
+                                                   day: day,
+                                                   vacation_percentage: vacation_percentage,
+                                                   holiday_in_week: holiday_in_week)
+            expect(RevenueItem.count).to eq(1)
+            expect(new_item.id).to eq(revenue_item.id)
+            expect(new_item.amount).to eq(revenue_item.amount / 2.0)
+          end
+        end
+
+        context "past allocation" do
+          let(:day) { (Date.today - 1.week).beginning_of_week }
+
+          it "noops" do
+            old_item = revenue_item
+            allocation.update(percent_allocated: 50)
+            new_item = RevenueItem.for_allocation!(allocation,
+                                                   day: day,
+                                                   vacation_percentage: vacation_percentage,
+                                                   holiday_in_week: holiday_in_week)
+            expect(RevenueItem.count).to eq(1)
+            expect(new_item.id).to eq(revenue_item.id)
+            expect(new_item.amount).to eq(revenue_item.amount)
           end
         end
       end
