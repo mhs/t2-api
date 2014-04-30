@@ -8,6 +8,15 @@ FactoryGirl.define do
     billable { [true, false].sample }
     binding  { [true, false].sample }
 
+    rates do
+      {
+        'Developer' => 1000.0,
+        'Designer' => 1100.0,
+        'Principal' => 1200.0,
+        'Product Manager' => 1300.0
+      }
+    end
+
     trait :billable do
       name  "Nexia"
       billable true

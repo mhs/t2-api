@@ -20,20 +20,22 @@ class Project < ActiveRecord::Base
     where(holiday: true).first
   end
 
-  # TODO: make this configurable per-project
-  # this is per-day internally, but may need to be cooked on input
+  NON_BILLING_ROLES = [
+    'Apprentice',
+    'Business Development',
+    'General & Administrative',
+    'Support Staff'
+  ]
+
+  ALIASED_ROLES = [
+    'Managing Director' => 'Principal'
+  ]
+
   def rate_for(role)
-    {
-      'Apprentice' => 0.0,
-      'Business Development' => 0.0,
-      'Designer' => 7000.0,
-      'Developer' => 7000.0,
-      'General & Administrative' => 0.0,
-      'Managing Director' => 14000.0,
-      'Principal' => 14000.0,
-      'Product Manager' => 10000.0,
-      'Support Staff' => 0.0
-    }[role]
+    return 0.0 if NON_BILLING_ROLES.include?(role)
+
+    rate = rates[role] || rates[ALIASED_ROLES[role]]
+    rate.to_f / (investment_fridays? ? 4 : 5)
   end
 
   protected
