@@ -210,4 +210,22 @@ describe Allocation do
     end
   end
 
+  context "when destroyed" do
+
+    let!(:allocation) { FactoryGirl.create(:allocation) }
+    let!(:past) { RevenueItem.for_allocation!(allocation, day: (Date.today - 1)) }
+    let!(:present) { RevenueItem.for_allocation!(allocation, day: Date.today) }
+    let!(:future) { RevenueItem.for_allocation!(allocation, day: (Date.today + 1)) }
+
+    it "destroyed future revenue items and nullifies past revenue items" do
+      allocation.revenue_items.count.should eq(3)
+      allocation.destroy
+      expect(RevenueItem.exists?(past.id)).to be_true
+      expect(RevenueItem.exists?(present.id)).to be_false
+      expect(RevenueItem.exists?(future.id)).to be_false
+
+      expect(past.reload.allocation_id).to be_nil
+    end
+  end
+
 end

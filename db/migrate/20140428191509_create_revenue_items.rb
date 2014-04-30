@@ -2,7 +2,7 @@ class CreateRevenueItems < ActiveRecord::Migration
   def change
     create_table :revenue_items do |t|
       t.integer :project_id, null: false
-      t.integer :allocation_id, null: false
+      t.integer :allocation_id
       t.integer :office_id, null: false
       t.integer :person_id, null: false
       t.string  :role, null: false

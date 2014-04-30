@@ -9,6 +9,8 @@ class Allocation < ActiveRecord::Base
   has_one :office, through: :person
   has_many :revenue_items, inverse_of: :allocation
 
+  before_destroy :clean_up_revenue
+
   validates :person_id, :project_id, :start_date, :end_date, presence: true
   validates_date :end_date, on_or_after: :start_date
 
@@ -81,4 +83,13 @@ class Allocation < ActiveRecord::Base
     (1..5).cover? day.wday
   end
 
+  private
+
+  def clean_up_revenue
+    # NOTE: this is a bit tricky. Future revenue can be destroyed, but
+    #       past revenue has been reported and should not be destroyed
+    #
+    revenue_items.future.destroy_all
+    revenue_items.past.update_all(allocation_id: nil)
+  end
 end

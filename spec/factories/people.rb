@@ -8,6 +8,7 @@ FactoryGirl.define do
     twitter { "https://twitter.com/neo_innovation" }
     title   { Faker::HipsterIpsum.sentence }
     bio     { Faker::HipsterIpsum.sentence }
+    role    "Developer"
     percent_billable { 100 }
   end
 

@@ -27,9 +27,9 @@ class Project < ActiveRecord::Base
     'Support Staff'
   ]
 
-  ALIASED_ROLES = [
+  ALIASED_ROLES = {
     'Managing Director' => 'Principal'
-  ]
+  }
 
   def rate_for(role)
     return 0.0 if NON_BILLING_ROLES.include?(role)

@@ -10,6 +10,8 @@ class RevenueItem < ActiveRecord::Base
   before_save :compute_amount
 
   scope :for_project, -> (project) { where(project: project) }
+  scope :future, -> { where('day >= ?', Date.today) }
+  scope :past, -> { where('day < ?', Date.today) }
 
   store_accessor :details, :holiday_in_week, :investment_fridays, :vacation_percentage, :percent_allocated, :base_rate
 
