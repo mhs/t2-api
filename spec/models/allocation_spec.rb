@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe Allocation do
+  let(:current_user) { FactoryGirl.create(:user) }
+  let(:allocation) { FactoryGirl.create(:allocation) }
 
   it 'should not be valid without a person' do
     FactoryGirl.build(:allocation, person: nil).should_not be_valid
@@ -33,6 +35,18 @@ describe Allocation do
   it 'should not be valid with an end date before the start date' do
     FactoryGirl.build(:allocation, start_date: Date.today, end_date: 2.days.ago).should_not be_valid
   end
+
+    it 'should be valid without a creator' do
+      FactoryGirl.build(:allocation, created_by: nil).should be_valid
+    end
+
+    it 'should have a created_by if a current_user is logged on' do
+      allocation.created_by = current_user
+
+      expect(allocation.created_by.id).to eql current_user.id
+    end
+  end
+
 
   describe "by_office Scope" do
     let(:office_a_person) { FactoryGirl.create(:person) }
@@ -209,5 +223,3 @@ describe Allocation do
       Allocation.vacation.should_not include(allocation)
     end
   end
-
-end

@@ -7,6 +7,7 @@ class Allocation < ActiveRecord::Base
   belongs_to :person
   belongs_to :project
   has_one :office, through: :person
+  belongs_to :created_by, class_name: 'User', :foreign_key => 'created_by_id'
 
   validates :person_id, :project_id, :start_date, :end_date, presence: true
   validates_date :end_date, on_or_after: :start_date
