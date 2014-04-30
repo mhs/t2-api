@@ -99,6 +99,10 @@ class Person < ActiveRecord::Base
     end
   end
 
+  def revenue_items_for(start_date, end_date)
+    RevenueCalculator.new(person: self, start_date: start_date, end_date: end_date).revenue_items
+  end
+
   def availabilities_for(start_date, end_date, allocations_within_range=nil)
     overlap_calculator_for(start_date, end_date, allocations_within_range).availabilities
   end
