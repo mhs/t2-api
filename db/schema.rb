@@ -111,8 +111,8 @@ ActiveRecord::Schema.define(version: 20140501142334) do
     t.integer  "office_id"
     t.string   "email"
     t.text     "notes"
-    t.datetime "created_at",                        null: false
-    t.datetime "updated_at",                        null: false
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
     t.date     "start_date"
     t.date     "end_date"
     t.integer  "user_id"
@@ -127,7 +127,8 @@ ActiveRecord::Schema.define(version: 20140501142334) do
     t.datetime "avatar_updated_at"
     t.datetime "deleted_at"
     t.string   "role"
-    t.integer  "percent_billable",    default: 100, null: false
+    t.integer  "percent_billable",      default: 100,  null: false
+    t.boolean  "voluntary_termination", default: true
   end
 
   add_index "people", ["end_date"], name: "index_people_on_end_date", using: :btree

@@ -1,0 +1,67 @@
+<title>Employee Information</title>
+
+<h2>Employee Information</h2>
+<%= link_to "CSV", staff_report_path(format: "csv") %>
+
+<table>
+  <tr>
+    <td></td>
+    <td></td>
+    <th><%= @start_date.strftime("%m/%d/%Y") %> - <%= @end_date.strftime("%m/%d/%Y") %></th>
+  </tr>
+
+<% @counts.each do |count| %>
+  <tr>
+    <td rowspan=11 style="vertical-align: top;"><b><%= count.office.name %></b></td>
+    <td>New Billable</td>
+    <td><%= count.hired_billable %></td>
+  </tr>
+  <tr>
+    <td>Lost Billable - Voluntary</td>
+    <td><%= count.left_billable %></td>
+  </tr>
+  <tr>
+    <td>Lost Billable - Involuntary</td>
+    <td><%= count.fired_billable %></td>
+  </tr>
+  <tr>
+    <td>Total Billable</td>
+    <td><%= count.total_billable %>
+      <% if count.billable_change > 0 %>
+        <%= "(#{count.billable_change})" %>
+      <% end %>
+    </td>
+  </tr>
+  <tr>
+  </tr>
+  <tr>
+    <td>New Non-Billable</td>
+    <td><%= count.hired_unbillable %></td>
+  </tr>
+  <tr>
+    <td>Lost Non-Billable - Voluntary</td>
+    <td><%= count.left_unbillable %></td>
+  </tr>
+  <tr>
+    <td>Lost Non-Billable - Involuntary</td>
+    <td><%= count.fired_unbillable %></td>
+  </tr>
+  <tr>
+    <td>Total Non-Billable</td>
+    <td><%= count.total_unbillable %>
+      <% if count.unbillable_change > 0 %>
+        <%= "(#{count.unbillable_change})" %>
+      <% end %>
+    </td>
+  </tr>
+  <tr>
+  </tr>
+  <tr>
+    <td><b>Total Employees<b></td>
+    <td><b><%= count.total_billable+count.total_unbillable %>
+      <% if count.billable_change+count.unbillable_change > 0 %>
+        <%= "(#{count.billable_change+count.unbillable_change})" %>
+      <% end %>
+    </b></td>
+  </tr>
+<% end %>
