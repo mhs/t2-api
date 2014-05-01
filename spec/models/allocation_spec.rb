@@ -4,46 +4,12 @@ describe Allocation do
   let(:current_user) { FactoryGirl.create(:user) }
   let(:allocation) { FactoryGirl.create(:allocation) }
 
-  it 'should not be valid without a person' do
-    FactoryGirl.build(:allocation, person: nil).should_not be_valid
-  end
-
-  context 'tallying work days' do
-    it 'should count each day as 8 hours' do
-      allocation = FactoryGirl.create(:allocation, start_date: Date.parse("03-09-2013"), end_date: Date.parse("05-09-2013")) # 3 day vacation
-      expect(allocation.duration_in_hours).to eq(24)
-    end
-
-    it 'should only count weekdays' do
-      allocation = FactoryGirl.create(:allocation, start_date: 1.week.ago, end_date: 1.day.ago) # weeklong vacation
-      expect(allocation.duration_in_hours).to eq(40)
-    end
-  end
-
-  it 'should not be valid without a project' do
-    FactoryGirl.build(:allocation, project: nil).should_not be_valid
-  end
-
-  it 'should not be valid without a start date' do
-    FactoryGirl.build(:allocation, start_date: nil).should_not be_valid
-  end
-
-  it 'should not be valid without a end_date' do
-    FactoryGirl.build(:allocation, end_date: nil).should_not be_valid
-  end
-
   it 'should not be valid with an end date before the start date' do
     FactoryGirl.build(:allocation, start_date: Date.today, end_date: 2.days.ago).should_not be_valid
   end
 
   it 'should be valid without a creator' do
     FactoryGirl.build(:allocation, creator: nil).should be_valid
-  end
-
-  it 'should have a creator if a current_user is logged on' do
-    allocation.creator = current_user
-
-    expect(allocation.creator.id).to eql current_user.id
   end
 end
 
@@ -56,11 +22,6 @@ describe "by_office Scope" do
   before do
     @office_a_allocation = FactoryGirl.create(:allocation, project: project, person: office_a_person)
     @office_b_allocation = FactoryGirl.create(:allocation, project: project, person: office_b_person)
-  end
-
-  it 'should return an ActiveRecord::Relation Class' do
-    Allocation.by_office(office_a_person).should be_kind_of(ActiveRecord::Relation)
-    Allocation.by_office(nil).should be_kind_of(ActiveRecord::Relation)
   end
 
   it 'should be able to fetch Allocations for giveno Office' do
@@ -95,19 +56,6 @@ describe "starting_soon Scope" do
   it 'should not include allocations starting further then 2 days from today' do
     allocation = FactoryGirl.create(:allocation, start_date: 3.days.from_now, end_date: 5.days.from_now)
     Allocation.starting_soon.should_not include(allocation)
-  end
-end
-
-describe "provisional Scope" do
-
-  it 'should not include allocations where provisional is false' do
-    allocation = FactoryGirl.create(:allocation, provisional: false)
-    Allocation.provisional.should_not include(allocation)
-  end
-
-  it 'should include allocations where provisional is true' do
-    allocation = FactoryGirl.create(:allocation, provisional: true)
-    Allocation.provisional.should include(allocation)
   end
 end
 
@@ -177,20 +125,6 @@ describe '.unassignable' do
     project.destroy
     Allocation.unassignable.should_not include(allocation)
   end
-end
-
-describe '.with_start_date' do
-  let!(:time_window) { Allocation::TIME_WINDOW }
-  let!(:allocation_before) { FactoryGirl.create(:allocation, start_date: 3.weeks.ago, end_date: 1.week.ago) }
-  let!(:allocation_start) { FactoryGirl.create(:allocation, start_date: 3.weeks.ago, end_date: 1.week.from_now) }
-  let!(:allocation_end) { FactoryGirl.create(:allocation, start_date: 3.weeks.from_now, end_date: (time_window + 1).weeks.from_now) }
-  let!(:allocation_after) { FactoryGirl.create(:allocation, start_date: (time_window + 1).weeks.from_now, end_date: (time_window + 5).weeks.from_now) }
-  subject(:allocations) { Allocation.with_start_date( Date.today ) }
-
-  it { should_not include allocation_before }
-  it { should include allocation_start }
-  it { should include allocation_end }
-  it { should_not include allocation_after }
 end
 
 describe '.between' do

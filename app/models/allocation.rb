@@ -2,7 +2,6 @@ class Allocation < ActiveRecord::Base
   attr_accessible :notes, :start_date, :end_date, :billable, :binding, :provisional, :person, :person_id, :project, :project_id, :percent_allocated
 
   attr_accessor :conflicts # used by the serialization code
-  TIME_WINDOW = 20 # weeks
 
   belongs_to :person
   belongs_to :project
@@ -42,7 +41,6 @@ class Allocation < ActiveRecord::Base
   scope :billable, -> { where(billable: true) }
   scope :provisional, -> { where(provisional: true) }
   scope :bound, -> { where(binding: true) }
-  scope :with_start_date, lambda { |d| where("allocations.start_date <= ?", d.to_date + TIME_WINDOW.weeks).where("allocations.end_date >= ?", d.to_date).current }
   scope :vacation, -> { current.where(:projects => { vacation: true }) }
   scope :by_office, lambda { |office| office ? joins(:office).where("people.office_id" => office.id) : where(false) }
   scope :includes_provisional, lambda { |x| x ? where(nil) : where(provisional: false) }
@@ -51,10 +49,6 @@ class Allocation < ActiveRecord::Base
 
   delegate :name, to: :project, prefix: true, :allow_nil => true
 
-  def duration_in_hours
-    duration_in_days * 8
-  end
-
   def vacation?
     project.vacation?
   end
@@ -62,21 +56,4 @@ class Allocation < ActiveRecord::Base
   def conflicts
     @conflicts ||= []
   end
-
-  private
-
-  def duration_in_days
-    weekdays.count
-  end
-
-  def weekdays
-    (start_date && end_date) ?
-      (start_date.to_date..end_date.to_date).select {|day| is_weekday? day } :
-      []
-  end
-
-  def is_weekday? day
-    (1..5).cover? day.wday
-  end
-
 end
