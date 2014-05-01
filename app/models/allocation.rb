@@ -7,7 +7,7 @@ class Allocation < ActiveRecord::Base
   belongs_to :person
   belongs_to :project
   has_one :office, through: :person
-  belongs_to :created_by, class_name: 'User', :foreign_key => 'created_by_id'
+  belongs_to :creator, class_name: 'User'
 
   validates :person_id, :project_id, :start_date, :end_date, presence: true
   validates_date :end_date, on_or_after: :start_date
@@ -36,9 +36,11 @@ class Allocation < ActiveRecord::Base
 
   scope :on_date, lambda { |d| for_date(d).current }
   scope :this_year, -> { between(Date.today.beginning_of_year, Date.today.end_of_year).current }
+  scope :starting_soon, -> { where("allocations.start_date >= ?", Date.today ).where("allocations.start_date <= ?", 2.days.from_now) }
   scope :assignable, -> { current.includes(:project).where(:projects => { vacation: false }) }
   scope :unassignable, -> { current.includes(:project).where(:projects => { vacation: true }) }
   scope :billable, -> { where(billable: true) }
+  scope :provisional, -> { where(provisional: true) }
   scope :bound, -> { where(binding: true) }
   scope :with_start_date, lambda { |d| where("allocations.start_date <= ?", d.to_date + TIME_WINDOW.weeks).where("allocations.end_date >= ?", d.to_date).current }
   scope :vacation, -> { current.where(:projects => { vacation: true }) }
