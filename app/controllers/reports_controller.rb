@@ -1,3 +1,5 @@
+require 'csv'
+
 class OfficeCounts
   attr_accessor :office, :start_date, :end_date,
     :hired_billable, :left_billable, :fired_billable, :total_billable,
@@ -53,6 +55,22 @@ class OfficeCounts
       end
     end
   end
+
+  def self.column_names
+    ["Office",
+     "New Billable", "Lost Billable - Voluntary", "Lost Billable - Involuntary",
+     "Total Billable", "Billable Change",
+     "New Non-Billable", "Lost Non-Billable - Voluntary", "Lost Non-Billable - Involuntary",
+     "Total Non-Billable", "Non-Billable Change",
+     "Total Employees", "Total Change"]
+  end
+
+  def column_values
+    [ @office.name,
+      @hired_billable, @left_billable, @fired_billable, @total_billable, @billable_change,
+      @hired_unbillable, @left_unbillable, @fired_unbillable, @total_unbillable, @unbillable_change,
+      @total_billable+@total_unbillable, @billable_change+@unbillable_change]
+  end
 end
 
 
@@ -63,6 +81,25 @@ class ReportsController < ApplicationController
     @end_date = params[:end_date] || now
     @start_date = params[:start_date] || now.day.days.ago.beginning_of_month
     @counts = Office.all.collect { |office| office_staff_report(office,@start_date,@end_date) }
+    respond_to do |format|
+      format.html
+      format.csv { send_data staff_csv }
+    end
+  end
+
+  def staff_csv
+    CSV.generate(col_sep: ", ") do |csv|
+      csv << csv_line(["Staffing Delta Report",
+                       @start_date.strftime("%m/%d/%Y"),@end_date.strftime("%m/%d/%Y")])
+      csv << csv_line(OfficeCounts.column_names)
+      @counts.each do |count|
+        csv << csv_line(count.column_values)
+      end
+    end
+  end
+
+  def csv_line column_items
+    column_items.map { |item| item.to_s }
   end
 
   def office_staff_report office, start_date, end_date
