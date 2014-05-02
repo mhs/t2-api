@@ -1,0 +1,10 @@
+%div
+  %h1
+    Attention #{@creator.try(:name) || @creator.email}
+  %p You have created one or more provisional projects/allocations in T2 that are due to start in the next two days or have already started. Please adjust to reflect your current understanding of the project(s).
+  %h4 Upcoming Provisional Project Allocations:
+  %ul
+    - @allocations.each do |allocation|
+      %li
+        = allocation.start_date.to_formatted_s(:long_ordinal)
+        \- #{allocation.person.name} on #{allocation.project.name}
