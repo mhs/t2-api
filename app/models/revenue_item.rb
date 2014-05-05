@@ -13,7 +13,14 @@ class RevenueItem < ActiveRecord::Base
   scope :future, -> { where('day >= ?', Date.today) }
   scope :past, -> { where('day < ?', Date.today) }
 
+  scope :before, -> (date) { where('day <= ?', date.to_date) }
+  scope :after, -> (date) { where('day >= ?', date.to_date) }
+
   store_accessor :details, :holiday_in_week, :investment_fridays, :vacation_percentage, :percent_allocated, :base_rate
+
+  def self.between(start_date, end_date)
+    before(end_date).after(start_date)
+  end
 
   def self.for_allocation!(allocation, day:, vacation_percentage: 0, holiday_in_week: false)
     person = allocation.person
@@ -22,7 +29,7 @@ class RevenueItem < ActiveRecord::Base
       :allocation => allocation,
       :day => day
     })
-    return result if result.persisted? && day < Date.today
+    return result if result.persisted? && day < (Date.today - 1.day)
     result.update!({
       :office => allocation.office,
       :person => person,
