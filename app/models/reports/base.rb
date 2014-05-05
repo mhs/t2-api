@@ -4,6 +4,10 @@ class Reports::Base
     raise NotImplementedError
   end
 
+  def filename
+    raise NotImplementedError
+  end
+
   def to_csv_string
     raise NotImplementedError
   end

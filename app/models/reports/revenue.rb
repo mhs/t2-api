@@ -5,15 +5,19 @@ class Reports::Revenue
 
   attr_reader :start_date, :end_date
 
-  def initialize(start_date: Date.today.beginning_of_month, end_date: (start_date + 2.months).end_of_month)
-    @start_date = start_date
-    @end_date = end_date
+  def initialize(start_date, end_date)
+    @start_date = start_date || Date.today.beginning_of_month
+    @end_date = end_date || (@start_date + 2.months).end_of_month
     @projects_hash = Project.within_date_range(start_date, end_date) { Project.all.to_a }.index_by(&:id)
     @offices_hash = Office.all.to_a.index_by(&:id)
   end
 
   def self.column_names
-    %w(Year Month Project Office Role Booked Projected)
+    %w[Year Month Project Office Role Booked Projected]
+  end
+
+  def filename
+    "Revenue: #{@start_date}-#{@end_date}"
   end
 
   def rows

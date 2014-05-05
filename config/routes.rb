@@ -39,7 +39,10 @@ T2Api::Application.routes.draw do
     end
   end
 
-  get 'staff_report' => "reports#staff"
+  resource :reports, only: [] do
+    get :revenue
+    get :staff
+  end
 
   get "navbar" => "application#navbar"
   root to: "application#show"
