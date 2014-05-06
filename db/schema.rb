@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140429143404) do
+ActiveRecord::Schema.define(version: 20140501142334) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -30,10 +30,12 @@ ActiveRecord::Schema.define(version: 20140429143404) do
     t.integer  "slot_id"
     t.integer  "percent_allocated", default: 100,   null: false
     t.boolean  "provisional",       default: false
+    t.integer  "creator_id"
   end
 
   add_index "allocations", ["billable"], name: "index_allocations_on_billable", using: :btree
   add_index "allocations", ["binding"], name: "index_allocations_on_binding", using: :btree
+  add_index "allocations", ["creator_id"], name: "index_allocations_on_creator_id", using: :btree
   add_index "allocations", ["end_date"], name: "index_allocations_on_end_date", using: :btree
   add_index "allocations", ["person_id"], name: "index_allocations_on_person_id", using: :btree
   add_index "allocations", ["project_id"], name: "index_allocations_on_project_id", using: :btree
@@ -91,6 +93,9 @@ ActiveRecord::Schema.define(version: 20140429143404) do
     t.integer "holiday_id"
   end
 
+  add_index "office_holidays", ["holiday_id"], name: "index_office_holidays_on_holiday_id", using: :btree
+  add_index "office_holidays", ["office_id"], name: "index_office_holidays_on_office_id", using: :btree
+
   create_table "offices", force: true do |t|
     t.string   "name"
     t.text     "notes"
@@ -129,6 +134,7 @@ ActiveRecord::Schema.define(version: 20140429143404) do
   add_index "people", ["end_date"], name: "index_people_on_end_date", using: :btree
   add_index "people", ["office_id"], name: "index_people_on_office_id", using: :btree
   add_index "people", ["start_date"], name: "index_people_on_start_date", using: :btree
+  add_index "people", ["user_id"], name: "index_people_on_user_id", using: :btree
 
   create_table "project_offices", force: true do |t|
     t.integer "project_id", null: false
@@ -198,6 +204,7 @@ ActiveRecord::Schema.define(version: 20140429143404) do
 
   add_index "taggings", ["tag_id"], name: "index_taggings_on_tag_id", using: :btree
   add_index "taggings", ["taggable_id", "taggable_type", "context"], name: "index_taggings_on_taggable_id_and_taggable_type_and_context", using: :btree
+  add_index "taggings", ["tagger_id", "tagger_type"], name: "index_taggings_on_tagger_id_and_tagger_type", using: :btree
 
   create_table "tags", force: true do |t|
     t.string "name"
@@ -218,6 +225,8 @@ ActiveRecord::Schema.define(version: 20140429143404) do
   end
 
   add_index "users", ["authentication_token"], name: "index_users_on_authentication_token", unique: true, using: :btree
+  add_index "users", ["office_id"], name: "index_users_on_office_id", using: :btree
+  add_index "users", ["t2_application_id"], name: "index_users_on_t2_application_id", using: :btree
 
   create_table "versions", force: true do |t|
     t.string   "item_type",  null: false

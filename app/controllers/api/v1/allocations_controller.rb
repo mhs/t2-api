@@ -22,6 +22,7 @@ class Api::V1::AllocationsController < Api::V1::BaseController
   # POST /allocations.json
   def create
     allocation = Allocation.new(params[:allocation])
+    allocation.creator = current_user
     if allocation.save
       with_conflicts = allocation.person.allocations_with_conflicts_for(window_start, window_end)
       new_with_conflicts = with_conflicts.find { |a| a.id == allocation.id } || allocation

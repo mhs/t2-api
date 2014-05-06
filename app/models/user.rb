@@ -4,6 +4,7 @@ class User < ActiveRecord::Base
   belongs_to :office
   has_one :person, inverse_of: :user
   belongs_to :t2_application
+  has_many :created_allocations, class_name: 'Allocation', :foreign_key => 'creator_id'
 
   before_create :set_date_format_if_unset
 
