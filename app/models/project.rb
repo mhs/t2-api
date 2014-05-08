@@ -38,6 +38,10 @@ class Project < ActiveRecord::Base
     rate.to_f / (investment_fridays? ? 4 : 5)
   end
 
+  def rates
+    super || {}
+  end
+
   protected
 
   def update_provisional_allocations

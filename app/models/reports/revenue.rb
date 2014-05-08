@@ -52,12 +52,12 @@ class Reports::Revenue
   memoize :combined_revenue
 
   def projected_revenues
-    grouped_revenue.where(provisional: false).sum(:amount)
+    grouped_revenue.sum(:amount)
   end
   memoize :projected_revenues
 
   def booked_revenues
-    grouped_revenue.sum(:amount)
+    grouped_revenue.where(provisional: false).sum(:amount)
   end
   memoize :booked_revenues
 
