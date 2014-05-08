@@ -1,3 +1,6 @@
+[![Stories in Ready](https://badge.waffle.io/neo/t2-api.png?label=ready&title=Ready)](https://waffle.io/neo/t2-api)
+
+
 # T2-API
 
 This is the API layer for the suite of apps used by Neons to run the business.
