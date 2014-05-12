@@ -13,7 +13,7 @@ class Reports::Revenue
   end
 
   def self.column_names
-    %w[Year Month Project Office Role Booked Projected]
+    %w[Month Project Office Role Booked Projected]
   end
 
   def filename
@@ -36,8 +36,8 @@ class Reports::Revenue
   private
 
   def named_revenue
-    combined_revenue.transform_keys do |year, month, project_id, office_id, role|
-      [year.to_i, month.to_i, @projects_hash[project_id].name, @offices_hash[office_id].name,  role]
+    combined_revenue.transform_keys do |month, project_id, office_id, role|
+      [month, @projects_hash[project_id].name, @offices_hash[office_id].name,  role]
     end.sort
   end
 
@@ -62,7 +62,7 @@ class Reports::Revenue
   memoize :booked_revenues
 
   def grouped_revenue
-    proxy = RevenueItem.group('EXTRACT(year FROM day)', 'EXTRACT(month FROM day)', :project_id, :office_id, :role)
+    proxy = RevenueItem.group("to_char(day, 'Mon-YY')", :project_id, :office_id, :role)
     proxy.between(start_date, end_date)
   end
 
