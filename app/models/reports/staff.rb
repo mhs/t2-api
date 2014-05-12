@@ -104,7 +104,7 @@ class Reports::Staff < Reports::Base
     CSV.generate do |csv|
       csv << self.class.column_names
       rows.each do |count|
-        csv << csv_line(count.column_values)
+        csv << count.column_values
       end
     end
   end
