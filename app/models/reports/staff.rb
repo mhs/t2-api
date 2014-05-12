@@ -15,6 +15,7 @@ class OfficeCounts
 
   def consider_person(person)
     person_start_date = person.start_date || (@start_date - 1.day)
+    return if person_start_date > @end_date
     if person.percent_billable > 0
       if !person.end_date || (person.end_date && person.end_date >= @start_date)
         @total_billable += 1
