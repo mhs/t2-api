@@ -93,7 +93,7 @@ class Reports::Staff < Reports::Base
   end
 
   def filename
-    "Staffing Delta: #{start_date}-#{end_date}"
+    "staffing_delta_#{start_date}-#{end_date}.csv"
   end
 
   def rows
