@@ -1,7 +1,10 @@
 class Api::V1::ProjectsController < Api::V1::BaseController
-  # GET /projects.json
+
+  respond_to :json
+
   def index
-    render json: with_ids_from_params(Project.includes(:offices, :allocations))
+    projects = Project.paginate(page: params[:page] || 1)
+    respond_with(projects, each_serializer: ProjectListItemSerializer)
   end
 
   # GET /projects/1.json
