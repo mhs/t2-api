@@ -17,7 +17,7 @@ class Reports::Revenue
   end
 
   def filename
-    "revenue_#{@start_date}-#{@end_date}.csv"
+    "revenue_#{@start_date}-#{@end_date}_on_#{Time.zone.now.to_date}.csv"
   end
 
   def rows
