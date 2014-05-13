@@ -62,7 +62,7 @@ class Reports::Revenue
   memoize :booked_revenues
 
   def grouped_revenue
-    proxy = RevenueItem.group("to_char(day, 'Mon-YY')", :project_id, :office_id, :role)
+    proxy = RevenueItem.group("to_char(day, 'YYYY-MM-01')", :project_id, :office_id, :role)
     proxy.between(start_date, end_date)
   end
 
