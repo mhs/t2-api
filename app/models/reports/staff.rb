@@ -94,7 +94,7 @@ class Reports::Staff < Reports::Base
   end
 
   def filename
-    "staffing_delta_#{start_date}-#{end_date}.csv"
+    "staffing_delta_#{start_date}-#{end_date}_on_#{Time.zone.now.to_date}.csv"
   end
 
   def rows
