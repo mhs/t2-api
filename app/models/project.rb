@@ -20,6 +20,16 @@ class Project < ActiveRecord::Base
     where(holiday: true).first
   end
 
+  def self.search(query)
+    return where(false) if query.blank?
+    where('name ILIKE ?', "%#{query}%")
+  end
+
+  def self.for_office_id(office_id)
+    return where(false) if office_id.blank?
+    joins(:offices).where(offices: { id: office_id })
+  end
+
   NON_BILLING_ROLES = [
     'Apprentice',
     'Business Development',

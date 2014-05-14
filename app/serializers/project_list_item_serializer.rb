@@ -1,8 +1,8 @@
 class ProjectListItemSerializer < ActiveModel::Serializer
 
-  attributes :id, :name, :start_date, :end_date, :selling_office
+  attributes :id, :name, :start_date, :end_date
 
-  has_one :selling_office
+  has_one :selling_office, embed: :ids
 
   def selling_office
     object.offices.sample
