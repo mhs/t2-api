@@ -23,6 +23,7 @@ namespace :revenue do
     project_rates[83]  = { investment_fridays: false, rates: { 'Principal' => 14000 } }
     project_rates[160] = { investment_fridays: true, rates: { 'Developer' => 7000, 'Designer' => 7000, 'Principal' => 12000 } }
     project_rates[191] = { investment_fridays: true, rates: { 'Developer' => 5834 } }
+    project_rates[180] = { investment_fridays: true, rates: { 'Developer' => 5760 } }
 
     project_rates.keys.each do |project_id|
       project = Project.find(project_id)
