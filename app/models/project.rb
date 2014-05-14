@@ -8,7 +8,7 @@ class Project < ActiveRecord::Base
   has_many :offices, through: :project_offices
   has_many :revenue_items, inverse_of: :project
   has_many_current :allocations
-  has_many_current :people, through: :allocations
+  has_many_current :people, -> { uniq }, through: :allocations
 
   acts_as_paranoid
 
