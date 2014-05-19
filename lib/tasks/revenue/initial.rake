@@ -5,7 +5,7 @@ namespace :revenue do
     project_rates[173] = { investment_fridays: true, rates: { 'Developer' => 6400, 'Designer' => 6400, 'Principal' => 11200, 'Product Manager' => 0 } }
     project_rates[172] = { investment_fridays: true, rates: { 'Developer' => 2000, 'Designer' => 2000 } }
     project_rates[134] = { investment_fridays: false, rates: { 'Developer' => 7200, 'Designer' => 5400, 'Principal' => 7200, 'Product Manager' => 5400 } }
-    project_rates[194] = { investment_fridays: false, rates: { 'Developer' => 7200, 'Principal' => 14400, 'Product Manager' => 7200 } }
+    project_rates[205] = { investment_fridays: false, rates: { 'Developer' => 7200, 'Principal' => 14400, 'Product Manager' => 7200 } }
     project_rates[168] = { investment_fridays: false, rates: { 'Developer' => 9000, 'Designer' => 9250, 'Principal' => 15300 } }
     project_rates[203] = { investment_fridays: false, rates: { 'Developer' => 8000, 'Designer' => 8000 } }
     project_rates[195] = { investment_fridays: false, rates: { 'Developer' => 7400, 'Designer' => 7400, 'Principal' => 12000 } }
@@ -18,7 +18,7 @@ namespace :revenue do
     project_rates[73]  = { investment_fridays: false, rates: { 'Developer' => 7360, 'Principal' => 0 } }
     project_rates[200] = { investment_fridays: true, rates: { 'Developer' => 6000, 'Designer' => 6000, 'Principal' => 12000 } }
     project_rates[87]  = { investment_fridays: true, rates: { 'Developer' => 5938, 'Designer' => 5938, 'Product Manager' => 5937.5 } }
-    project_rates[197] = { investment_fridays: false, rates: { 'Developer' => 7200, 'Designer' => 7200, 'Principal' => 3600 } }
+    project_rates[197] = { investment_fridays: false, rates: { 'Developer' => 7200, 'Designer' => 7200, 'Principal' => 11200 } }
     project_rates[105] = { investment_fridays: false, rates: { 'Developer' => 6752, 'Designer' => 0, 'Principal' => 6752 } }
     project_rates[83]  = { investment_fridays: false, rates: { 'Principal' => 14000 } }
     project_rates[160] = { investment_fridays: true, rates: { 'Developer' => 5600, 'Designer' => 5600, 'Principal' => 12000 } }
