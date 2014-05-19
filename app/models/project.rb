@@ -1,7 +1,7 @@
 class Project < ActiveRecord::Base
   include HasManyCurrent
 
-  attr_accessible :name, :notes, :billable, :binding, :provisional, :slug, :client_principal_id, :vacation, :start_date, :end_date, :office_ids
+  attr_accessible :name, :notes, :billable, :binding, :provisional, :slug, :client_principal_id, :vacation, :start_date, :end_date, :office_ids, :rates
 
   has_one :client_principal, class_name: "Person"
   has_many :project_offices
@@ -22,7 +22,7 @@ class Project < ActiveRecord::Base
 
   def self.search(query)
     return where(false) if query.blank?
-    where('name ILIKE ?', "%#{query}%")
+    where('projects.name ILIKE ?', "%#{query}%")
   end
 
   def self.for_office_id(office_id)
