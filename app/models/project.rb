@@ -30,6 +30,14 @@ class Project < ActiveRecord::Base
     joins(:offices).where(offices: { id: office_id })
   end
 
+  def self.base_order
+    order(:billable => :desc).where(holiday: false, vacation: false)
+  end
+
+  def self.only_active
+    where('end_date IS NULL OR end_date >= ?', Date.today)
+  end
+
   NON_BILLING_ROLES = [
     'Apprentice',
     'Business Development',

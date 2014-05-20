@@ -3,7 +3,9 @@ class Api::V1::ProjectsController < Api::V1::BaseController
   respond_to :json
 
   def index
-    projects = Project.search(params[:search]).for_office_id(params[:office_id]).paginate(page: params[:page] || 1)
+    proxy = Project.search(params[:search]).for_office_id(params[:office_id]).base_order
+    proxy = proxy.order(:name).only_active
+    projects = proxy.paginate(page: params[:page] || 1)
     respond_with(projects, each_serializer: ProjectListItemSerializer, meta: { page: params[:page].to_i, total: projects.total_pages})
   end
 
