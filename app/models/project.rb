@@ -12,6 +12,9 @@ class Project < ActiveRecord::Base
 
   acts_as_paranoid
 
+  validates :name, presence: true, uniqueness: true
+  validates :office_ids, presence: true
+
   after_update :update_provisional_allocations
 
   scope :assignable, -> { where(vacation: true) }
@@ -28,6 +31,14 @@ class Project < ActiveRecord::Base
   def self.for_office_id(office_id)
     return where(false) if office_id.blank?
     joins(:offices).where(offices: { id: office_id })
+  end
+
+  def self.base_order
+    order(:billable => :desc).where(holiday: false, vacation: false)
+  end
+
+  def self.only_active
+    where('end_date IS NULL OR end_date >= ?', Date.today)
   end
 
   NON_BILLING_ROLES = [
