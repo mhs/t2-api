@@ -7,6 +7,7 @@ FactoryGirl.define do
     notes    { Faker::HipsterIpsum.sentence }
     billable { [true, false].sample }
     binding  { [true, false].sample }
+    office_ids { [FactoryGirl.create(:office).id] }
 
     rates do
       {

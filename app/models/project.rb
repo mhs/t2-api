@@ -12,6 +12,9 @@ class Project < ActiveRecord::Base
 
   acts_as_paranoid
 
+  validates :name, presence: true, uniqueness: true
+  validates :office_ids, presence: true
+
   after_update :update_provisional_allocations
 
   scope :assignable, -> { where(vacation: true) }
