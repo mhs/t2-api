@@ -1,16 +1,16 @@
 <title>Employee Information</title>
 
 <h2>Employee Information</h2>
-<%= link_to "CSV", staff_report_path(format: "csv") %>
+<%= link_to "CSV", staff_reports_path(format: "csv") %>
 
 <table>
   <tr>
     <td></td>
     <td></td>
-    <th><%= @start_date.strftime("%m/%d/%Y") %> - <%= @end_date.strftime("%m/%d/%Y") %></th>
+    <th><%= @staff.start_date %> - <%= @staff.end_date %></th>
   </tr>
 
-<% @counts.each do |count| %>
+<% @staff.counts.each do |count| %>
   <tr>
     <td rowspan=11 style="vertical-align: top;"><b><%= count.office.name %></b></td>
     <td>New Billable</td>

@@ -6,13 +6,17 @@ module HasManyCurrent
   end
 
   module ClassMethods
-    def has_many_current(name, options={})
-      has_many name, filter_lambda(name), options
+    def has_many_current(name, scope=nil, options={})
+      if scope.is_a?(Hash)
+        options = scope
+        scope = nil
+      end
+      has_many name, filter_lambda(name, scope), options
     end
 
     private
 
-    def filter_lambda(name)
+    def filter_lambda(name, scope)
       # apply start_date and end_date to the specified scope.
       # This will be instance_eval'ed onto the Relation
       -> {
@@ -23,6 +27,7 @@ module HasManyCurrent
         #       use bare Arel to avoid trouble
         rel = rel.where(table[:start_date].lteq(e).or(table[:start_date].eq(nil))) if e
         rel = rel.where(table[:end_date].gteq(s).or(table[:end_date].eq(nil))) if s
+        rel = rel.instance_exec(&scope) if scope
         rel
       }
     end

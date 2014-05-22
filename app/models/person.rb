@@ -26,6 +26,7 @@ class Person < ActiveRecord::Base
 
   belongs_to  :user, inverse_of: :person
   has_many_current :allocations
+  has_many :revenue_items, inverse_of: :person
   belongs_to  :office
   belongs_to  :project
 
@@ -98,6 +99,10 @@ class Person < ActiveRecord::Base
     end
   end
 
+  def revenue_items_for(start_date, end_date)
+    RevenueCalculator.new(person: self, start_date: start_date, end_date: end_date).revenue_items
+  end
+
   def availabilities_for(start_date, end_date, allocations_within_range=nil)
     overlap_calculator_for(start_date, end_date, allocations_within_range).availabilities
   end
@@ -132,8 +137,6 @@ class Person < ActiveRecord::Base
     end
   end
 
-  private
-
   def overlap_calculator_for(start_date, end_date, allocations_within_range=nil)
     min_start_date = self.start_date.nil? ? start_date : [self.start_date,start_date].max
     max_end_date = self.end_date.nil? ? end_date : [self.end_date,end_date].min
@@ -144,6 +147,8 @@ class Person < ActiveRecord::Base
     OverlapCalculator.new(initial_region, allocations_within_range)
   end
   memoize :overlap_calculator_for
+
+  private
 
   def create_or_associate_user
     self.user = User.find_or_create_by!(:email => email.downcase) do |u|

@@ -174,22 +174,22 @@ describe '.this_year' do
     Allocation.this_year.should_not include(allocation)
   end
 
-  it "does not include allocations ending after the year boundary" do
-    allocation = FactoryGirl.create(:allocation, start_date: start_date, end_date: end_of_year + 1.day)
-    Allocation.this_year.should_not include(allocation)
-  end
-end
+  context "when destroyed" do
 
-describe '.vacation' do
-  let(:vacation_project) { FactoryGirl.create(:project, :vacation) }
+    let!(:allocation) { FactoryGirl.create(:allocation) }
+    let!(:past) { RevenueItem.for_allocation!(allocation, day: (Date.today - 1)) }
+    let!(:present) { RevenueItem.for_allocation!(allocation, day: Date.today) }
+    let!(:future) { RevenueItem.for_allocation!(allocation, day: (Date.today + 1)) }
 
-  it 'includes allocations for vacation projects' do
-    allocation = FactoryGirl.create(:allocation, project: vacation_project)
-    Allocation.vacation.should include(allocation)
+    it "destroyed future revenue items and nullifies past revenue items" do
+      allocation.revenue_items.count.should eq(3)
+      allocation.destroy
+      expect(RevenueItem.exists?(past.id)).to be_true
+      expect(RevenueItem.exists?(present.id)).to be_false
+      expect(RevenueItem.exists?(future.id)).to be_false
+
+      expect(past.reload.allocation_id).to be_nil
+    end
   end
 
-  it 'does not include allocations for non-vacation projects' do
-    allocation = FactoryGirl.create(:allocation)
-    Allocation.vacation.should_not include(allocation)
-  end
 end

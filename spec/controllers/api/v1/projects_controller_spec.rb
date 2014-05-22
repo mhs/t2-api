@@ -10,10 +10,10 @@ describe Api::V1::ProjectsController do
     it "should respond with list of projects" do
       projects = FactoryGirl.create_list :project, 2
 
-      get :index
+      get :index, format: :json
 
       resp = JSON.parse(response.body)
-      resp.keys.should eql(["projects"])
+      resp.keys.should eql(["projects", "meta"])
       resp["projects"].should have(2).items
     end
   end

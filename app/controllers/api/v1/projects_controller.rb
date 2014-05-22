@@ -1,16 +1,22 @@
 class Api::V1::ProjectsController < Api::V1::BaseController
-  # GET /projects.json
+
+  respond_to :json
+
   def index
-    render json: with_ids_from_params(Project.includes(:offices, :allocations))
+    proxy = Project.search(params[:search]).for_office_id(params[:office_id]).base_order
+    proxy = proxy.order(:name)
+    unless params[:show_archived] == 'true' # LOL YAVASCRIPT
+      proxy = proxy.only_active
+    end
+    projects = proxy.paginate(page: params[:page] || 1)
+    respond_with(projects, each_serializer: ProjectListItemSerializer, meta: { page: params[:page].to_i, total: projects.total_pages})
   end
 
-  # GET /projects/1.json
   def show
     project = Project.find(params[:id])
     render json: project
   end
 
-  # POST /projects.json
   def create
     project = Project.new(params[:project])
     if project.save
@@ -20,17 +26,15 @@ class Api::V1::ProjectsController < Api::V1::BaseController
     end
   end
 
-  # PUT /projects/1.json
   def update
     project = Project.find(params[:id])
     if project.update_attributes(params[:project])
-      render json: project, status: :ok, serializer: UpdatedProjectSerializer
+      render json: project, status: :ok
     else
       render json: { errors: project.errors }, status: :unprocessable_entity
     end
   end
 
-  # DELETE /projects/1.json
   def destroy
     project = Project.find(params[:id])
     project.destroy

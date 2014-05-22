@@ -7,6 +7,16 @@ FactoryGirl.define do
     notes    { Faker::HipsterIpsum.sentence }
     billable { [true, false].sample }
     binding  { [true, false].sample }
+    office_ids { [FactoryGirl.create(:office).id] }
+
+    rates do
+      {
+        'Developer' => 1000.0,
+        'Designer' => 1100.0,
+        'Principal' => 1200.0,
+        'Product Manager' => 1300.0
+      }
+    end
 
     trait :billable do
       name  "Nexia"

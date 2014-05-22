@@ -21,6 +21,12 @@ FactoryGirl.define do
 
     trait :billable do
       billable true
+      binding true
+    end
+
+    trait :vacation do
+      billable false
+      binding true
     end
 
     trait :provisional do

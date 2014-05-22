@@ -158,10 +158,28 @@ ActiveRecord::Schema.define(version: 20140501142334) do
     t.date     "end_date"
     t.boolean  "holiday",             default: false, null: false
     t.boolean  "provisional",         default: false
+    t.boolean  "investment_fridays",  default: false
+    t.hstore   "rates"
   end
 
   add_index "projects", ["billable"], name: "index_projects_on_billable", using: :btree
   add_index "projects", ["binding"], name: "index_projects_on_binding", using: :btree
+
+  create_table "revenue_items", force: true do |t|
+    t.integer  "project_id",                                             null: false
+    t.integer  "allocation_id"
+    t.integer  "office_id",                                              null: false
+    t.integer  "person_id",                                              null: false
+    t.string   "role",                                                   null: false
+    t.date     "day",                                                    null: false
+    t.boolean  "provisional",                            default: false
+    t.decimal  "amount",        precision: 10, scale: 2, default: 0.0
+    t.hstore   "details"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "revenue_items", ["day", "office_id", "project_id", "allocation_id", "person_id", "role", "provisional"], name: "index_all_the_things", unique: true, using: :btree
 
   create_table "snapshots", force: true do |t|
     t.text     "utilization"
