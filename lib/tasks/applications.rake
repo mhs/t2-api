@@ -8,6 +8,7 @@ namespace :applications do
       {url: "http://t2allocation.neo.com",       icon: "📊", title: "Allocations",  classes: "allocations"},
       {url: "http://t2utilization.neo.com",      icon: "📈", title: "Utilization"},
       {url: "http://t2people.neo.com",           icon: "👤", title: "Neons"},
+      {url: "http://t2projects.neo.com",         icon: "", title: "Projects"}
     ]
 
     applications_attributes.each_with_index do |attrs, index|
@@ -22,6 +23,7 @@ namespace :applications do
       {url: "http://t2allocation-staging.neo.com",       icon: "📊", title: "Allocations",  classes: "allocations"},
       {url: "http://t2utilization-staging.neo.com",      icon: "📈", title: "Utilization"},
       {url: "http://t2people-staging.neo.com",           icon: "👤", title: "Neons"},
+      {url: "http://t2projects-staging.neo.com",         icon: "", title: "Projects"}
     ]
 
     applications_attributes.each_with_index do |attrs, index|
