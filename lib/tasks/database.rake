@@ -12,22 +12,22 @@ namespace :db do
     sysputs "heroku pgbackups:capture -a t2-staging --expire"
     restore_url = `heroku pgbackups:url -a t2api`
     puts "resetting staging database"
-    sysputs "heroku pg:reset HEROKU_POSTGRESQL_ONYX_URL -a t2-staging --confirm"
+    sysputs "heroku pg:reset HEROKU_POSTGRESQL_OLIVE_URL -a t2-staging --confirm"
     puts "copying data..."
-    sysputs "heroku pgbackups:restore HEROKU_POSTGRESQL_ONYX_URL -a t2-staging --confirm t2-staging '#{restore_url}'"
+    sysputs "heroku pgbackups:restore HEROKU_POSTGRESQL_OLIVE_URL -a t2-staging --confirm t2-staging '#{restore_url}'"
     # puts "obscuring project names..."
     # sysputs "heroku run rake obscure_projects -a t2-staging"
   end
 
 
-  desc "Copy database from t2api to localhost"
+  desc "Copy database from production to localhost"
   task :pull_prod do
-    system "heroku pg:pull HEROKU_POSTGRESQL_WHITE_URL t2api -a t2api"
+    system "heroku pg:pull HEROKU_POSTGRESQL_VIOLET_URL t2api -a t2api"
   end
 
-  desc "Copy database from t2api to localhost"
+  desc "Copy database from staging to localhost"
   task :pull_staging do
-    system "heroku pg:pull HEROKU_POSTGRESQL_ONYX_URL t2api -a t2-staging"
+    system "heroku pg:pull HEROKU_POSTGRESQL_OLIVE_URL t2api -a t2-staging"
   end
 
   desc "Complete reset of local database from staging"
