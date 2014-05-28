@@ -3,7 +3,8 @@ class Project < ActiveRecord::Base
 
   attr_accessible :name, :notes, :billable, :binding, :provisional, :slug,
     :client_principal_id, :vacation, :start_date, :end_date, :office_ids,
-    :rates, :investment_fridays
+    :rates, :investment_fridays, :typical_allocation_percentages, :typical_counts,
+    :num_weeks_per_invoice
 
   has_one :client_principal, class_name: "Person"
   has_many :project_offices
@@ -59,10 +60,6 @@ class Project < ActiveRecord::Base
 
     rate = rates[role] || rates[ALIASED_ROLES[role]]
     rate.to_f / (investment_fridays? ? 4 : 5)
-  end
-
-  def rates
-    super || {}
   end
 
   protected
