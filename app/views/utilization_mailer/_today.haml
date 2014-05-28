@@ -10,10 +10,10 @@
       %tr{class: snapshot.office.name.parameterize}
         %td= snapshot.office.name
         %td.aligned-center
-          #{number_with_precision(snapshot.billing.to_fte, precision: 2)} / #{number_with_precision(snapshot.assignable.to_fte, precision: 2)}
-          \= #{number_to_percentage(snapshot.utilization, precision: 2)}
-        %td.center #{snapshot.assignable.count}
+          #{number_with_precision(snapshot.billing.to_fte, precision: 2)} / #{number_with_precision(snapshot.billable.to_fte, precision: 2)}
+          \= #{number_to_percentage(snapshot.gross_utilization, precision: 2)}
+        %td.center #{snapshot.billable.count}
   %tfoot
     %tr
-      %td{colspan: 3} * Calculated as Billing FTEs / Assignable FTEs
+      %td{colspan: 3} * Calculated as Billing FTEs / Billable FTEs
 
