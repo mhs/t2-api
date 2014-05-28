@@ -143,6 +143,28 @@ describe Snapshot do
           snapshot.calculate
           expect(snapshot.unassignable).to eq(wset(dev.name, 100))
         end
+
+        context "with another booked developer" do
+          let(:other_developer) { FactoryGirl.create(:person, office: office) }
+          let!(:other_allocation) { allocation_for(other_developer) }
+
+          it "calculuates utilization and gross utilization correctly" do
+            snapshot.calculate
+            # 100 + 0 + 0
+            # -----------
+            # 100 + 50 + 0
+            #
+            # dev is on vacation, and so isn't counted in the denominator
+            expect(snapshot.utilization).to eq('66.7')
+
+            # 100 + 0 + 0
+            # -----------
+            # 100 + 50 + 100
+            #
+            # dev is on vacation, but IS counted in the denominator
+            expect(snapshot.gross_utilization).to eq('40.0')
+          end
+        end
       end
 
       context "with people from another office" do

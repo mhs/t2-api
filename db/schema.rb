@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140501142334) do
+ActiveRecord::Schema.define(version: 20140528203802) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -196,6 +196,7 @@ ActiveRecord::Schema.define(version: 20140501142334) do
     t.text     "overallocated"
     t.text     "non_billable"
     t.boolean  "includes_provisional", default: false
+    t.string   "gross_utilization"
   end
 
   add_index "snapshots", ["snap_date", "office_id", "includes_provisional"], name: "unique_snapshots_index", unique: true, using: :btree

@@ -44,6 +44,11 @@ class UtilizationGroup
     sprintf "%.1f", (100.0 * billing_percentages.total) / assignable_percentages.total
   end
 
+  def gross_utilization_percentage
+    return "0.0" if billable_percentages.empty?
+    sprintf "%.1f", (100.0 * billing_percentages.total) / billable_percentages.total
+  end
+
   private
 
   def fetch(key)
