@@ -5,10 +5,10 @@ namespace :applications do
   task :seed => :environment do
     T2Application.delete_all
     applications_attributes = [
-      {url: "http://t2allocation.neo.com",       icon: "📊", title: "Allocations",  classes: "allocations"},
-      {url: "http://t2utilization.neo.com",      icon: "📈", title: "Utilization"},
-      {url: "http://t2people.neo.com",           icon: "👤", title: "Neons"},
-      {url: "http://t2projects.neo.com",         icon: "", title: "Projects"}
+      {url: "http://t2allocation.neo.com",       icon: "📊", title: "Allocations",  classes: "allocations", position: 0},
+      {url: "http://t2projects.neo.com",         icon: "", title: "Projects", position: 1},
+      {url: "http://t2utilization.neo.com",      icon: "📈", title: "Utilization", position: 2},
+      {url: "http://t2people.neo.com",           icon: "👤", title: "Neons", position: 3}
     ]
 
     applications_attributes.each_with_index do |attrs, index|
@@ -20,10 +20,10 @@ namespace :applications do
   task :seed_staging => :environment do
     T2Application.delete_all
     applications_attributes = [
-      {url: "http://t2allocation-staging.neo.com",       icon: "📊", title: "Allocations",  classes: "allocations"},
-      {url: "http://t2utilization-staging.neo.com",      icon: "📈", title: "Utilization"},
-      {url: "http://t2people-staging.neo.com",           icon: "👤", title: "Neons"},
-      {url: "http://t2projects-staging.neo.com",         icon: "", title: "Projects"}
+      {url: "http://t2allocation-staging.neo.com",       icon: "📊", title: "Allocations",  classes: "allocations", position: 0},
+      {url: "http://t2projects-staging.neo.com",         icon: "", title: "Projects", position: 1},
+      {url: "http://t2utilization-staging.neo.com",      icon: "📈", title: "Utilization", position: 2},
+      {url: "http://t2people-staging.neo.com",           icon: "👤", title: "Neons", position: 3}
     ]
 
     applications_attributes.each_with_index do |attrs, index|
