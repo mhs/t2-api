@@ -4,6 +4,7 @@ class ProjectSerializer < ActiveModel::Serializer
              :typical_counts, :num_weeks_per_invoice
 
   has_many :offices, embed: :ids
+  has_one :selling_office, embed: :ids
   has_many :people, embed: :ids, include: true
 
 end

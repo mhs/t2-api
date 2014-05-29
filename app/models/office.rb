@@ -7,6 +7,7 @@ class Office < ActiveRecord::Base
   has_many :office_holidays, :inverse_of => :office
   has_many :holidays, :through => :office_holidays
   has_many :revenue_items, inverse_of: :office
+  has_many :sold_projects, class_name: "Project", foreign_key: :selling_office_id
   has_many_current :projects, :through => :project_offices
   has_many_current :people
   has_many_current :allocations, :through => :people
