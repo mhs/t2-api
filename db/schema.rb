@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140528203802) do
+ActiveRecord::Schema.define(version: 20140529173729) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -145,25 +145,30 @@ ActiveRecord::Schema.define(version: 20140528203802) do
 
   create_table "projects", force: true do |t|
     t.string   "name"
-    t.boolean  "billable",            default: true,  null: false
-    t.boolean  "binding",             default: false, null: false
+    t.boolean  "billable",                       default: true,  null: false
+    t.boolean  "binding",                        default: false, null: false
     t.text     "notes"
-    t.datetime "created_at",                          null: false
-    t.datetime "updated_at",                          null: false
+    t.datetime "created_at",                                     null: false
+    t.datetime "updated_at",                                     null: false
     t.string   "slug"
     t.integer  "client_principal_id"
-    t.boolean  "vacation",            default: false
+    t.boolean  "vacation",                       default: false
     t.datetime "deleted_at"
     t.date     "start_date"
     t.date     "end_date"
-    t.boolean  "holiday",             default: false, null: false
-    t.boolean  "provisional",         default: false
-    t.boolean  "investment_fridays",  default: false
-    t.hstore   "rates"
+    t.boolean  "holiday",                        default: false, null: false
+    t.boolean  "provisional",                    default: false
+    t.boolean  "investment_fridays",             default: false
+    t.hstore   "rates",                          default: {},    null: false
+    t.hstore   "typical_allocation_percentages", default: {},    null: false
+    t.hstore   "typical_counts",                 default: {},    null: false
+    t.integer  "num_weeks_per_invoice"
+    t.integer  "selling_office_id"
   end
 
   add_index "projects", ["billable"], name: "index_projects_on_billable", using: :btree
   add_index "projects", ["binding"], name: "index_projects_on_binding", using: :btree
+  add_index "projects", ["selling_office_id"], name: "index_projects_on_selling_office_id", using: :btree
 
   create_table "revenue_items", force: true do |t|
     t.integer  "project_id",                                             null: false
