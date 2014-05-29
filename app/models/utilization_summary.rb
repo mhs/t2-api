@@ -12,7 +12,7 @@ class UtilizationSummary
     context_snapshots << Snapshot.on_date!(snap_date, office_id: nil)
 
     @by_office_utilizations = context_snapshots.map do |snap|
-      {name: snap.office.name, utilization: snap.utilization.to_f}
+      {name: snap.office.name, utilization: snap.gross_utilization.to_f}
     end
 
     @utilization_counts = UtilizationCount.for_weekdays_between(summary_start_date, summary_end_date, office_id)

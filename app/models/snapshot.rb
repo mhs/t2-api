@@ -79,5 +79,6 @@ class Snapshot < ActiveRecord::Base
     self.assignable       = utilization_group.assignable_percentages
     self.overallocated    = utilization_group.overallocated_percentages
     self.utilization      = utilization_group.utilization_percentage
+    self.gross_utilization = utilization_group.gross_utilization_percentage
   end
 end

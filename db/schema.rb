@@ -201,6 +201,7 @@ ActiveRecord::Schema.define(version: 20140529173729) do
     t.text     "overallocated"
     t.text     "non_billable"
     t.boolean  "includes_provisional", default: false
+    t.string   "gross_utilization"
   end
 
   add_index "snapshots", ["snap_date", "office_id", "includes_provisional"], name: "unique_snapshots_index", unique: true, using: :btree
