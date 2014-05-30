@@ -4,7 +4,7 @@ class Project < ActiveRecord::Base
   attr_accessible :name, :notes, :billable, :binding, :provisional, :slug,
     :client_principal_id, :vacation, :start_date, :end_date, :office_ids,
     :rates, :investment_fridays, :typical_allocation_percentages, :typical_counts,
-    :num_weeks_per_invoice, :selling_office_id
+    :num_weeks_per_invoice, :selling_office_id, :archived
 
   has_one :client_principal, class_name: "Person"
   belongs_to :selling_office, class_name: "Office"
