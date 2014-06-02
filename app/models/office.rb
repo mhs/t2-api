@@ -12,7 +12,7 @@ class Office < ActiveRecord::Base
   has_many_current :people
   has_many_current :allocations, :through => :people
 
-  SPECIAL_OFFICES = ["Headquarters", "Archived"]
+  SPECIAL_OFFICES = ["Headquarters"]
   US_OFFICES = ["Cincinnati", "Columbus", "San Francisco", "New York"]
 
   def self.active
