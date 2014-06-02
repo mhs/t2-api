@@ -43,9 +43,11 @@ class MonthlySnapshot < ActiveRecord::Base
       Snapshot.on_date!(date, office_id: office_id, includes_provisional: includes_provisional).tap do |snapshot|
         self.billing_days += snapshot.billing.to_fte
         self.assignable_days += snapshot.assignable.to_fte
+        self.billable_days += snapshot.billable.to_fte
       end
     end
     self.utilization = assignable_days.zero? ? 0.0 : (billing_days/assignable_days * 100)
+    self.gross_utilization = billable_days.zero? ? 0.0 : (billing_days/billable_days * 100)
   end
 
   def office
