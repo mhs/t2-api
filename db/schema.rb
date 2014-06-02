@@ -11,11 +11,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140530171838) do
+ActiveRecord::Schema.define(version: 20140602142407) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
+  enable_extension "pg_stat_statements"
 
   create_table "allocations", force: true do |t|
     t.date     "start_date"
@@ -82,6 +83,8 @@ ActiveRecord::Schema.define(version: 20140530171838) do
     t.datetime "updated_at",                                                   null: false
     t.decimal  "utilization",          precision: 6, scale: 2, default: 0.0
     t.boolean  "includes_provisional",                         default: false
+    t.decimal  "billable_days",        precision: 6, scale: 2, default: 0.0
+    t.decimal  "gross_utilization",    precision: 6, scale: 2, default: 0.0
   end
 
   add_index "monthly_snapshots", ["office_id"], name: "index_monthly_snapshots_on_office_id", using: :btree
