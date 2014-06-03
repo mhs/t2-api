@@ -29,4 +29,23 @@ describe MonthlySnapshot do
       snapshot.billing_days.should eq(5)
     end
   end
+
+  describe 'recalculate' do
+
+    let(:snapshot) { MonthlySnapshot.on_date!(Date.today) }
+
+    it 'resets values before calculating' do
+      billable_days = snapshot.billable_days
+      assignable_days = snapshot.assignable_days
+      billing_days = snapshot.billing_days
+
+      snapshot.recalculate!
+      snapshot.reload
+
+      expect(snapshot.billing_days).to eq(billing_days)
+      expect(snapshot.billable_days).to eq(billable_days)
+      expect(snapshot.assignable_days).to eq(assignable_days)
+    end
+
+  end
 end

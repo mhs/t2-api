@@ -60,6 +60,7 @@ class MonthlySnapshot < ActiveRecord::Base
   def reset_aggregates
     self.billing_days    = 0.0
     self.assignable_days = 0.0
+    self.billable_days   = 0.0
   end
 
 end
