@@ -22,6 +22,7 @@ class Project < ActiveRecord::Base
   after_update :update_provisional_allocations
 
   scope :assignable, -> { where(vacation: true) }
+  scope :archived, lambda { |bool| bool ? only_archived : only_active }
 
   def self.holiday_project
     where(holiday: true).first
@@ -43,6 +44,10 @@ class Project < ActiveRecord::Base
 
   def self.only_active
     where('end_date IS NULL OR end_date >= ?', Date.today)
+  end
+
+  def self.only_archived
+    where('end_date IS NULL OR end_date < ?', Date.today)
   end
 
   NON_BILLING_ROLES = [
