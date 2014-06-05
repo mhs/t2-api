@@ -2,11 +2,13 @@ class Api::V1::ProjectsController < Api::V1::BaseController
 
   respond_to :json
 
+  before_action :cleanup_params, only: :index
+
   def index
     proxy = Project.search(params[:search]).for_office_id(params[:office_id]).base_order
     proxy = proxy.order(:name)
-    proxy = proxy.only_active unless params[:show_archived] == 'true'
-    projects = proxy.paginate(page: params[:page] || 1)
+    proxy = proxy.archived(params[:archived])
+    projects = proxy.paginate(page: params[:page])
     respond_with(projects, each_serializer: ProjectListItemSerializer, meta: { page: params[:page].to_i, total: projects.total_pages})
   end
 
@@ -38,4 +40,13 @@ class Api::V1::ProjectsController < Api::V1::BaseController
     project.destroy
     render json: nil, status: :ok
   end
+
+
+  private
+
+  def cleanup_params
+    params[:archived] = params[:archived] == 'true' ? true : false
+    params[:page] = params[:page] || 1
+  end
+
 end
