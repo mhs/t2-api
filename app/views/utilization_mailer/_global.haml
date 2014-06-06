@@ -3,7 +3,7 @@
   .left
     %p== Currently there are #{snapshot.staff.size} staff members of which #{snapshot.pure_billable.size} are 100% billable, #{snapshot.pure_overhead.size} are 0% billable, and #{snapshot.partially_billable.size} are partially billable.
     %ul.default
-      %li== Based on billable time, these #{snapshot.staff.size} staff members equate to #{number_with_precision(snapshot.staff.to_fte, precision: 2)} FTEs of which #{number_with_precision(snapshot.billable.to_fte, precision: 2)} are billable.
+      %li== Based on billable time, these #{snapshot.staff.size} staff members equate to #{number_with_precision(snapshot.staff.to_fte, precision: 2)} FTEs which are billable.
       %li== Of the #{number_with_precision(snapshot.billable.to_fte, precision: 2)} billable FTEs, #{number_with_precision(snapshot.billing.to_fte, precision: 2)} are billing today.
       %li== Daily utilization is calculated as billing over billable.
       %li== For today, that is #{number_with_precision(snapshot.billing.to_fte, precision: 2)} / #{number_with_precision(snapshot.billable.to_fte, precision: 2)} = #{number_to_percentage(snapshot.gross_utilization, precision: 2)}
