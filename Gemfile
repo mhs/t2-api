@@ -48,6 +48,7 @@ group :development, :test do
   gem 'launchy'
   gem 'letter_opener'
   gem 'pry-rails'
+  gem 'pry-byebug'
   gem 'railroady'
   gem 'rspec-rails'
   gem 'sqlite3'

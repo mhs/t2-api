@@ -177,18 +177,62 @@ describe '.this_year' do
   context "when destroyed" do
 
     let!(:allocation) { FactoryGirl.create(:allocation) }
-    let!(:past) { RevenueItem.for_allocation!(allocation, day: (Date.today - 1)) }
+    let!(:last_month) { RevenueItem.for_allocation!(allocation, day: (Date.today.beginning_of_month - 1)) }
     let!(:present) { RevenueItem.for_allocation!(allocation, day: Date.today) }
     let!(:future) { RevenueItem.for_allocation!(allocation, day: (Date.today + 1)) }
 
     it "destroyed future revenue items and nullifies past revenue items" do
       allocation.revenue_items.count.should eq(3)
       allocation.destroy
-      expect(RevenueItem.exists?(past.id)).to be_true
+      expect(RevenueItem.exists?(last_month.id)).to be_true
       expect(RevenueItem.exists?(present.id)).to be_false
       expect(RevenueItem.exists?(future.id)).to be_false
 
-      expect(past.reload.allocation_id).to be_nil
+      expect(last_month.reload.allocation_id).to be_nil
+    end
+  end
+
+  # -       : denotes revenue item that is recalculated
+  # x       : denotes revenue item that isn't recalculated
+  # |       : denotes relevate date (see label)
+  # [(x|-)] : denotes allocation
+
+  # Beginning of month       Today    Arbitraty Future
+  #         |                  |             |
+  #   [xxxxx|------------------|-------------|---]
+  #         |[-----------------|-------------|------]
+  #         |                  |[------------|---------]
+  #
+  context "when updated" do
+
+    let(:beginning_of_month) { Date.today.beginning_of_month }
+    let(:some_day_last_month) { beginning_of_month.preceding_friday }
+    let(:some_future_date) { Date.today.following_monday }
+
+    let!(:allocation) do
+      FactoryGirl.create(:allocation, binding:true, provisional: false, start_date: some_day_last_month, end_date: some_future_date)
+    end
+
+    let(:person) { allocation.person }
+
+    before do
+      # simulate having revenue items from a previous month
+      person.revenue_items_for(some_day_last_month, Date.today + 1)
+    end
+
+    it "updates revenue items from this month and beyond and leave past alone" do
+      allocation.provisional = true
+      allocation.save!
+
+      revenue_item_before_this_month = RevenueItem.for_allocation!(allocation, day: some_day_last_month)
+      revenue_item_beginning_of_month = RevenueItem.for_allocation!(allocation, day: beginning_of_month)
+      revenue_item_today = RevenueItem.for_allocation!(allocation, day: Date.today)
+      revenue_item_future = RevenueItem.for_allocation!(allocation, day: some_future_date)
+
+      expect(revenue_item_before_this_month.provisional).to be_false
+      expect(revenue_item_beginning_of_month.provisional).to be_true
+      expect(revenue_item_today.provisional).to be_true
+      expect(revenue_item_future.provisional).to be_true
     end
   end
 

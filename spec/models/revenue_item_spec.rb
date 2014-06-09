@@ -102,7 +102,7 @@ describe RevenueItem do
         end
 
         context "past allocation" do
-          let(:day) { (Date.today - 1.week).beginning_of_week }
+          let(:day) { (Date.today - 1.month).beginning_of_week }
 
           it "noops" do
             old_item = revenue_item
