@@ -67,11 +67,12 @@ class Allocation < ActiveRecord::Base
   private
 
   def clean_up_revenue
-    # NOTE: this is a bit tricky. Future revenue can be destroyed, but
-    #       past revenue has been reported and should not be destroyed
+    # NOTE: This is a bit tricky. This month and future revenue can be destroyed, but
+    #       revenue generated before the beginning of this month has been reported and
+    #       should not be destroyed.
     #
-    revenue_items.future.destroy_all
-    revenue_items.past.update_all(allocation_id: nil)
+    revenue_items.this_month_and_on.destroy_all
+    revenue_items.before_this_month.update_all(allocation_id: nil)
   end
 
 end

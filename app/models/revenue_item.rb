@@ -10,8 +10,8 @@ class RevenueItem < ActiveRecord::Base
   before_save :compute_amount
 
   scope :for_project, -> (project) { where(project: project) }
-  scope :future, -> { where('day >= ?', Date.today) }
-  scope :past, -> { where('day < ?', Date.today) }
+  scope :this_month_and_on, -> { where('day >= ?', Date.today.beginning_of_month) }
+  scope :before_this_month, -> { where('day < ?', Date.today.beginning_of_month) }
 
   scope :before, -> (date) { where('day <= ?', date.to_date) }
   scope :after, -> (date) { where('day >= ?', date.to_date) }
@@ -29,7 +29,7 @@ class RevenueItem < ActiveRecord::Base
       :allocation => allocation,
       :day => day
     })
-    return result if result.persisted? && day < (Date.today - 1.day)
+    return result if result.persisted? && day < Date.today.beginning_of_month
     result.update!({
       :office => allocation.office,
       :person => person,
