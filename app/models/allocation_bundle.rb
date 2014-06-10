@@ -9,8 +9,11 @@ class AllocationBundle
   end
 
   def projects
-    Project.within_date_range(@start_date, @end_date) do
-      Project.includes(:offices, :allocations).to_a
+    projects = Project.within_date_range(@start_date, @end_date) do
+      projects = StandardProject.includes(:offices, :allocations).to_a
+      workshop_rollup = WorkshopRollup.from_workshops(Workshop.includes(:offices, :allocations).to_a)
+      projects << workshop_rollup
+      projects
     end
   end
   memoize :projects
