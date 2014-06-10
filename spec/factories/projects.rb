@@ -2,7 +2,8 @@
 # office = FactoryGirl.create(:office)
 # project = FactoryGirl.create(:project, offices = [ office ])).offices.length # 1
 FactoryGirl.define do
-  factory :project do
+  factory :project, class: StandardProject do
+    type     "StandardProject"
     name     { Faker::Company.name }
     notes    { Faker::HipsterIpsum.sentence }
     billable { [true, false].sample }

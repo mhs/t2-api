@@ -1,5 +1,9 @@
+class NotImplementedByParentClass < StandardError; end
+
 class Project < ActiveRecord::Base
   include HasManyCurrent
+
+  TYPES = %w[StandardProject Workshop]
 
   attr_accessible :name, :notes, :billable, :binding, :provisional,
     :vacation, :start_date, :end_date, :office_ids, :rates, :investment_fridays,
@@ -17,6 +21,7 @@ class Project < ActiveRecord::Base
 
   validates :name, presence: true, uniqueness: true
   validates :office_ids, presence: true
+  validates :type, inclusion: TYPES
 
   after_update :update_provisional_allocations
 
@@ -49,22 +54,8 @@ class Project < ActiveRecord::Base
     where('end_date IS NULL OR end_date < ?', Date.today)
   end
 
-  NON_BILLING_ROLES = [
-    'Apprentice',
-    'Business Development',
-    'General & Administrative',
-    'Support Staff'
-  ]
-
-  ALIASED_ROLES = {
-    'Managing Director' => 'Principal'
-  }
-
   def rate_for(role)
-    return 0.0 if NON_BILLING_ROLES.include?(role)
-
-    rate = rates[role] || rates[ALIASED_ROLES[role]]
-    rate.to_f / (investment_fridays? ? 4 : 5)
+    raise NotImplementedByParentClass
   end
 
   protected
