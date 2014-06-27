@@ -236,4 +236,26 @@ describe '.this_year' do
     end
   end
 
+  describe '.week_days' do
+    let(:monday_of_work_week) { Date.new(2014,6,23) }
+    let(:friday_of_work_week) { Date.new(2014,6,27) }
+    let(:tuesday_of_next_work_week) { Date.new(2014,7,1) }
+
+    it 'has one day if the allocation is one day long' do
+      allocation = FactoryGirl.create(:allocation, start_date: monday_of_work_week, end_date: monday_of_work_week)
+      allocation.week_days.size.should eql(1)
+    end
+
+    it 'has five days if the allocation is one week long' do
+      allocation = FactoryGirl.create(:allocation, start_date: monday_of_work_week, end_date: friday_of_work_week)
+      allocation.week_days.size.should eql(5)
+    end
+
+    it 'omits weekend dates' do
+      allocation = FactoryGirl.create(:allocation, start_date: monday_of_work_week, end_date: tuesday_of_next_work_week)
+      allocation.week_days.size.should eql(7)
+    end
+
+  end
+
 end

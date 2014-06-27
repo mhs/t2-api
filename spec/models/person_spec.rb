@@ -164,4 +164,77 @@ describe Person do
     end
   end
 
+  describe ".pto_this_year" do
+    before { Timecop.freeze(Date.new(2014,7,1)) }
+    after { Timecop.return }
+
+    let!(:office) { FactoryGirl.create(:office) }
+    let!(:employee) { FactoryGirl.create(:person, office: office) }
+    let!(:vacation_project) { FactoryGirl.create(:project, :vacation, name: 'vacation') }
+    let!(:holiday_project) { FactoryGirl.create(:project, :holiday, name: 'holiday') }
+    let(:vacation_time) { employee.pto_this_year['vacation'] }
+
+    it 'includes company holidays' do
+      Holiday.declare('Independence Day',[office],'2014-7-4')
+      employee.pto_this_year['holiday'].should_not be_empty
+    end
+
+    it 'does not include holidays from last year' do
+      Holiday.declare('Independence Day',[office],'2013-7-4')
+      employee.pto_this_year['holiday'].should be_empty
+    end
+
+    it 'includes vacation days' do
+      FactoryGirl.create(:allocation, person: employee, project: vacation_project, start_date: '2014-7-1', end_date: '2014-7-1')
+      vacation_time.should_not be_empty
+      vacation_time.size.should eq(1)
+    end
+
+    it 'provides the actual days off' do
+      FactoryGirl.create(:allocation, person: employee, project: vacation_project, start_date: '2014-7-1', end_date: '2014-7-1')
+      vacation_time[0].year.should eql(2014)
+      vacation_time[0].month.should eql(7)
+      vacation_time[0].day.should eql(1)
+    end
+
+
+    it 'does not include vacation days from last year' do
+      FactoryGirl.create(:allocation, person: employee, project: vacation_project, start_date: '2013-7-1', end_date: '2013-7-1')
+      vacation_time.should be_empty
+    end
+
+    it 'includes every day of vacation' do
+      FactoryGirl.create(:allocation, person: employee, project: vacation_project, start_date: '2014-7-1', end_date: '2014-7-2')
+      vacation_time.size.should eq(2)
+    end
+
+    it 'knows that holidays trump vacation days' do
+      Holiday.declare('Independence Day',[office],'2014-7-4')
+      FactoryGirl.create(:allocation, person: employee, project: vacation_project, start_date: '2014-7-1', end_date: '2014-7-5')
+      vacation_time.size.should eq(3)
+    end
+
+    it 'only includes parts of a vacation at the start of the year that are in this calendar year' do
+      FactoryGirl.create(:allocation, person: employee, project: vacation_project, start_date: '2013-12-29', end_date: '2014-1-2')
+      vacation_time.size.should eq(2)
+    end
+
+    it 'only includes parts of a vacation at the end of the year that are in this calendar year' do
+      FactoryGirl.create(:allocation, person: employee, project: vacation_project, start_date: '2014-12-29', end_date: '2015-1-2')
+      vacation_time.size.should eq(3)
+    end
+
+    it 'does not include weekend days' do
+      FactoryGirl.create(:allocation, person: employee, project: vacation_project, start_date: '2014-7-10', end_date: '2014-7-14')
+      vacation_time.size.should eq(3)
+    end
+
+    it 'dedupes overlapping vacation allocations' do
+      FactoryGirl.create(:allocation, person: employee, project: vacation_project, start_date: '2014-7-10', end_date: '2014-7-14')
+      FactoryGirl.create(:allocation, person: employee, project: vacation_project, start_date: '2014-7-10', end_date: '2014-7-14')
+      vacation_time.size.should eq(3)
+    end
+
+  end
+
 end

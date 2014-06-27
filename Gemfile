@@ -53,6 +53,7 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'sqlite3'
   gem 'taps'
+  gem 'timecop'
 end
 
 group :development, :staging do
