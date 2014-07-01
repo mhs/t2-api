@@ -7,7 +7,7 @@ class Api::V1::ProjectsController < Api::V1::BaseController
   def index
     proxy = Project.search(params[:search]).for_office_id(params[:office_id]).base_order
     proxy = proxy.order(:name)
-    proxy = proxy.archived(params[:archived])
+    proxy = proxy.archived(params[:archived]) unless params[:archived].nil?
     projects = proxy.paginate(page: params[:page])
     respond_with(projects, each_serializer: ProjectListItemSerializer, meta: { page: params[:page].to_i, total: projects.total_pages})
   end
@@ -45,7 +45,15 @@ class Api::V1::ProjectsController < Api::V1::BaseController
   private
 
   def cleanup_params
-    params[:archived] = params[:archived] == 'true' ? true : false
+    # lol javascript
+    params[:archived] = case params[:archived]
+    when 'true'
+      true
+    when 'false'
+      false
+    else
+      nil
+    end
     params[:page] = params[:page] || 1
   end
 
