@@ -148,6 +148,22 @@ class Person < ActiveRecord::Base
   end
   memoize :overlap_calculator_for
 
+  def pto_this_year
+    holiday = Project.holiday_project
+    holiday_days = Allocation.this_year.where(project: holiday, person: self).map(&:week_days).flatten.uniq.sort
+
+    pto = {}
+    pto[holiday.name] = holiday_days
+
+    other_pto_projects = Project.where(vacation: true).where("id <> ?",holiday.id)
+    other_pto_projects.each do |project|
+      days_this_year = Allocation.overlaps_this_year.where(project: project, person: self).map(&:week_days).flatten.uniq.reject{|d| d.year != Date.today.year}
+      pto[project.name] = days_this_year.reject{|d| holiday_days.include? d}.sort
+    end
+
+    pto
+  end
+
   private
 
   def create_or_associate_user

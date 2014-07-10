@@ -52,6 +52,12 @@ class Allocation < ActiveRecord::Base
 
   delegate :name, to: :project, prefix: true, :allow_nil => true
 
+  def self.overlaps_this_year
+    where("(start_date >= ? and start_date <= ?) OR (end_date >= ? and end_date <= ?)",
+          Date.today.beginning_of_year,Date.today.end_of_year,
+          Date.today.beginning_of_year,Date.today.end_of_year)
+  end
+
   def vacation?
     project.vacation?
   end
@@ -62,6 +68,10 @@ class Allocation < ActiveRecord::Base
 
   def conflicts
     @conflicts ||= []
+  end
+
+  def week_days
+    (start_date..end_date).to_a.reject{|d| [6,7].include?(d.cwday)}
   end
 
   private
