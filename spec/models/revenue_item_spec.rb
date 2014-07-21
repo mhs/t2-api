@@ -4,6 +4,7 @@ describe RevenueItem do
 
   # tunable params
   let(:investment_fridays) { false }
+  let(:billable) { true }
   let(:percent_allocated) { 100 }
   let(:provisional) { false }
   let(:holiday_in_week) { false }
@@ -21,6 +22,7 @@ describe RevenueItem do
       percent_allocated: percent_allocated,
       provisional: provisional,
       project: project,
+      billable: billable,
       person: person
     })
   end
@@ -61,6 +63,14 @@ describe RevenueItem do
             it "gets one day of revenue" do
               expect(revenue).to eq(normal_rate)
             end
+          end
+        end
+
+        context "in a non-billable allocation" do
+          let(:billable) { false }
+
+          it "gets no revenue" do
+            expect(revenue).to eq(0.0)
           end
         end
 
