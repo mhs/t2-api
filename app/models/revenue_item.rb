@@ -71,7 +71,7 @@ class RevenueItem < ActiveRecord::Base
 
   def compute_amount
     assignable_percentage = (100 - vacation_percentage)/100.0
-    amount_billed = rate * (percent_allocated/100.0)
+    amount_billed = allocation.billable? ? rate * (percent_allocated/100.0) : 0.0
 
     self.amount = assignable_percentage * amount_billed
   end
