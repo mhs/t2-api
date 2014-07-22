@@ -7,7 +7,7 @@ class Reports::Revenue
 
   def initialize(start_date, end_date)
     @start_date = start_date || Date.today.beginning_of_month
-    @end_date = end_date || (@start_date + 3.months).end_of_month
+    @end_date = end_date || (@start_date + 36.months).end_of_month
     @projects_hash = Project.within_date_range(start_date, end_date) { Project.all.to_a }.index_by(&:id)
     @offices_hash = Office.all.to_a.index_by(&:id)
   end
