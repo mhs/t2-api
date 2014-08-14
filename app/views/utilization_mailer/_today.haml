@@ -3,7 +3,8 @@
   %thead
     %tr
       %th Office
-      %th.aligned-center Utilization Percentage*
+      %th.aligned-center Gross Utilization*
+      %th.aligned-center Net Utilization*
       %th.center Billable People
   %tbody
     - snapshots.each do |snapshot|
@@ -12,8 +13,11 @@
         %td.aligned-center
           #{number_with_precision(snapshot.billing.to_fte, precision: 2)} / #{number_with_precision(snapshot.billable.to_fte, precision: 2)}
           \= #{number_to_percentage(snapshot.gross_utilization, precision: 2)}
+        %td.aligned-center
+          #{number_with_precision(snapshot.billing.to_fte, precision: 2)} / #{number_with_precision(snapshot.assignable.to_fte, precision: 2)}
+          \= #{number_to_percentage(snapshot.utilization, precision: 2)}
         %td.center #{snapshot.billable.count}
   %tfoot
     %tr
-      %td{colspan: 3} * Calculated as Billing FTEs / Billable FTEs
+      %td{colspan: 4} * Net Utilization excludes PTO time while Gross Utilization treats it as unbillable time.
 

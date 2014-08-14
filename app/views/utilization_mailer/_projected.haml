@@ -3,12 +3,16 @@
   %thead
     %tr
       %th Date
-      %th Booked Utilization
-      %th Projected Utilization
+      %th Booked Gross
+      %th Booked Net
+      %th Projected Gross
+      %th Projected Net
   %tbody
     - snapshots.each do |(snapshot, projected_snapshot)|
       %tr
         %td= snapshot.snap_date
         %td= number_to_percentage(snapshot.gross_utilization, precision: 2)
+        %td= number_to_percentage(snapshot.utilization, precision: 2)
         %td= number_to_percentage(projected_snapshot.gross_utilization, precision: 2)
+        %td= number_to_percentage(projected_snapshot.utilization, precision: 2)
 

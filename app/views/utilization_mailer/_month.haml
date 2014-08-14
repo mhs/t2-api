@@ -3,21 +3,21 @@
   %thead
     %tr
       %th Office
-      %th.right Booked
-      %th %*
-      %th.right Projected
-      %th %*
+      %th Booked Gross
+      %th Booked Net
+      %th Projected Gross
+      %th Projected Net
   %tbody
     - snapshots.each do |(snapshot, projected_snapshot)|
       %tr{class: snapshot.office.name.parameterize}
         %td= snapshot.office.name
 
-        %td.right== #{number_with_precision(snapshot.billing_days, precision: 2)} / #{number_with_precision(snapshot.billable_days, precision: 2)}
-        %td = #{number_to_percentage(snapshot.gross_utilization, precision: 2)}
+        %td #{number_to_percentage(snapshot.gross_utilization, precision: 2)}
+        %td #{number_to_percentage(snapshot.utilization, precision: 2)}
 
-        %td.right== #{number_with_precision(projected_snapshot.billing_days, precision: 2)} / #{number_with_precision(projected_snapshot.billable_days, precision: 2)}
-        %td = #{number_to_percentage(projected_snapshot.gross_utilization, precision: 2)}
+        %td #{number_to_percentage(projected_snapshot.gross_utilization, precision: 2)}
+        %td #{number_to_percentage(projected_snapshot.utilization, precision: 2)}
   %tfoot
     %tr
-      %td{colspan: 3} * Calculated as Billing FTEs / Billable FTEs
+      %td{colspan: 3} * See above for definition of Gross vs Net
 
