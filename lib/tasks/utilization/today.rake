@@ -11,7 +11,7 @@ namespace :utilization do
       puts "No weekend delivery"
       return
     else
-      UtilizationMailer.daily(["leadership@neo.com"]).deliver
+      UtilizationMailer.daily(["utilization@neo.com"]).deliver
     end
   end
 end
