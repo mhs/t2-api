@@ -106,6 +106,8 @@ GEM
       rubyzip
     heroku-api (0.3.15)
       excon (~> 0.25.1)
+    heroku-deflater (0.5.3)
+      rack (>= 1.4.5)
     hike (1.2.3)
     htmlentities (4.3.1)
     httpauth (0.2.0)
@@ -286,6 +288,7 @@ DEPENDENCIES
   haml (~> 4.0.5)
   hashie
   heroku
+  heroku-deflater
   jquery-rails
   launchy
   letter_opener
