@@ -28,6 +28,7 @@ gem 'will_paginate', '~> 3.0'
 
 
 group :production do
+  gem 'heroku-deflater'
   gem 'newrelic_rpm'
   gem 'rails_12factor'
 end
