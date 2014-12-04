@@ -155,7 +155,7 @@ end
 describe '.this_year' do
   let(:base_date) { [Date.today - 1.month, Date.today.beginning_of_year].max + 1.month }
   let(:start_date) { base_date - 1.month }
-  let(:end_date) { base_date + 1.month }
+  let(:end_date) { [base_date + 1.month, Date.today.end_of_year].min }
   let(:start_of_year) { base_date.beginning_of_year }
   let(:end_of_year) { base_date.end_of_year }
 
