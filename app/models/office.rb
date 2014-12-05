@@ -35,6 +35,10 @@ class Office < ActiveRecord::Base
     false
   end
 
+  def deleted
+    !deleted_at.nil?
+  end
+
   class SummaryOffice
     def name
       "Company-wide"
