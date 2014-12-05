@@ -22,23 +22,22 @@ regular_rates = {
   'Principal'       => 5000,
   'Product Manager' => 5000
 }
+roles = regular_rates.keys
 
 # Projects with a single office
 5.times do
   office_ids = Office.all.sample(1).map &:id
-  FactoryGirl.create(:project,
+  FactoryGirl.create :project,
     office_ids: office_ids,
     rates: regular_rates
-  )
 end
 
 # Projects with multiple offices
 5.times do
   office_ids = Office.all.sample(2).map &:id
-  FactoryGirl.create(:project,
+  FactoryGirl.create :project,
     office_ids: office_ids,
     rates: regular_rates
-  )
 end
 
 # One project has investment friday
@@ -60,5 +59,14 @@ vacation_rates = {
 ].each do |project|
   unless Project.find_by_name(project[:name])
     FactoryGirl.create :project, project.merge( office_ids: Office.all.map(&:id), rates: vacation_rates )
+  end
+end
+
+# People
+Office.all.each do |office|
+  5.times do
+    FactoryGirl.create :person,
+      role: roles.sample,
+      office: office
   end
 end

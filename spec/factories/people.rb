@@ -1,8 +1,8 @@
 FactoryGirl.define do
   factory :person do
     office
-    name    { Faker::Name.name }
-    email   { Faker::Internet.email }
+    name    { "#{Faker::Name.first_name} #{Faker::Name.last_name}" }
+    email   { "#{name.downcase.gsub(/\s/, '.')}@neo.com" }
     notes   { Faker::HipsterIpsum.sentence }
     github  { "http://github.com/neo" }
     twitter { "https://twitter.com/neo_innovation" }
