@@ -23,26 +23,27 @@ RATES = {
   'Principal' => 5000,
   'Product Manager' => 5000
 }
-# Projects with a single office
 
+# Projects with a single office
 5.times do
+  office_ids = Office.all.sample(1).map &:id
   FactoryGirl.create(:project,
-    offices: Office.all.sample(1),
+    office_ids: office_ids,
     rates: RATES
   )
 end
 
 # Projects with multiple offices
-
 5.times do
+  office_ids = Office.all.sample(2).map &:id
   FactoryGirl.create(:project,
-    offices: Office.all.sample(2),
+    office_ids: office_ids,
     rates: RATES
   )
 end
 
 # One project has investment friday
-Project.first.update_attribute(:investment_fridays, false)
+Project.first.update_attribute(:investment_fridays, true)
 
 Project.where(name: 'Vacation', binding: true, vacation: true).first_or_create
 Project.where(name: 'Company Holiday', holiday: true, binding: true, vacation: true).first_or_create
