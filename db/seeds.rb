@@ -29,7 +29,10 @@ roles = regular_rates.keys
   office_ids = Office.all.sample(1).map &:id
   FactoryGirl.create :project,
     office_ids: office_ids,
-    rates: regular_rates
+    rates: regular_rates,
+    selling_office_id: office_ids.first,
+    start_date: (rand * 100).to_i.days.ago,
+    end_date: (rand * 100).to_i.days.from_now
 end
 
 # Projects with multiple offices
@@ -37,11 +40,17 @@ end
   office_ids = Office.all.sample(2).map &:id
   FactoryGirl.create :project,
     office_ids: office_ids,
-    rates: regular_rates
+    rates: regular_rates,
+    selling_office_id: office_ids.first,
+    start_date: (rand * 100).to_i.days.ago,
+    end_date: (rand * 100).to_i.days.from_now
 end
 
-# One project has investment friday
-Project.first.update_attribute(:investment_fridays, true)
+# A few projects have investment friday
+Project.where(vacation: false).sample(3).each{ |p| p.update_attribute :investment_fridays, true }
+
+# A few projects are provisional
+Project.where(vacation: false).sample(3).each{ |p| p.update_attribute :provisional, true }
 
 # Vacation style projects
 vacation_rates = {
@@ -68,5 +77,22 @@ Office.all.each do |office|
     FactoryGirl.create :person,
       role: roles.sample,
       office: office
+  end
+end
+
+# How about some allocations!
+people = Person.all
+Project.where(vacation: false).each do |project|
+  Person.all.select{|p| p.allocations.size < 4}.sample((rand * 10).to_i).each do |person|
+    days_in_project = project.end_date.mjd - project.start_date.mjd
+    dates = []
+    2.times { dates << project.start_date + rand(days_in_project).days }
+    FactoryGirl.create :allocation,
+      person: person,
+      project: project,
+      provisional: (person.allocations.size > 2),
+      percent_allocated: 50,
+      start_date: dates.min,
+      end_date: dates.max
   end
 end
