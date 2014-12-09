@@ -4,6 +4,8 @@ class Holiday < ActiveRecord::Base
 
   scope :upcoming, -> { where('start_date >= ?', Date.today) }
 
+  before_destroy { allocations.destroy_all }
+
   def self.declare(name, offices, start_date, end_date=nil)
     holiday = create! do |h|
       h.name = name
@@ -38,5 +40,11 @@ class Holiday < ActiveRecord::Base
       a.binding = true
       a.notes = holiday.name
     end
+  end
+
+  def allocations
+    project = Project.holiday_project
+
+    project.allocations.where(start_date: start_date, end_date: end_date)
   end
 end
