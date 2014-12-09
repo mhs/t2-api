@@ -1,18 +1,37 @@
+desc 'Clean up 2014 holidays with full winter break'
+task :winter_break_2014 => :environment do
+  xmas_eve = Holiday.find_by start_date: '2014-12-24'
+  xmas = Holiday.find_by start_date: '2014-12-25'
+  ny_eve = Holiday.find_by start_date: '2014-12-31'
+  ny_day = Holiday.find_by start_date: '2015-1-1'
+
+  xmas_eve.destroy
+  xmas.destroy
+  ny_eve.destroy
+  ny_day.destroy
+
+  singapore = Office.find_by name: 'Singapore'
+  columbus = Office.find_by name: 'Columbus'
+  nyc = Office.find_by name: 'New York'
+  sanfran = Office.find_by name: 'San Francisco'
+  hq = Office.find_by name: 'Headquarters'
+
+  Holiday.declare 'US Shutdown', [columbus, nyc, sanfran, hq], '2014-12-20', '2015-1-4'
+  Holiday.declare 'Singapore Shutdown', [singapore], '2014-12-25', '2015-1-4'
+end
+
 desc 'Declare Company Holidays'
 task :declare_holidays => :environment do
   singapore = Office.find_by name: 'Singapore'
   columbus = Office.find_by name: 'Columbus'
-  cincinnati = Office.find_by name: 'Cincinnati'
   nyc = Office.find_by name: 'New York'
   sanfran = Office.find_by name: 'San Francisco'
   hq = Office.find_by name: 'Headquarters'
-  montevideo = Office.find_by name: 'Montevideo'
-  edinburgh = Office.find_by name: 'Edinburgh'
 
   #Note that only holidays for US and Singapore have been provided thus far
 
-  us_offices = [columbus, cincinnati, nyc, sanfran, hq]
-  all_offices = [columbus, cincinnati, nyc, sanfran, hq, singapore]
+  us_offices = [columbus, nyc, sanfran, hq]
+  all_offices = [columbus, nyc, sanfran, hq]
 
   Holiday.declare 'New Years Day', all_offices, '2014-1-1'
   Holiday.declare 'Christmas', all_offices, '2014-12-25'
