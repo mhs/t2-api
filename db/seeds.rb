@@ -81,9 +81,9 @@ end
 
 # How about some allocations!
 people = Person.all
-Project.where(vacation: false).each do |project|
+Project.where(vacation: false).select{ |p| p.allocations.size == 0 }.each do |project|
   Person.all.select{|p| p.allocations.size < 4}.sample((rand * 10).to_i).each do |person|
-    days_in_project = project.end_date.mjd - project.start_date.mjd
+    days_in_project = (project.start_date && project.end_date) ? project.end_date.mjd - project.start_date.mjd : 100
     dates = []
     2.times { dates << project.start_date + rand(days_in_project).days }
     FactoryGirl.create :allocation,
