@@ -60,7 +60,6 @@ vacation_rates = {
   'Product Manager' => 0 }
 
 [ { name: 'Vacation',                binding: true,  vacation: true                },
-  { name: 'Vacation',                binding: true,  vacation: true                },
   { name: 'Company Holiday',         binding: true,  vacation: true, holiday: true },
   { name: 'Conference - Unbillable', binding: true,  vacation: true                },
   { name: 'Sick',                    binding: true,  vacation: true                },
