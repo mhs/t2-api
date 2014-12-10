@@ -83,9 +83,16 @@ end
 people = Person.all
 Project.where(vacation: false).select{ |p| p.allocations.size == 0 }.each do |project|
   Person.all.select{|p| p.allocations.size < 4}.sample((rand * 10).to_i).each do |person|
+
     days_in_project = (project.start_date && project.end_date) ? project.end_date.mjd - project.start_date.mjd : 100
     dates = []
-    2.times { dates << project.start_date + rand(days_in_project).days }
+    if project.start_date
+      2.times { dates << project.start_date + rand(days_in_project).days }
+    else
+      dates << Time.now - rand(days_in_project).days
+      dates << Time.now + rand(days_in_project).days
+    end
+
     FactoryGirl.create :allocation,
       person: person,
       project: project,
@@ -93,5 +100,6 @@ Project.where(vacation: false).select{ |p| p.allocations.size == 0 }.each do |pr
       percent_allocated: 50,
       start_date: dates.min,
       end_date: dates.max
+
   end
 end
