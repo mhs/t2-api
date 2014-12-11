@@ -217,6 +217,34 @@ Then establish links to production and staging and pull down a local copy of the
 rake db:refresh_from_production
 ```
 
+Alternatively, if you want to populate the database with non-production data, you can populate a randomly generated
+set of offices, projects, people and allocations.
+
+```
+foreman run rake db:seed
+```
+
+If you want to wipe the database and use seed data, just run
+
+```
+foreman run rake db:reset
+```
+
+When using seed data, it's often helpful to add yourself so you can login.
+
+```
+NAME="Bill Jones" rake person:add
+#=> Bill Jones :: bill.jones@neo.com :: (Random Office)
+
+EMAIL=bill.jones@gmail.com rake person:add
+#=> Bill Jones :: bill.jones@gmail.com :: (Random Office)
+
+NAME="Bill Jones" EMAIL=bj1234@gmail.com rake person:add # <= leaves nothing to chance :)
+#=> Bill Jones :: bj1234@gmail.com :: (Random Office)
+
+NAME="Bill Jones" OFFICE=Columbus rake person:add
+#=> Bill Jones :: bill.jones@neo.com :: Columbus
+```
 
 #### Start the server
 
