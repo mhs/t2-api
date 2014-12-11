@@ -36,6 +36,14 @@ namespace :db do
   desc "Complete reset of local database from production"
   task :refresh_from_production => [ :drop, :pull_prod, :seed ]
 
+  if Rails.env == 'development'
+    desc "Populate database with sample data"
+    task :load_sample_data => [ :reset ] do
+      require "#{Rails.root}/db/sample_data"
+      SampleData.load
+    end
+  end
+
   desc "Links people records to users via matching emails"
   task :link_people_to_users => :environment do
     Person.find_each do |person|

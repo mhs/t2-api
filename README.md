@@ -221,13 +221,7 @@ Alternatively, if you want to populate the database with non-production data, yo
 set of offices, projects, people and allocations.
 
 ```
-foreman run rake db:seed
-```
-
-If you want to wipe the database and use seed data, just run
-
-```
-foreman run rake db:reset
+foreman run rake db:load_sample_data
 ```
 
 When using seed data, it's often helpful to add yourself so you can login.
