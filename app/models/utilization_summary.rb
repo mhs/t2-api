@@ -1,12 +1,14 @@
 class UtilizationSummary
   attr_reader :id, :office_id, :office_name, :office_slug, :utilization_counts, :snapshot, :by_office_utilizations
+
   def initialize(params={})
     @office_id = params[:office_id]
     snap_date = params[:snap_date] || Date.today
     summary_start_date = params[:summary_start_date] || snap_date - 2.weeks
     summary_end_date = params[:summary_end_date] || snap_date + 2.weeks
     @snapshot = Snapshot.on_date!(snap_date, office_id: @office_id)
-    context_snapshots = Office.standard.map do |office|
+
+    context_snapshots = Office.reporting.map do |office|
       Snapshot.on_date!(snap_date, office_id: office.id)
     end
     context_snapshots << Snapshot.on_date!(snap_date, office_id: nil)
