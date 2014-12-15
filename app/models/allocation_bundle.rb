@@ -10,7 +10,7 @@ class AllocationBundle
 
   def projects
     Project.within_date_range(@start_date, @end_date) do
-      Project.includes(:offices, :allocations).to_a
+      Project.includes(:offices, :allocations).active_within(@start_date, @end_date).to_a
     end
   end
   memoize :projects
@@ -53,7 +53,11 @@ class AllocationBundle
 
   def load_conflicts
     @conflicts = people.flat_map { |person| person.conflicts_for(start_date, end_date) }
-    @allocations_hash = Allocation.within(@start_date, @end_date).index_by(&:id)
+
+    @allocations_hash = Allocation.within(@start_date, @end_date)
+      .joins(:person).merge(Person.employed_between(@start_date, @end_date))
+      .index_by(&:id)
+
     @conflicts.each do |conflict|
       conflict.allocations.each do |alloc|
         @allocations_hash[alloc.id].conflicts << conflict

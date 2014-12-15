@@ -23,15 +23,13 @@ describe AllocationBundle do
     it 'does not include allocations outside a date range' do
       AllocationBundle.new(in_the_past_start, in_the_past_end).allocations.should_not include(allocation)
     end
-  end
 
-  describe '#offices' do
-    it 'includes offices that have projcts within a date range' do
-      AllocationBundle.new(current_start, current_end).offices.should include(allocation.office)
-    end
+    context 'ended employees' do
+      let(:person) {  FactoryGirl.create(:person, start_date: 2.years.ago, end_date: 1.year.ago) }
 
-    it 'does not include offices with no current projects within a date range' do
-      AllocationBundle.new(in_the_past_start, in_the_past_end).offices.should_not include(allocation.office)
+      it 'does not include allocations for employee with end date before range' do
+        AllocationBundle.new(current_start, current_end).allocations.should_not include(allocation)
+      end
     end
   end
 

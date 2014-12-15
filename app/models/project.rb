@@ -22,6 +22,10 @@ class Project < ActiveRecord::Base
 
   scope :assignable, -> { where(vacation: true) }
   scope :archived, lambda { |bool| bool ? only_archived : only_active }
+  scope :active_within, lambda { |start_date, end_date|
+    where("start_date IS NULL OR start_date <= ?", end_date)
+    .where("end_date IS NULL OR end_date >= ?", start_date)
+  }
 
   def self.holiday_project
     where(holiday: true).first
