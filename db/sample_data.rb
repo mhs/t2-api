@@ -40,9 +40,6 @@ module SampleData
   # A few projects have investment friday
   Project.where(vacation: false).sample(3).each{ |p| p.update_attribute :investment_fridays, true }
 
-  # A few projects are provisional
-  Project.where(vacation: false).sample(3).each{ |p| p.update_attribute :provisional, true }
-
   # Vacation style projects
   vacation_rates = {
     'Developer'       => 0,
@@ -95,5 +92,5 @@ module SampleData
       end
     end
   end
-  
+
 end
