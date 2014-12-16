@@ -77,8 +77,6 @@ class Project < ActiveRecord::Base
     rate.to_f / (investment_fridays? ? 4 : 5)
   end
 
-  protected
-
   def set_default_rates
     DEFAULT_RATES.each do |role, rate|
       self.rates[role] ||= rate
