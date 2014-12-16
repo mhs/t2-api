@@ -1,4 +1,10 @@
 class Project < ActiveRecord::Base
+
+  DEFAULT_RATES = { 'Developer' => 7000,
+                    'Designer' => 7000,
+                    'Product Manager' => 7000,
+                    'Principal' => 14000 }
+
   include HasManyCurrent
 
   attr_accessible :name, :notes, :billable, :binding,
@@ -74,10 +80,9 @@ class Project < ActiveRecord::Base
   protected
 
   def set_default_rates
-    self.rates['Developer'] ||= 7000
-    self.rates['Designer'] ||= 7000
-    self.rates['Product Manager'] ||= 7000
-    self.rates['Principal'] ||= 14000
+    DEFAULT_RATES.each do |role, rate|
+      self.rates[role] ||= rate
+    end
   end
 
   def update_provisional_allocations
