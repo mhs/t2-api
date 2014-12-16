@@ -1,6 +1,17 @@
 require 'spec_helper'
 
 describe Project do
+  describe "initialize" do
+    let(:project) { Project.new }
+
+    it 'has appropriate default rates' do
+      expect(project.rates['Developer']).to eq(7000)
+      expect(project.rates['Designer']).to eq(7000)
+      expect(project.rates['Product Manager']).to eq(7000)
+      expect(project.rates['Principal']).to eq(14000)
+    end
+  end
+
   describe "rate_for" do
     let(:project) { FactoryGirl.create(:project, :billable, rates: { 'Developer' => '2000' }) }
 

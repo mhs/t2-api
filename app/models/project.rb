@@ -17,6 +17,9 @@ class Project < ActiveRecord::Base
   validates :name, presence: true, uniqueness: true
   validates :office_ids, presence: true
 
+  after_initialize :set_default_rates
+  after_update :update_provisional_allocations
+
   scope :assignable, -> { where(vacation: true) }
   scope :archived, lambda { |bool| bool ? only_archived : only_active }
   scope :active_within, lambda { |start_date, end_date|
@@ -68,4 +71,19 @@ class Project < ActiveRecord::Base
     rate.to_f / (investment_fridays? ? 4 : 5)
   end
 
+  protected
+
+  def set_default_rates
+    self.rates['Developer'] ||= 7000
+    self.rates['Designer'] ||= 7000
+    self.rates['Product Manager'] ||= 7000
+    self.rates['Principal'] ||= 14000
+  end
+
+  def update_provisional_allocations
+    # if we have changed from provisional to not, update the
+    # allocations to match
+    return unless !provisional? && provisional_was
+    allocations.update_all(provisional: false)
+  end
 end
