@@ -1,5 +1,7 @@
 class Allocation < ActiveRecord::Base
-  attr_accessible :notes, :start_date, :end_date, :billable, :binding, :provisional, :person, :person_id, :project, :project_id, :percent_allocated
+  attr_accessible :notes, :start_date, :end_date, :billable, :binding, :provisional,
+                  :person, :person_id, :project, :project_id, :percent_allocated,
+                  :likelihood
 
   attr_accessor :conflicts # used by the serialization code
 

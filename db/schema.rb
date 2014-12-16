@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140721194213) do
+ActiveRecord::Schema.define(version: 20141216211836) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,6 +32,7 @@ ActiveRecord::Schema.define(version: 20140721194213) do
     t.integer  "percent_allocated", default: 100,   null: false
     t.boolean  "provisional",       default: false
     t.integer  "creator_id"
+    t.string   "likelihood"
   end
 
   add_index "allocations", ["billable"], name: "index_allocations_on_billable", using: :btree
