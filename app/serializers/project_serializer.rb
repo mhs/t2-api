@@ -1,5 +1,5 @@
 class ProjectSerializer < ActiveModel::Serializer
-  attributes :id, :name, :start_date, :end_date, :provisional, :vacation,
+  attributes :id, :name, :start_date, :end_date, :vacation,
              :investment_fridays, :rates, :billable
 
   has_many :offices, embed: :ids

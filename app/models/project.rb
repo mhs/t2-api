@@ -24,7 +24,6 @@ class Project < ActiveRecord::Base
   validates :office_ids, presence: true
 
   after_initialize :set_default_rates
-  after_update :update_provisional_allocations
 
   scope :assignable, -> { where(vacation: true) }
   scope :archived, lambda { |bool| bool ? only_archived : only_active }
@@ -81,12 +80,5 @@ class Project < ActiveRecord::Base
     DEFAULT_RATES.each do |role, rate|
       self.rates[role] ||= rate
     end
-  end
-
-  def update_provisional_allocations
-    # if we have changed from provisional to not, update the
-    # allocations to match
-    return unless !provisional? && provisional_was
-    allocations.update_all(provisional: false)
   end
 end
