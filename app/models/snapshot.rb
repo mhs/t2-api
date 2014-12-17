@@ -65,6 +65,10 @@ class Snapshot < ActiveRecord::Base
     oid.present? ? Office.find(oid) : Office::SummaryOffice.new
   end
 
+  def gross_utilization
+    self[:gross_utilization] < '0' ? '0' : self[:gross_utilization]
+  end
+
   def utilization_group
     UtilizationGroup.new(people: people, start_date: snap_date, includes_provisional: includes_provisional)
   end
