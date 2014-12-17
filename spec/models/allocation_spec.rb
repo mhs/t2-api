@@ -11,6 +11,25 @@ describe Allocation do
   it 'should be valid without a creator' do
     FactoryGirl.build(:allocation, creator: nil).should be_valid
   end
+
+
+  context 'person or role' do
+    it 'is valid when role present, and no person' do
+      allocation = FactoryGirl.build(:allocation, role: 'Developer', person: nil)
+      allocation.should be_valid
+    end
+
+    it 'is valid when person present, and no role' do
+      allocation = FactoryGirl.build(:allocation, role: nil)
+      allocation.should be_valid
+    end
+
+    it 'is not valid when no role and no person are present' do
+      allocation = FactoryGirl.build(:allocation, role: nil, person: nil)
+      allocation.should_not be_valid
+      allocation.errors.messages[:person_id].should include('Need to select a role or person')
+    end
+  end
 end
 
 

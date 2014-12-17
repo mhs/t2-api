@@ -7,6 +7,7 @@ FactoryGirl.define do
     end_date   { Date.today + 1.week }
     billable   { [true, false].sample }
     percent_allocated { 100 }
+    likelihood { '90% Likely' }
 
 
     trait :this_week do

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141216211836) do
+ActiveRecord::Schema.define(version: 20141217191713) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,6 +33,7 @@ ActiveRecord::Schema.define(version: 20141216211836) do
     t.boolean  "provisional",       default: false
     t.integer  "creator_id"
     t.string   "likelihood"
+    t.string   "role"
   end
 
   add_index "allocations", ["billable"], name: "index_allocations_on_billable", using: :btree

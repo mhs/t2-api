@@ -13,9 +13,9 @@ class Allocation < ActiveRecord::Base
 
   before_destroy :clean_up_revenue
 
-  validates :person_id, :project_id, :start_date, :end_date, :likelihood, presence: true
+  validates :project_id, :start_date, :end_date, :likelihood, presence: true
   validates_date :end_date, on_or_after: :start_date
-
+  validate :person_or_role_present
   validates :percent_allocated, inclusion: {in: 0..100, message: "must be between 0 and 100"}
 
   scope :current, -> { includes(:project).where("projects.deleted_at is NULL").references(:project) }
@@ -85,6 +85,12 @@ class Allocation < ActiveRecord::Base
     #
     revenue_items.this_month_and_on.destroy_all
     revenue_items.before_this_month.update_all(allocation_id: nil)
+  end
+
+  def person_or_role_present
+    if person.nil? && role.nil?
+      errors.add(:person_id, 'Need to select a role or person')
+    end
   end
 
 end
