@@ -13,7 +13,7 @@ class Allocation < ActiveRecord::Base
 
   before_destroy :clean_up_revenue
 
-  validates :person_id, :project_id, :start_date, :end_date, presence: true
+  validates :person_id, :project_id, :start_date, :end_date, :likelihood, presence: true
   validates_date :end_date, on_or_after: :start_date
 
   validates :percent_allocated, inclusion: {in: 0..100, message: "must be between 0 and 100"}
