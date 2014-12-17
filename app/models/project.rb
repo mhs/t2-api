@@ -1,7 +1,7 @@
 class Project < ActiveRecord::Base
   include HasManyCurrent
 
-  attr_accessible :name, :notes, :billable, :binding, :provisional,
+  attr_accessible :name, :notes, :billable, :binding,
     :vacation, :start_date, :end_date, :office_ids, :rates, :investment_fridays,
     :typical_allocation_percentages, :typical_counts, :num_weeks_per_invoice,
     :selling_office_id
@@ -17,8 +17,6 @@ class Project < ActiveRecord::Base
 
   validates :name, presence: true, uniqueness: true
   validates :office_ids, presence: true
-
-  after_update :update_provisional_allocations
 
   scope :assignable, -> { where(vacation: true) }
   scope :archived, lambda { |bool| bool ? only_archived : only_active }
@@ -71,12 +69,4 @@ class Project < ActiveRecord::Base
     rate.to_f / (investment_fridays? ? 4 : 5)
   end
 
-  protected
-
-  def update_provisional_allocations
-    # if we have changed from provisional to not, update the
-    # allocations to match
-    return unless !provisional? && provisional_was
-    allocations.update_all(provisional: false)
-  end
 end
