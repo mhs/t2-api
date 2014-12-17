@@ -1,6 +1,29 @@
 require 'spec_helper'
 
 describe Project do
+  describe "initialize" do
+
+    context 'with no rates' do
+      let(:project) { Project.new }
+      it 'has appropriate default rates' do
+        expect(project.rates['Developer']).to eq(7000)
+        expect(project.rates['Designer']).to eq(7000)
+        expect(project.rates['Product Manager']).to eq(7000)
+        expect(project.rates['Principal']).to eq(14000)
+      end
+    end
+
+    context 'with rates' do
+      let(:project) { Project.new(rates: {'Developer' => 39000}) }
+      it 'allows for overriding a specific rate(s)' do
+        expect(project.rates['Developer']).to eq(39000)
+        expect(project.rates['Designer']).to eq(7000)
+        expect(project.rates['Product Manager']).to eq(7000)
+        expect(project.rates['Principal']).to eq(14000)
+      end
+    end
+  end
+
   describe "rate_for" do
     let(:project) { FactoryGirl.create(:project, :billable, rates: { 'Developer' => '2000' }) }
 

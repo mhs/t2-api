@@ -1,9 +1,14 @@
 class Project < ActiveRecord::Base
+
+  DEFAULT_RATES = { 'Developer' => 7000,
+                    'Designer' => 7000,
+                    'Product Manager' => 7000,
+                    'Principal' => 14000 }
+
   include HasManyCurrent
 
   attr_accessible :name, :notes, :billable, :binding,
     :vacation, :start_date, :end_date, :office_ids, :rates, :investment_fridays,
-    :typical_allocation_percentages, :typical_counts, :num_weeks_per_invoice,
     :selling_office_id
 
   belongs_to :selling_office, class_name: "Office"
@@ -17,6 +22,8 @@ class Project < ActiveRecord::Base
 
   validates :name, presence: true, uniqueness: true
   validates :office_ids, presence: true
+
+  after_initialize :set_default_rates
 
   scope :assignable, -> { where(vacation: true) }
   scope :archived, lambda { |bool| bool ? only_archived : only_active }
@@ -69,4 +76,9 @@ class Project < ActiveRecord::Base
     rate.to_f / (investment_fridays? ? 4 : 5)
   end
 
+  def set_default_rates
+    DEFAULT_RATES.each do |role, rate|
+      self.rates[role] ||= rate
+    end
+  end
 end
