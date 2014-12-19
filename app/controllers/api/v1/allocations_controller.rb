@@ -35,7 +35,7 @@ class Api::V1::AllocationsController < Api::V1::BaseController
       else
         with_conflicts = allocation
         availabilites = []
-      end 
+      end
       render json: with_conflicts, meta: availabilities, meta_key: :availabilities, status: :created
     else
       render json: { errors: allocation.errors }, status: :unprocessable_entity
@@ -46,7 +46,11 @@ class Api::V1::AllocationsController < Api::V1::BaseController
   def update
     allocation = Allocation.find(params[:id])
     if allocation.update_attributes(params[:allocation])
-      render json: allocation.person.allocations_with_conflicts_for(window_start, window_end), status: :ok
+      if allocation.person.present?
+        render json: allocation.person.allocations_with_conflicts_for(window_start, window_end), status: :ok
+      else
+        render json: allocation, status: :ok
+      end
     else
       render json: { errors: allocation.errors }, status: :unprocessable_entity
     end
