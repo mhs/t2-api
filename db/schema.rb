@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141217191713) do
+ActiveRecord::Schema.define(version: 20141219192605) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -185,6 +185,7 @@ ActiveRecord::Schema.define(version: 20141217191713) do
     t.hstore   "details"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "likelihood"
   end
 
   add_index "revenue_items", ["day", "office_id", "project_id", "allocation_id", "person_id", "role", "provisional"], name: "index_all_the_things", unique: true, using: :btree

@@ -5,6 +5,10 @@ class Allocation < ActiveRecord::Base
 
   attr_accessor :conflicts # used by the serialization code
 
+  ALL_LIKELIHOODS = ['30% Likely','60% Likely','90% Likely', '100% Booked']
+  BOOKED_LIKELIHOODS = ['100% Booked']
+  SPECULATIVE_LIKELIHOODS = ALL_LIKELIHOODS - BOOKED_LIKELIHOODS
+
   belongs_to :person
   belongs_to :project
   has_one :office, through: :person
