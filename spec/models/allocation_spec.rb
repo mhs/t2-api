@@ -193,6 +193,16 @@ describe '.this_year' do
     Allocation.this_year.should_not include(allocation)
   end
 
+  describe '.speculative' do
+    it 'does not include booked allocations' do
+      ['30% Likely','60% Likely','90% Likely', '100% Booked'].each do |likelihood|
+        FactoryGirl.create(:allocation, likelihood: likelihood)
+      end
+
+      expect(Allocation.speculative.pluck(:likelihood)).to match_array(['30% Likely','60% Likely','90% Likely'])
+    end
+  end
+
   context "when destroyed" do
 
     let!(:allocation) { FactoryGirl.create(:allocation) }

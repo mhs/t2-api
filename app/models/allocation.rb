@@ -53,6 +53,7 @@ class Allocation < ActiveRecord::Base
   scope :vacation, -> { current.where(:projects => { vacation: true }) }
   scope :by_office, lambda { |office| office ? joins(:office).where("people.office_id" => office.id) : where(false) }
   scope :includes_provisional, lambda { |x| x ? where(nil) : where(provisional: false) }
+  scope :speculative, -> { where(likelihood: SPECULATIVE_LIKELIHOODS) }
 
   scope :billable_and_assignable, -> { billable.assignable }
 
