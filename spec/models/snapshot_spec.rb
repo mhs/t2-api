@@ -211,15 +211,15 @@ describe Snapshot do
       end
 
       context "projected utilization" do
-        it "returns a utilization ratio that includes provisional allocation if requested" do
+        it "returns a utilization ratio that includes speculative allocation if requested" do
           # This person will be present but will not have
           # an allocation. It should be taken into account
           # in the utilization ration calculation.
           FactoryGirl.create(:person, office: office)
-          allocation_for(dev, provisional: true)
+          allocation_for(dev, likelihood: '90% Likely')
 
           snapshot.office = office
-          snapshot.includes_provisional = true
+          snapshot.includes_speculative = true
           snapshot.calculate
 
           # Since there are three people in the snapshot's office
@@ -233,15 +233,15 @@ describe Snapshot do
           snapshot.utilization.should eql("40.0")
         end
 
-        it "returns a utilization ratio that ignores provisional allocation otherwise" do
+        it "returns a utilization ratio that ignores speculative allocation otherwise" do
           # This person will be present but will not have
           # an allocation. It should be taken into account
           # in the utilization ration calculation.
           FactoryGirl.create(:person, office: office)
-          allocation_for(dev, provisional: true)
+          allocation_for(dev, likelihood: '90% Likely')
 
           snapshot.office = office
-          snapshot.includes_provisional = false
+          snapshot.includes_speculative = false
           snapshot.calculate
 
           snapshot.utilization.should eql("0.0")

@@ -239,7 +239,7 @@ describe '.this_year' do
     let(:some_future_date) { Date.today.following_monday }
 
     let!(:allocation) do
-      FactoryGirl.create(:allocation, binding:true, provisional: false, start_date: some_day_last_month, end_date: some_future_date)
+      FactoryGirl.create(:allocation, binding:true, start_date: some_day_last_month, end_date: some_future_date)
     end
 
     let(:person) { allocation.person }
@@ -250,7 +250,7 @@ describe '.this_year' do
     end
 
     it "updates revenue items from this month and beyond and leave past alone" do
-      allocation.provisional = true
+      allocation.likelihood = '90% Likely'
       allocation.save!
 
       revenue_item_before_this_month = RevenueItem.for_allocation!(allocation, day: some_day_last_month)
@@ -258,10 +258,10 @@ describe '.this_year' do
       revenue_item_today = RevenueItem.for_allocation!(allocation, day: Date.today)
       revenue_item_future = RevenueItem.for_allocation!(allocation, day: some_future_date)
 
-      expect(revenue_item_before_this_month.provisional).to be_false
-      expect(revenue_item_beginning_of_month.provisional).to be_true
-      expect(revenue_item_today.provisional).to be_true
-      expect(revenue_item_future.provisional).to be_true
+      expect(revenue_item_before_this_month.speculative?).to be_false
+      expect(revenue_item_beginning_of_month.speculative?).to be_true
+      expect(revenue_item_today.speculative?).to be_true
+      expect(revenue_item_future.speculative?).to be_true
     end
   end
 

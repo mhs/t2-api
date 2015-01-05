@@ -8,13 +8,13 @@ class MonthlySnapshot < ActiveRecord::Base
 
   scope :by_date, lambda {|date| where(snap_date: date.beginning_of_month) }
   scope :by_office_id, lambda {|office_id| office_id ? where(office_id: office_id) : where(false) }
-  scope :by_provisional, lambda {|provisional| where(includes_provisional: provisional) }
+  scope :by_speculative, lambda {|speculative| where(includes_speculative: speculative) }
   scope :future, lambda { where('snap_date >= ?', Date.today - 1.month) }
 
-  validates :snap_date, uniqueness: { scope: [:office_id, :includes_provisional] }
+  validates :snap_date, uniqueness: { scope: [:office_id, :includes_speculative] }
 
-  def self.on_date!(date, includes_provisional: false, office_id: nil)
-    rel = where(snap_date: date.beginning_of_month, office_id: office_id, includes_provisional: includes_provisional)
+  def self.on_date!(date, includes_speculative: false, office_id: nil)
+    rel = where(snap_date: date.beginning_of_month, office_id: office_id, includes_speculative: includes_speculative)
     rel.first_or_create! do |snap|
       snap.calculate
     end
@@ -24,12 +24,12 @@ class MonthlySnapshot < ActiveRecord::Base
     MonthlySnapshot.order("snap_date ASC").where(office_id: office_id)
   end
 
-  def self.current_month!(includes_provisional: false, office_id: nil)
-    on_date!(Date.today, includes_provisional: includes_provisional, office_id: office_id)
+  def self.current_month!(includes_speculative: false, office_id: nil)
+    on_date!(Date.today, includes_speculative: includes_speculative, office_id: office_id)
   end
 
-  def self.next_month!(includes_provisional: false, office_id: nil)
-    on_date!(Date.today.advance(months: 1), includes_provisional: includes_provisional, office_id: office_id)
+  def self.next_month!(includes_speculative: false, office_id: nil)
+    on_date!(Date.today.advance(months: 1), includes_speculative: includes_speculative, office_id: office_id)
   end
 
   def recalculate!
@@ -40,7 +40,7 @@ class MonthlySnapshot < ActiveRecord::Base
   def calculate
     reset_aggregates
     with_week_days_in(snap_date) do |date|
-      Snapshot.on_date!(date, office_id: office_id, includes_provisional: includes_provisional).tap do |snapshot|
+      Snapshot.on_date!(date, office_id: office_id, includes_speculative: includes_speculative).tap do |snapshot|
         self.billing_days += snapshot.billing.to_fte
         self.assignable_days += snapshot.assignable.to_fte
         self.billable_days += snapshot.billable.to_fte

@@ -38,7 +38,6 @@ class RevenueItem < ActiveRecord::Base
       :project => allocation.project,
       :role => person.role,
       :base_rate => project.rate_for(person.role),
-      :provisional => allocation.provisional,
       :likelihood => allocation.likelihood,
       :vacation_percentage => vacation_percentage,
       :holiday_in_week => holiday_in_week,
@@ -68,6 +67,10 @@ class RevenueItem < ActiveRecord::Base
 
   def base_rate
     super.to_f
+  end
+
+  def speculative?
+    Allocation::SPECULATIVE_LIKELIHOODS.include? likelihood
   end
 
   private

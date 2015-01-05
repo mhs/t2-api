@@ -1,5 +1,4 @@
 class Api::V1::SnapshotsController < Api::V1::BaseController
-  # TODO: deal with provisional allocations
   def index
     office_id = params[:office_id]
     proxy = Snapshot.by_office_id(office_id)

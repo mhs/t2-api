@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141219192605) do
+ActiveRecord::Schema.define(version: 20150105183913) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -84,13 +84,13 @@ ActiveRecord::Schema.define(version: 20141219192605) do
     t.datetime "created_at",                                                   null: false
     t.datetime "updated_at",                                                   null: false
     t.decimal  "utilization",          precision: 6, scale: 2, default: 0.0
-    t.boolean  "includes_provisional",                         default: false
+    t.boolean  "includes_speculative",                         default: false
     t.decimal  "billable_days",        precision: 6, scale: 2, default: 0.0
     t.decimal  "gross_utilization",    precision: 6, scale: 2, default: 0.0
   end
 
   add_index "monthly_snapshots", ["office_id"], name: "index_monthly_snapshots_on_office_id", using: :btree
-  add_index "monthly_snapshots", ["snap_date", "office_id", "includes_provisional"], name: "unique_monthly_snapshots_index", unique: true, using: :btree
+  add_index "monthly_snapshots", ["snap_date", "office_id", "includes_speculative"], name: "unique_monthly_snapshots_index", unique: true, using: :btree
   add_index "monthly_snapshots", ["snap_date"], name: "index_monthly_snapshots_on_snap_date", using: :btree
 
   create_table "office_holidays", force: true do |t|
@@ -204,11 +204,11 @@ ActiveRecord::Schema.define(version: 20141219192605) do
     t.text     "billable"
     t.text     "overallocated"
     t.text     "non_billable"
-    t.boolean  "includes_provisional", default: false
+    t.boolean  "includes_speculative", default: false
     t.string   "gross_utilization"
   end
 
-  add_index "snapshots", ["snap_date", "office_id", "includes_provisional"], name: "unique_snapshots_index", unique: true, using: :btree
+  add_index "snapshots", ["snap_date", "office_id", "includes_speculative"], name: "unique_snapshots_index", unique: true, using: :btree
 
   create_table "t2_applications", force: true do |t|
     t.string   "url"

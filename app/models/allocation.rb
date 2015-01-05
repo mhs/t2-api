@@ -48,11 +48,10 @@ class Allocation < ActiveRecord::Base
   scope :assignable, -> { current.includes(:project).where(:projects => { vacation: false }) }
   scope :unassignable, -> { current.includes(:project).where(:projects => { vacation: true }) }
   scope :billable, -> { where(billable: true) }
-  scope :provisional, -> { where(provisional: true) }
   scope :bound, -> { where(binding: true) }
   scope :vacation, -> { current.where(:projects => { vacation: true }) }
   scope :by_office, lambda { |office| office ? joins(:office).where("people.office_id" => office.id) : where(false) }
-  scope :includes_provisional, lambda { |x| x ? where(nil) : where(provisional: false) }
+  scope :includes_speculative, lambda { |x| x ? where(nil) : where(likelihood: BOOKED_LIKELIHOODS) }
   scope :speculative, -> { where(likelihood: SPECULATIVE_LIKELIHOODS) }
 
   scope :billable_and_assignable, -> { billable.assignable }

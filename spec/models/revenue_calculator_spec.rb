@@ -36,11 +36,11 @@ describe "project revenue calculation" do
     end
   end
 
-  context "a project allocated provisionally all week" do
-    before { allocation.provisional = true; allocation.save! }
-    context "when not including provisional allocations" do
+  context "a project allocated speculatively all week" do
+    before { allocation.likelihood = '90% Likely'; allocation.save! }
+    context "when not including speculative allocations" do
       it "has no revenue" do
-        expect(provisional_items.length).to eq(5)
+        expect(speculative_items.length).to eq(5)
       end
     end
   end
@@ -82,7 +82,7 @@ describe "project revenue calculation" do
     revenue_items.select { |i| i.amount > 0 }
   end
 
-  def provisional_items
-    revenue_items.select { |i| i.provisional }
+  def speculative_items
+    revenue_items.select { |i| i.speculative? }
   end
 end

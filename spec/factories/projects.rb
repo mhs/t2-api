@@ -37,9 +37,5 @@ FactoryGirl.define do
     trait :holiday do
       holiday true
     end
-
-    trait :provisional do
-      provisional true
-    end
   end
 end
