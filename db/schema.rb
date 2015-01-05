@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150105183913) do
+ActiveRecord::Schema.define(version: 20150105200819) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,6 +40,7 @@ ActiveRecord::Schema.define(version: 20150105183913) do
   add_index "allocations", ["binding"], name: "index_allocations_on_binding", using: :btree
   add_index "allocations", ["creator_id"], name: "index_allocations_on_creator_id", using: :btree
   add_index "allocations", ["end_date"], name: "index_allocations_on_end_date", using: :btree
+  add_index "allocations", ["likelihood"], name: "index_allocations_on_likelihood", using: :btree
   add_index "allocations", ["person_id"], name: "index_allocations_on_person_id", using: :btree
   add_index "allocations", ["project_id"], name: "index_allocations_on_project_id", using: :btree
   add_index "allocations", ["slot_id"], name: "index_allocations_on_slot_id", using: :btree
