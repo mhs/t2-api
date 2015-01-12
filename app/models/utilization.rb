@@ -53,6 +53,11 @@ class Utilization
     end
   end
 
+  def vacation_allocation_percentage
+    percent = vacation.sum(:percent_allocated).to_f
+    percent <= 100.0 ? percent : 100.0 
+  end
+  memoize :vacation_allocation_percentage
 
   private
 
@@ -72,11 +77,6 @@ class Utilization
     assignable_percentage - billing_percentage
   end
   memoize :slack
-
-  def vacation_allocation_percentage
-    vacation.sum(:percent_allocated).to_f
-  end
-  memoize :vacation_allocation_percentage
 
   def output
     { billable_percentage: billable_percentage,
