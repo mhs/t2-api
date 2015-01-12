@@ -12,9 +12,9 @@ task :shelley_report => :environment do
   end
 
   this_month = Date.today.month
-  prior_month = this_month == '1' ? '12' : (this_month - 1).to_s
+  prior_month = this_month == 1 ? 12 : (this_month - 1).to_s
   this_year = Date.today.year
-  prior_month_year = this_month == '1' ? (this_year - 1).to_s : this_year.to_s
+  prior_month_year = this_month == 1 ? (this_year - 1).to_s : this_year.to_s
 
   start_of_period = "#{prior_month_year}-#{prior_month}-1"
   end_of_period = "#{this_year}-#{this_month}-1"
