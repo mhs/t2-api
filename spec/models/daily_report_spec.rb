@@ -20,7 +20,7 @@ describe DailyReport do
     end
 
     it 'should not update snapshots' do
-      daily_report.snapshots.first.updated_at.to_f.should eql(@snapshot.updated_at.to_f)
+      daily_report.snapshots.first.updated_at.to_i.should eql(@snapshot.updated_at.to_i)
     end
   end
 end
