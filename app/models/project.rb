@@ -78,7 +78,7 @@ class Project < ActiveRecord::Base
 
   def set_default_rates
     DEFAULT_RATES.each do |role, rate|
-      self.rates[role] ||= rate
+      self.rates[role] = rate if self.rates[role].blank?
     end
   end
 end
