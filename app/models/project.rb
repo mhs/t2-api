@@ -9,7 +9,7 @@ class Project < ActiveRecord::Base
 
   attr_accessible :name, :notes, :billable, :binding,
     :vacation, :start_date, :end_date, :office_ids, :rates, :investment_fridays,
-    :selling_office_id
+    :selling_office_id, :num_weeks_per_invoice, :typical_counts, :typical_allocation_percentages
 
   belongs_to :selling_office, class_name: "Office"
   has_many :project_offices
