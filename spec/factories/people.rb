@@ -21,4 +21,9 @@ FactoryGirl.define do
     percent_billable 0
   end
 
+  trait :past do
+    start_date { 2.years.ago }
+    end_date   { 1.year.ago }
+  end
+
 end

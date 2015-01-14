@@ -10,7 +10,7 @@ class AllocationBundle
 
   def projects
     Project.within_date_range(@start_date, @end_date) do
-      Project.includes(:offices, :allocations).active_within(@start_date, @end_date).to_a
+      Project.includes(:offices, :employed_allocations).joins(people: :allocations).active_within(@start_date, @end_date).to_a
     end
   end
   memoize :projects

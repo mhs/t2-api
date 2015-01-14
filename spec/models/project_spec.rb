@@ -47,4 +47,28 @@ describe Project do
       Project.assignable.should_not include(project)
     end
   end
+
+  describe '.allocations/.employed_allocations' do
+    let(:project) { FactoryGirl.create(:project) }
+    let(:person_past) { FactoryGirl.create(:person, :past) }
+    let!(:active_allcoation) { FactoryGirl.create(:allocation, :active, project: project) }
+    let!(:allocation_unemployed) { FactoryGirl.create(:allocation, :active, project: project, person: person_past) }
+
+    let(:start_date) { Date.today }
+    let(:end_date) { Date.today + 1.week }
+
+    it 'has all allocations' do
+      Project.within_date_range(start_date, end_date) do
+        expect(project.allocations.count).to eql(2)
+      end
+    end
+
+    it 'has only employed allocations' do
+      Project.within_date_range(start_date, end_date) do
+        binding.pry
+        expect(project.employed_allocations.count).to eql(1)
+      end
+    end
+  end
+
 end

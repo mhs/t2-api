@@ -16,6 +16,9 @@ class Project < ActiveRecord::Base
   has_many :offices, through: :project_offices
   has_many :revenue_items, inverse_of: :project
   has_many_current :allocations
+  has_many_current :employed_allocations,
+                    -> { joins(:person).merge(Person.employed_between(ActiveRecord::Base._start_date, ActiveRecord::Base._end_date)) },
+                      class_name: 'Allocation'
   has_many_current :people, -> { uniq }, through: :allocations
 
   acts_as_paranoid
