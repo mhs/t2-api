@@ -10,7 +10,7 @@ describe Utilization do
         FactoryGirl.create(:allocation, :vacation, person: person, project: project)
       end
 
-      Utilization.new(person: person, includes_provisional: false).vacation_allocation_percentage.should eq(100.0)
+      Utilization.new(person: person, includes_speculative: false).vacation_allocation_percentage.should eq(100.0)
     end
   end
 

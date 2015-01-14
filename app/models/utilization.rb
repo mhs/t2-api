@@ -3,7 +3,7 @@ class Utilization
 
   attr_accessor :person, :start_date, :end_date, :includes_speculative
 
-  def initialize(person:, start_date: nil, end_date: nil, includes_speculative:)
+  def initialize(person:, start_date: nil, end_date: nil, includes_speculative: false)
     @person     = person
     @start_date = start_date.presence || Date.today
     @end_date   = end_date.presence   || start_date.presence || Date.today
@@ -55,7 +55,7 @@ class Utilization
 
   def vacation_allocation_percentage
     percent = vacation.sum(:percent_allocated).to_f
-    percent <= 100.0 ? percent : 100.0 
+    percent <= 100.0 ? percent : 100.0
   end
   memoize :vacation_allocation_percentage
 
