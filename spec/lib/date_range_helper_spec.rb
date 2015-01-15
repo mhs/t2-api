@@ -14,30 +14,30 @@ describe "DateRangeHelper" do
   let(:sunday)     { Date.new(2014, 02, 16) }
 
   describe "#weekend?" do
-    it "will be false if a weekday" do
-      expect(tester.weekend?(wednesday)).to be_false
+    it "will be falsey if a weekday" do
+      expect(tester.weekend?(wednesday)).to be_falsey
     end
 
-    it "will be true if a Saturday" do
-      expect(tester.weekend?(saturday)).to be_true
+    it "will be truthy if a Saturday" do
+      expect(tester.weekend?(saturday)).to be_truthy
     end
 
-    it "will be true if Sunday" do
-      expect(tester.weekend?(sunday)).to be_true
+    it "will be truthy if Sunday" do
+      expect(tester.weekend?(sunday)).to be_truthy
     end
   end
 
   describe "#weekday?" do
-    it "will be true if a weekday" do
-      expect(tester.weekday?(wednesday)).to be_true
+    it "will be truthy if a weekday" do
+      expect(tester.weekday?(wednesday)).to be_truthy
     end
 
-    it "will be false if a Saturday" do
-      expect(tester.weekday?(saturday)).to be_false
+    it "will be falsey if a Saturday" do
+      expect(tester.weekday?(saturday)).to be_falsey
     end
 
-    it "will be false if Sunday" do
-      expect(tester.weekday?(sunday)).to be_false
+    it "will be falsey if Sunday" do
+      expect(tester.weekday?(sunday)).to be_falsey
     end
   end
 end

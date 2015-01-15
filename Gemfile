@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 ruby '2.1.0'
 
-gem 'active_model_serializers'
+gem 'active_model_serializers', '~> 0.8.3'
 gem 'acts-as-taggable-on'
 gem 'aws-sdk'
 gem 'bitters', '~> 0.9.2'
