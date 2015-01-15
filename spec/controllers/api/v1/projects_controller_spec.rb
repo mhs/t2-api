@@ -8,13 +8,13 @@ describe Api::V1::ProjectsController do
 
   describe "GET #index" do
     it "should respond with list of projects" do
-      projects = FactoryGirl.create_list :project, 2
+      FactoryGirl.create_list :project, 2
 
       get :index, format: :json
 
       resp = JSON.parse(response.body)
-      resp.keys.should eql(["projects", "meta"])
-      resp["projects"].should have(2).items
+      expect(resp.keys).to eql(["projects", "meta"])
+      expect(resp["projects"].size).to eq(2)
     end
   end
 end

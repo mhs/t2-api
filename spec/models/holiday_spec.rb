@@ -19,8 +19,8 @@ describe Holiday do
   
   describe ".allocations" do
     before(:each) do
-      joe = FactoryGirl.create(:person, office: columbus, start_date: 1.week.ago)
-      sally = FactoryGirl.create(:person, office: columbus, start_date: 1.week.ago)
+      FactoryGirl.create(:person, office: columbus, start_date: 1.week.ago)
+      FactoryGirl.create(:person, office: columbus, start_date: 1.week.ago)
     end
 
     let(:columbus) do
@@ -45,27 +45,27 @@ describe Holiday do
 
     it "should only include allocations for the holiday project" do
       project = office_shutdown_allocations.first.project
-      project.holiday.should be_truthy
+      expect(project.holiday).to be_truthy
     end
 
     it "should include allocations for everyone in the office" do
-      office_shutdown_allocations.should have_at_least(2).items
+      expect(office_shutdown_allocations.count).to eq(2)
     end
 
     it "should include allocations that start on the right date" do
-      office_shutdown_allocations.first.start_date.should eql(shutdown_start)
+      expect(office_shutdown_allocations.first.start_date).to eq(shutdown_start)
     end
 
     it "should include allocations that end on the right date" do
-      office_shutdown_allocations.first.end_date.should eql(shutdown_end)
+      expect(office_shutdown_allocations.first.end_date).to eql(shutdown_end)
     end
   end
 
   it "destroys allocations when it is destroyed" do
     holiday_project = Project.find_by(holiday: true)
-    Allocation.where(project: holiday_project).should_not be_empty
+    expect(Allocation.where(project: holiday_project)).to exist
     holiday.destroy
-    Allocation.where(project: holiday_project).should be_empty
+    expect(Allocation.where(project: holiday_project)).to_not exist
   end
 
   describe "#declare" do

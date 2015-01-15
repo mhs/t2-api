@@ -30,7 +30,7 @@ describe Snapshot do
     it 'creates a snapshot for the given office' do
       snapshot = Snapshot.on_date!(Date.today, office_id: office.id)
       snapshot.office_id.should eql(office.id)
-      snapshot.should be_persisted
+expect(snapshot).to be_persisted
     end
 
     it 'should raise an error when invoked without arguments' do
@@ -58,9 +58,7 @@ describe Snapshot do
       it 'should not create a new snapshot when exists a snapshot for the given day' do
         snapshot
 
-        lambda do
-          Snapshot.on_date!(Date.today)
-        end.should_not change(Snapshot, :count).by(1)
+        expect { Snapshot.on_date!(Date.today) }.to_not change(Snapshot, :count)
       end
 
       it 'should update existent snapshot' do
