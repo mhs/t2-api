@@ -77,7 +77,7 @@ namespace :db do
     puts "Cleaning Person duplicates..."
     all_email = Person.with_deleted.all.map(&:email)
     dup_emails = all_email.select{|e| all_email.count(e) > 1}.sort
-    suspicious_people = Person.only_deleted.where(email: dup_emails)
+    suspicious_people = Person.deleted.where(email: dup_emails)
     puts "#{dup_emails.size} duplicates detected:"
     dup_emails.each{|e| puts e}
     people_to_delete = suspicious_people.reject{|p| User.where(id: p.user_id).size > 0}

@@ -51,6 +51,7 @@ class Person < ActiveRecord::Base
     )
   end
 
+  scope :deleted, -> { where.not(deleted_at: nil) }
   scope :overhead, -> { where("percent_billable < 100") }
   scope :billable, -> { where("percent_billable > 0") }
   scope :by_office, lambda { |office| office.try(:id) ? where(office: office) : where(false) }

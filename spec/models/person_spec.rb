@@ -1,10 +1,10 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Person do
 
   it 'acts as paranoid' do
     Person.count.should eql(0)
-    Person.only_deleted.should be_empty
+    Person.deleted.should be_empty
 
     person = FactoryGirl.create(:person)
 
@@ -13,11 +13,11 @@ describe Person do
     person.destroy
 
     Person.count.should eql(0)
-    Person.only_deleted.should_not be_empty
+    Person.deleted.should be_empty
   end
 
   it "does not allow duplicate emails" do
-    person = FactoryGirl.create(:person, email: "joe@example.com")
+    FactoryGirl.create(:person, email: "joe@example.com")
     person2 = FactoryGirl.build(:person, email: "joe@example.com")
     person2.should_not be_valid
   end
@@ -42,7 +42,7 @@ describe Person do
   end
 
   describe 'associating with User' do
-    let(:email) { email = 'neon@example.com' }
+    let(:email) { 'neon@example.com' }
 
     it 'should associate a new person with an already created user' do
       user = FactoryGirl.create(:user, email: email)
