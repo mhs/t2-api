@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.1.0'
+ruby '2.2.0'
 
 gem 'active_model_serializers', '~> 0.8.3'
 gem 'acts-as-taggable-on'
@@ -52,7 +52,6 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'railroady'
   gem 'rspec-rails'
-  gem 'sqlite3'
   gem 'taps'
   gem 'timecop'
 end
