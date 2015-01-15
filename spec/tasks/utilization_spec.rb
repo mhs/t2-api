@@ -10,18 +10,6 @@ describe 'Utilization Rake Tasks' do
     Rake::Task.define_task(:environment)
   end
 
-  describe 'utilization:today rake task' do
-    before do
-      Rake.application.rake_require "tasks/utilization/today"
-    end
-
-    it 'should call Snapshot#today!' do
-      snapshot = Snapshot.today!
-      Snapshot.should_receive(:today!).and_return(snapshot)
-      Rake::Task['utilization:today'].invoke
-    end
-  end
-
   describe 'utilization:three_weeks rake task' do
     let(:office) { FactoryGirl.create(:office) }
 
