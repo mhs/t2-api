@@ -11,7 +11,7 @@ describe AllocationBundle do
     end
 
     it 'does not include projects outside a date range' do
-      AllocationBundle.new(in_the_past_start, in_the_past_end).projects.should_not include(project)
+      expect(AllocationBundle.new(in_the_past_start, in_the_past_end).projects).not_to include(project)
     end
   end
 
@@ -21,14 +21,14 @@ describe AllocationBundle do
     end
 
     it 'does not include allocations outside a date range' do
-      AllocationBundle.new(in_the_past_start, in_the_past_end).allocations.should_not include(allocation)
+      expect(AllocationBundle.new(in_the_past_start, in_the_past_end).allocations).not_to include(allocation)
     end
 
     context 'ended employees' do
       let(:person) {  FactoryGirl.create(:person, start_date: 2.years.ago, end_date: 1.year.ago) }
 
       it 'does not include allocations for employee with end date before range' do
-        AllocationBundle.new(current_start, current_end).allocations.should_not include(allocation)
+        expect(AllocationBundle.new(current_start, current_end).allocations).not_to include(allocation)
       end
     end
   end
@@ -39,7 +39,7 @@ describe AllocationBundle do
     end
 
     it 'does not include people who were not employed during a date range' do
-      AllocationBundle.new(years_ago_start, years_ago_end).people.should_not include(allocation.person)
+      expect(AllocationBundle.new(years_ago_start, years_ago_end).people).not_to include(allocation.person)
     end
   end
 

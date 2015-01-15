@@ -28,6 +28,6 @@ describe PersonSerializer do
 
   it "should serialize avatars" do
     expect(person_serialized.avatar).to be_kind_of(Hash)
-    expect(person_serialized.avatar.keys).to =~ [:thumb, :small, :medium]
+    expect(person_serialized.avatar.keys).to match_array([:thumb, :small, :medium])
   end
 end

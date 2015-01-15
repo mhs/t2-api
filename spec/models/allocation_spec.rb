@@ -5,7 +5,7 @@ describe Allocation do
   let(:allocation) { FactoryGirl.create(:allocation) }
 
   it 'should not be valid with an end date before the start date' do
-    FactoryGirl.build(:allocation, start_date: Date.today, end_date: 2.days.ago).should_not be_valid
+    expect(FactoryGirl.build(:allocation, start_date: Date.today, end_date: 2.days.ago)).not_to be_valid
   end
 
   it 'should be valid without a creator' do
@@ -50,12 +50,12 @@ describe "starting_soon Scope" do
 
   it 'should not include allocations started before today' do
     allocation = FactoryGirl.create(:allocation, start_date: 1.week.ago, end_date: 2.days.from_now)
-    Allocation.starting_soon.should_not include(allocation)
+    expect(Allocation.starting_soon).not_to include(allocation)
   end
 
   it 'should not include allocations starting further then 2 days from today' do
     allocation = FactoryGirl.create(:allocation, start_date: 3.days.from_now, end_date: 5.days.from_now)
-    Allocation.starting_soon.should_not include(allocation)
+    expect(Allocation.starting_soon).not_to include(allocation)
   end
 end
 
@@ -76,16 +76,16 @@ describe '.on_date' do
   end
   it 'does not include allocations that ended in the past' do
     allocation = FactoryGirl.create(:allocation, start_date: 2.weeks.ago, end_date: 1.week.ago)
-    Allocation.on_date(date).should_not include(allocation)
+    expect(Allocation.on_date(date)).not_to include(allocation)
   end
   it 'does not include allocations that start in the future' do
     allocation = FactoryGirl.create(:allocation, start_date: 1.week.from_now, end_date: 2.weeks.from_now)
-    Allocation.on_date(date).should_not include(allocation)
+    expect(Allocation.on_date(date)).not_to include(allocation)
   end
   it 'does not include allocations for deleted projects' do
     allocation = FactoryGirl.create(:allocation, start_date: 1.week.ago, end_date: 1.week.from_now)
     allocation.project.destroy
-    Allocation.on_date(date).should_not include(allocation)
+    expect(Allocation.on_date(date)).not_to include(allocation)
   end
 end
 
@@ -98,13 +98,13 @@ describe '.assignable' do
   it 'does not include an allocation on a vacation project' do
     project = FactoryGirl.create(:project, :vacation)
     allocation = FactoryGirl.create(:allocation, :active, project: project)
-    Allocation.assignable.should_not include(allocation)
+    expect(Allocation.assignable).not_to include(allocation)
   end
   it 'does not include an allocation on a project that has been deleted' do
     project = FactoryGirl.create(:project)
     allocation = FactoryGirl.create(:allocation, :active, project: project)
     project.destroy
-    Allocation.assignable.should_not include(allocation)
+    expect(Allocation.assignable).not_to include(allocation)
   end
 end
 
@@ -112,7 +112,7 @@ describe '.unassignable' do
   it 'does not include an allocation on billable project' do
     project = FactoryGirl.create(:project, :billable)
     allocation = FactoryGirl.create(:allocation, :active, project: project)
-    Allocation.unassignable.should_not include(allocation)
+    expect(Allocation.unassignable).not_to include(allocation)
   end
   it 'does include an allocation on a vacation project' do
     project = FactoryGirl.create(:project, :vacation)
@@ -123,7 +123,7 @@ describe '.unassignable' do
     project = FactoryGirl.create(:project, :vacation)
     allocation = FactoryGirl.create(:allocation, :active, project: project)
     project.destroy
-    Allocation.unassignable.should_not include(allocation)
+    expect(Allocation.unassignable).not_to include(allocation)
   end
 end
 
@@ -143,12 +143,12 @@ describe '.between' do
 
   it "does not include allocations starting before the range boundary" do
     allocation = FactoryGirl.create(:allocation, start_date: start_date - 1.day, end_date: end_date)
-    Allocation.between(start_date, end_date).should_not include(allocation)
+    expect(Allocation.between(start_date, end_date)).not_to include(allocation)
   end
 
   it "does not include allocations ending after the range boundary" do
     allocation = FactoryGirl.create(:allocation, start_date: start_date, end_date: end_date + 1.day)
-    Allocation.between(start_date, end_date).should_not include(allocation)
+    expect(Allocation.between(start_date, end_date)).not_to include(allocation)
   end
 end
 
@@ -171,7 +171,7 @@ describe '.this_year' do
 
   it "does not include allocations starting before the year boundary" do
     allocation = FactoryGirl.create(:allocation, start_date: start_of_year - 1.day, end_date: end_date)
-    Allocation.this_year.should_not include(allocation)
+    expect(Allocation.this_year).not_to include(allocation)
   end
 
   context "when destroyed" do

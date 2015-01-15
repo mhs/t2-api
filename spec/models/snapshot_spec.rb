@@ -43,11 +43,11 @@ describe Snapshot do
     end
 
     it 'captures currently employed staff' do
-      snapshot.staff.should_not be_empty
+      expect(snapshot.staff).not_to be_empty
     end
 
     it 'defaults the office to the entire company' do
-      expect(snapshot.office.class).to == Office::SummaryOffice
+      expect(snapshot.office.class).to eq(Office::SummaryOffice)
     end
 
     describe 'Updating Snapshots' do

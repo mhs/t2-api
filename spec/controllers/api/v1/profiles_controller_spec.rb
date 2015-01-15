@@ -30,25 +30,10 @@ describe Api::V1::ProfilesController do
       it 'should be able to update avatar' do
         update(avatar: fixture_file_upload("/images/neo.png"))
         expect(@serialized_person["avatar"]).to be_kind_of(Hash)
-        @serialized_person["avatar"]["thumb"].should_not be_empty
-        @serialized_person["avatar"]["small"].should_not be_empty
-        @serialized_person["avatar"]["medium"].should_not be_empty
+        expect(@serialized_person["avatar"]["thumb"]).not_to be_empty
+        expect(@serialized_person["avatar"]["small"]).not_to be_empty
+        expect(@serialized_person["avatar"]["medium"]).not_to be_empty
       end
     end
-
-    # TODO: uncomment this when there are validations that can fail
-    # describe 'When fails' do
-    #   before do
-    #     update(website: 'invalid website')
-    #   end
-
-    #   it 'should respond with status 400' do
-    #     response.status.should eql(400)
-    #   end
-
-    #   it 'should add error fields on the response' do
-    #     @serialized_person["errors"]["website"].should_not be_nil
-    #   end
-    # end
   end
 end

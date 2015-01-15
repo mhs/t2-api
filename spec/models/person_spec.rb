@@ -8,7 +8,7 @@ describe Person do
 
     person = FactoryGirl.create(:person)
 
-    Person.count.should_not eql(0)
+    expect(Person.count).not_to eql(0)
 
     person.destroy
 
@@ -19,7 +19,7 @@ describe Person do
   it "does not allow duplicate emails" do
     FactoryGirl.create(:person, email: "joe@example.com")
     person2 = FactoryGirl.build(:person, email: "joe@example.com")
-    person2.should_not be_valid
+    expect(person2).not_to be_valid
   end
 
   describe 'by_office Scope' do
@@ -58,7 +58,7 @@ describe Person do
         expect(person.user.email).to eq(email)
       }.to change(User, :count).by(1)
 
-      person.reload.user_id.should_not be_nil
+      expect(person.reload.user_id).not_to be_nil
     end
   end
 
@@ -87,12 +87,12 @@ describe Person do
 
     it 'does not include someone whose end date is in the past' do
       non_employee = FactoryGirl.create(:person, end_date: 1.week.ago)
-      Person.employed_on_date(date).should_not include(non_employee)
+      expect(Person.employed_on_date(date)).not_to include(non_employee)
     end
 
     it 'does not include someone whose start date is in the future' do
       non_employee = FactoryGirl.create(:person, start_date: 1.week.from_now)
-      Person.employed_on_date(date).should_not include(non_employee)
+      expect(Person.employed_on_date(date)).not_to include(non_employee)
     end
 
     it 'does not include a person deleted in a paranoid way' do
@@ -110,20 +110,20 @@ describe Person do
 
     it 'does not include people marked as sellable' do
       employee = FactoryGirl.create(:person)
-      Person.overhead.should_not include(employee)
+      expect(Person.overhead).not_to include(employee)
     end
 
     it 'does not include deleted employees' do
       employee = FactoryGirl.create(:person, :unsellable)
       employee.destroy
-      Person.overhead.should_not include(employee)
+      expect(Person.overhead).not_to include(employee)
     end
   end
 
   describe '.billable' do
     it 'does not include people marked as unsellable' do
       employee = FactoryGirl.create(:person, :unsellable)
-      Person.billable.should_not include(employee)
+      expect(Person.billable).not_to include(employee)
     end
 
     it 'includes people marked as sellable' do
@@ -134,7 +134,7 @@ describe Person do
     it 'does not include deleted employees' do
       employee = FactoryGirl.create(:person)
       employee.destroy
-      Person.billable.should_not include(employee)
+      expect(Person.billable).not_to include(employee)
     end
   end
 
@@ -156,11 +156,11 @@ describe Person do
     end
 
     it 'should not include allocations from this year that are not vacation' do
-      employee.pto_requests.should_not include(billable_alloc)
+      expect(employee.pto_requests).not_to include(billable_alloc)
     end
 
     it 'should not include allocations from last year that are vacatation' do
-      employee.pto_requests.should_not include(vacation_alloc_last_year)
+      expect(employee.pto_requests).not_to include(vacation_alloc_last_year)
     end
   end
 
@@ -176,7 +176,7 @@ describe Person do
 
     it 'includes company holidays' do
       Holiday.declare('Independence Day',[office],'2014-7-4')
-      employee.pto_this_year['holiday'].should_not be_empty
+      expect(employee.pto_this_year['holiday']).not_to be_empty
     end
 
     it 'does not include holidays from last year' do
@@ -186,7 +186,7 @@ describe Person do
 
     it 'includes vacation days' do
       FactoryGirl.create(:allocation, person: employee, project: vacation_project, start_date: '2014-7-1', end_date: '2014-7-1')
-      vacation_time.should_not be_empty
+      expect(vacation_time).not_to be_empty
       expect(vacation_time.size).to eq(1)
     end
 

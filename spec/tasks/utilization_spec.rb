@@ -26,8 +26,8 @@ describe 'Utilization Rake Tasks' do
 
     it 'should not call Snapshot#on_date! on weekends' do
       with_week_days do |date|
-        date.should_not be_saturday
-        date.should_not be_sunday
+        expect(date).not_to be_saturday
+        expect(date).not_to be_sunday
       end
     end
   end

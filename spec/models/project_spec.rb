@@ -44,7 +44,7 @@ describe Project do
     end
     it 'false by default' do
       project = FactoryGirl.create(:project)
-      Project.assignable.should_not include(project)
+      expect(Project.assignable).not_to include(project)
     end
   end
 end
