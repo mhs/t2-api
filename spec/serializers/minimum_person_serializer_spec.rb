@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe MinimumPersonSerializer do
   let(:person) { FactoryGirl.create(:person) }

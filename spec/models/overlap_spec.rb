@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 describe Overlap do
   let(:person) { double }
   let(:start_date) { Date.today.beginning_of_week }

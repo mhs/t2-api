@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Reports::Revenue do
   describe 'accepts start and end date' do

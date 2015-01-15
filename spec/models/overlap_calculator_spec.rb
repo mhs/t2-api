@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 describe OverlapCalculator do
 
   let(:person) { double(id: 42, percent_billable: 100) }

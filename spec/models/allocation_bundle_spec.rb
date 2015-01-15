@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe AllocationBundle do
   let(:project) { FactoryGirl.create(:project, start_date: Date.today - 1.week, end_date: Date.today + 2.weeks)}

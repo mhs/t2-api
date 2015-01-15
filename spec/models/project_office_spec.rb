@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe ProjectOffice do
   let(:vacation)  { FactoryGirl.create(:project, :vacation) }
