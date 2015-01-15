@@ -184,9 +184,9 @@ describe '.this_year' do
     it "destroyed future revenue items and nullifies past revenue items" do
       allocation.revenue_items.count.should eq(3)
       allocation.destroy
-      expect(RevenueItem.exists?(last_month.id)).to be_true
-      expect(RevenueItem.exists?(present.id)).to be_false
-      expect(RevenueItem.exists?(future.id)).to be_false
+      expect(RevenueItem.exists?(last_month.id)).to be_truthy
+      expect(RevenueItem.exists?(present.id)).to be_falsey
+      expect(RevenueItem.exists?(future.id)).to be_falsey
 
       expect(last_month.reload.allocation_id).to be_nil
     end
@@ -229,10 +229,10 @@ describe '.this_year' do
       revenue_item_today = RevenueItem.for_allocation!(allocation, day: Date.today)
       revenue_item_future = RevenueItem.for_allocation!(allocation, day: some_future_date)
 
-      expect(revenue_item_before_this_month.provisional).to be_false
-      expect(revenue_item_beginning_of_month.provisional).to be_true
-      expect(revenue_item_today.provisional).to be_true
-      expect(revenue_item_future.provisional).to be_true
+      expect(revenue_item_before_this_month.provisional).to be_falsey
+      expect(revenue_item_beginning_of_month.provisional).to be_truthy
+      expect(revenue_item_today.provisional).to be_truthy
+      expect(revenue_item_future.provisional).to be_truthy
     end
   end
 

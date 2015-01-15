@@ -45,7 +45,7 @@ describe Holiday do
 
     it "should only include allocations for the holiday project" do
       project = office_shutdown_allocations.first.project
-      project.holiday.should be_true
+      project.holiday.should be_truthy
     end
 
     it "should include allocations for everyone in the office" do
