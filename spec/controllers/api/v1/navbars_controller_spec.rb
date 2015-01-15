@@ -23,15 +23,14 @@ describe Api::V1::NavbarsController do
     it "should return settings in the bottom" do
       bottom = serialized_response['bottom']
       settings_entry = bottom.find { |entry| entry['title'] == 'Settings' }
-      settings_entry.should be_present
+      expect(settings_entry).to be_present
     end
 
     it "should interpolate the authentication token into the application links" do
       token = person.user.authentication_token
       bottom = serialized_response['bottom']
       settings_entry = bottom.find { |entry| entry['title'] == 'Settings' }
-      settings_entry['url'].should match(/authentication_token=#{token}/)
+      expect(settings_entry['url']).to match(/authentication_token=#{token}/)
     end
   end
 end
-

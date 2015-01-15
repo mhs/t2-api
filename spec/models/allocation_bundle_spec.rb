@@ -7,7 +7,7 @@ describe AllocationBundle do
 
   describe '#projects' do
     it 'includes projects within a date range' do
-      AllocationBundle.new(current_start, current_end).projects.should include(project)
+      expect(AllocationBundle.new(current_start, current_end).projects).to include(project)
     end
 
     it 'does not include projects outside a date range' do
@@ -17,7 +17,7 @@ describe AllocationBundle do
 
   describe '#allocations' do
     it 'includes allocations within a date range' do
-      AllocationBundle.new(current_start, current_end).allocations.should include(allocation)
+      expect(AllocationBundle.new(current_start, current_end).allocations).to include(allocation)
     end
 
     it 'does not include allocations outside a date range' do
@@ -35,7 +35,7 @@ describe AllocationBundle do
 
   describe '#people' do
     it 'includes people who are employed within a date range' do
-      AllocationBundle.new(current_start, current_end).people.should include(allocation.person)
+      expect(AllocationBundle.new(current_start, current_end).people).to include(allocation.person)
     end
 
     it 'does not include people who were not employed during a date range' do

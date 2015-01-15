@@ -11,16 +11,16 @@ describe DailyReport do
     end
 
     it 'should be kind of DailyReport' do
-      DailyReport.on_date(Date.today).should be_kind_of(DailyReport)
+      expect(DailyReport.on_date(Date.today)).to be_kind_of(DailyReport)
     end
 
     it 'should include date_report and snapshot' do
-      daily_report.snapshots.should include(@snapshot)
-      daily_report.report_date.should eql(Date.today)
+      expect(daily_report.snapshots).to include(@snapshot)
+      expect(daily_report.report_date).to eql(Date.today)
     end
 
     it 'should not update snapshots' do
-      daily_report.snapshots.first.updated_at.to_f.should eql(@snapshot.updated_at.to_f)
+      expect(daily_report.snapshots.first.updated_at.to_f).to eql(@snapshot.updated_at.to_f)
     end
   end
 end

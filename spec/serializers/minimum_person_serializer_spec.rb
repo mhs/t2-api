@@ -6,11 +6,11 @@ describe MinimumPersonSerializer do
   let(:person_serialized) { MinimumPersonSerializer.new(person) }
 
   it "should serialize office_name" do
-    person_serialized.office_name.should eql(person.office.name)
+    expect(person_serialized.office_name).to eql(person.office.name)
   end
 
   it "should serialize avatars" do
-    person_serialized.avatar.should be_kind_of(Hash)
-    person_serialized.avatar.keys.should =~ [:thumb, :small, :medium]
+    expect(person_serialized.avatar).to be_kind_of(Hash)
+    expect(person_serialized.avatar.keys).to =~ [:thumb, :small, :medium]
   end
 end

@@ -12,22 +12,22 @@ describe PersonSerializer do
   end
 
   it "should serialize office" do
-    person_serialized.office.should eql(person.office)
+    expect(person_serialized.office).to eql(person.office)
   end
 
   it "should include social links" do
-    person_serialized.github.should eql(person.github)
-    person_serialized.twitter.should eql(person.twitter)
+    expect(person_serialized.github).to eql(person.github)
+    expect(person_serialized.twitter).to eql(person.twitter)
   end
 
   it "should include personal links" do
-    person_serialized.website.should eql(person.website)
-    person_serialized.title.should eql(person.title)
-    person_serialized.bio.should eql(person.bio)
+    expect(person_serialized.website).to eql(person.website)
+    expect(person_serialized.title).to eql(person.title)
+    expect(person_serialized.bio).to eql(person.bio)
   end
 
   it "should serialize avatars" do
-    person_serialized.avatar.should be_kind_of(Hash)
-    person_serialized.avatar.keys.should =~ [:thumb, :small, :medium]
+    expect(person_serialized.avatar).to be_kind_of(Hash)
+    expect(person_serialized.avatar.keys).to =~ [:thumb, :small, :medium]
   end
 end

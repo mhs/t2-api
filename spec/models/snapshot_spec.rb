@@ -29,8 +29,8 @@ describe Snapshot do
 
     it 'creates a snapshot for the given office' do
       snapshot = Snapshot.on_date!(Date.today, office_id: office.id)
-      snapshot.office_id.should eql(office.id)
-expect(snapshot).to be_persisted
+      expect(snapshot.office_id).to eql(office.id)
+      expect(snapshot).to be_persisted
     end
 
     it 'should raise an error when invoked without arguments' do
@@ -39,7 +39,7 @@ expect(snapshot).to be_persisted
 
     it 'sets the snapshot date' do
       date = 3.days.ago.to_date
-      Snapshot.on_date!(date).snap_date.should eql(date)
+      expect(Snapshot.on_date!(date).snap_date).to eql(date)
     end
 
     it 'captures currently employed staff' do
@@ -47,7 +47,7 @@ expect(snapshot).to be_persisted
     end
 
     it 'defaults the office to the entire company' do
-      snapshot.office.class.should == Office::SummaryOffice
+      expect(snapshot.office.class).to == Office::SummaryOffice
     end
 
     describe 'Updating Snapshots' do
@@ -62,11 +62,11 @@ expect(snapshot).to be_persisted
       end
 
       it 'should update existent snapshot' do
-        snapshot.id.should eql(Snapshot.on_date!(Date.today).id)
+        expect(snapshot.id).to eql(Snapshot.on_date!(Date.today).id)
       end
 
       it 'should update captured data' do
-        Snapshot.on_date!(Date.today).billing.size.should eql(2)
+        expect(Snapshot.on_date!(Date.today).billing.size).to eql(2)
       end
     end
   end
@@ -82,7 +82,7 @@ expect(snapshot).to be_persisted
     before(:each) { Snapshot.today! }
 
     it 'provides a snapshot with todays date' do
-      Snapshot.today.snap_date.should eql(Date.today)
+      expect(Snapshot.today.snap_date).to eql(Date.today)
     end
   end
 
@@ -204,7 +204,7 @@ expect(snapshot).to be_persisted
           # -------     =  ---------------- = 40%
           # assignable      100 + 100 + 50
           #
-          snapshot.utilization.should eql("40.0")
+          expect(snapshot.utilization).to eql("40.0")
         end
       end
 
@@ -228,7 +228,7 @@ expect(snapshot).to be_persisted
           # -------     =  ---------------- = 40%
           # assignable      100 + 100 + 50
           #
-          snapshot.utilization.should eql("40.0")
+          expect(snapshot.utilization).to eql("40.0")
         end
 
         it "returns a utilization ratio that ignores provisional allocation otherwise" do
@@ -242,7 +242,7 @@ expect(snapshot).to be_persisted
           snapshot.includes_provisional = false
           snapshot.calculate
 
-          snapshot.utilization.should eql("0.0")
+          expect(snapshot.utilization).to eql("0.0")
         end
       end
     end

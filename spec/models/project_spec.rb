@@ -40,7 +40,7 @@ describe Project do
   describe '.unassignable' do
     it 'true if marked as a vacation project' do
       project = FactoryGirl.create(:project, vacation: true)
-      Project.assignable.should include(project)
+      expect(Project.assignable).to include(project)
     end
     it 'false by default' do
       project = FactoryGirl.create(:project)

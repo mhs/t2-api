@@ -19,17 +19,17 @@ describe Api::V1::ProfilesController do
 
       it 'should respond with status 200' do
         update
-        response.status.should eql(200)
+        expect(response.status).to eql(200)
       end
 
       it 'should update person attributes' do
         update(website: "http://mypersonalwebsite.com")
-        @serialized_person["website"].should eql("http://mypersonalwebsite.com")
+        expect(@serialized_person["website"]).to eql("http://mypersonalwebsite.com")
       end
 
       it 'should be able to update avatar' do
         update(avatar: fixture_file_upload("/images/neo.png"))
-        @serialized_person["avatar"].should be_kind_of(Hash)
+        expect(@serialized_person["avatar"]).to be_kind_of(Hash)
         @serialized_person["avatar"]["thumb"].should_not be_empty
         @serialized_person["avatar"]["small"].should_not be_empty
         @serialized_person["avatar"]["medium"].should_not be_empty

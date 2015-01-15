@@ -10,14 +10,14 @@ describe DailyReportSerializer do
   end
 
   it "should serialize with report_date" do
-    serialized_daily_report.as_json[:daily_report][:report_date].should eql(Date.today)
+    expect(serialized_daily_report.as_json[:daily_report][:report_date]).to eql(Date.today)
   end
 
   it "should serialize with snapshots array" do
-    serialized_daily_report.as_json[:daily_report][:snapshots].should be_kind_of(Array)
+    expect(serialized_daily_report.as_json[:daily_report][:snapshots]).to be_kind_of(Array)
   end
 
   it "should serialize with office aside snapshots" do
-    serialized_daily_report.as_json[:daily_report][:offices].should be_kind_of(Array)
+    expect(serialized_daily_report.as_json[:daily_report][:offices]).to be_kind_of(Array)
   end
 end

@@ -22,11 +22,11 @@ describe MonthlySnapshot do
     let(:week_days_in_month) { week_days.size }
 
     it 'should count assignable days' do
-      snapshot.assignable_days.should eq(week_days_in_month)
+      expect(snapshot.assignable_days).to eq(week_days_in_month)
     end
 
     it 'should count billing days' do
-      snapshot.billing_days.should eq(5)
+      expect(snapshot.billing_days).to eq(5)
     end
   end
 
