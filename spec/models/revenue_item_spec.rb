@@ -6,7 +6,6 @@ describe RevenueItem do
   let(:investment_fridays) { false }
   let(:billable) { true }
   let(:percent_allocated) { 100 }
-  let(:provisional) { false }
   let(:holiday_in_week) { false }
   let(:vacation_percentage) { 0 }
   let(:day) { Date.today.beginning_of_week }
@@ -20,7 +19,6 @@ describe RevenueItem do
   let(:allocation) do
     FactoryGirl.create(:allocation, {
       percent_allocated: percent_allocated,
-      provisional: provisional,
       project: project,
       billable: billable,
       person: person
@@ -127,6 +125,16 @@ describe RevenueItem do
           end
         end
       end
+    end
+  end
+
+  describe '#speculative?' do
+    it 'false when likelihood is booked' do
+      expect(RevenueItem.new(likelihood: '100% Booked').speculative?).to be_false
+    end
+
+    it 'true when likelihood is likely' do
+      expect(RevenueItem.new(likelihood: '90% Likely').speculative?).to be_true
     end
   end
 end

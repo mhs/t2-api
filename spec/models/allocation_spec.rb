@@ -11,6 +11,25 @@ describe Allocation do
   it 'should be valid without a creator' do
     FactoryGirl.build(:allocation, creator: nil).should be_valid
   end
+
+
+  context 'person or role' do
+    it 'is valid when role present, and no person' do
+      allocation = FactoryGirl.build(:allocation, role: 'Developer', person: nil)
+      allocation.should be_valid
+    end
+
+    it 'is valid when person present, and no role' do
+      allocation = FactoryGirl.build(:allocation, role: nil)
+      allocation.should be_valid
+    end
+
+    it 'is not valid when no role and no person are present' do
+      allocation = FactoryGirl.build(:allocation, role: nil, person: nil)
+      allocation.should_not be_valid
+      allocation.errors.messages[:person_id].should include('Need to select a role or person')
+    end
+  end
 end
 
 
@@ -174,6 +193,16 @@ describe '.this_year' do
     Allocation.this_year.should_not include(allocation)
   end
 
+  describe '.speculative' do
+    it 'does not include booked allocations' do
+      ['30% Likely','60% Likely','90% Likely', '100% Booked'].each do |likelihood|
+        FactoryGirl.create(:allocation, likelihood: likelihood)
+      end
+
+      expect(Allocation.speculative.pluck(:likelihood)).to match_array(['30% Likely','60% Likely','90% Likely'])
+    end
+  end
+
   context "when destroyed" do
 
     let!(:allocation) { FactoryGirl.create(:allocation) }
@@ -210,7 +239,7 @@ describe '.this_year' do
     let(:some_future_date) { Date.today.following_monday }
 
     let!(:allocation) do
-      FactoryGirl.create(:allocation, binding:true, provisional: false, start_date: some_day_last_month, end_date: some_future_date)
+      FactoryGirl.create(:allocation, binding:true, start_date: some_day_last_month, end_date: some_future_date)
     end
 
     let(:person) { allocation.person }
@@ -221,7 +250,7 @@ describe '.this_year' do
     end
 
     it "updates revenue items from this month and beyond and leave past alone" do
-      allocation.provisional = true
+      allocation.likelihood = '90% Likely'
       allocation.save!
 
       revenue_item_before_this_month = RevenueItem.for_allocation!(allocation, day: some_day_last_month)
@@ -229,10 +258,10 @@ describe '.this_year' do
       revenue_item_today = RevenueItem.for_allocation!(allocation, day: Date.today)
       revenue_item_future = RevenueItem.for_allocation!(allocation, day: some_future_date)
 
-      expect(revenue_item_before_this_month.provisional).to be_false
-      expect(revenue_item_beginning_of_month.provisional).to be_true
-      expect(revenue_item_today.provisional).to be_true
-      expect(revenue_item_future.provisional).to be_true
+      expect(revenue_item_before_this_month.speculative?).to be_false
+      expect(revenue_item_beginning_of_month.speculative?).to be_true
+      expect(revenue_item_today.speculative?).to be_true
+      expect(revenue_item_future.speculative?).to be_true
     end
   end
 

@@ -3,8 +3,8 @@ class UserMailer < ActionMailer::Base
 
   def allocation_upcoming_email(email)
     @creator = User.find_by(email: "#{email}")
-    @allocations = @creator.created_allocations.starting_soon.provisional
+    @allocations = @creator.created_allocations.starting_soon.speculative
 
-    mail(to: @creator.email, subject: 'Upcoming provisional T2 allocations that need your attention.')
+    mail(to: @creator.email, subject: 'Upcoming speculative T2 allocations that need your attention.')
   end
 end

@@ -39,6 +39,7 @@ class Holiday < ActiveRecord::Base
       a.billable = false
       a.binding = true
       a.notes = holiday.name
+      a.likelihood = '100% Booked'
     end
   end
 

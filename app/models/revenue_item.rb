@@ -12,6 +12,8 @@ class RevenueItem < ActiveRecord::Base
   scope :for_project, -> (project) { where(project: project) }
   scope :this_month_and_on, -> { where('day >= ?', Date.today.beginning_of_month) }
   scope :before_this_month, -> { where('day < ?', Date.today.beginning_of_month) }
+  scope :booked, -> { where(likelihood: Allocation::BOOKED_LIKELIHOODS) }
+  scope :speculative, -> (likelihood) { where(likelihood: likelihood || Allocation::SPECULATIVE_LIKELIHOODS)}
 
   scope :before, -> (date) { where('day <= ?', date.to_date) }
   scope :after, -> (date) { where('day >= ?', date.to_date) }
@@ -36,7 +38,7 @@ class RevenueItem < ActiveRecord::Base
       :project => allocation.project,
       :role => person.role,
       :base_rate => project.rate_for(person.role),
-      :provisional => allocation.provisional,
+      :likelihood => allocation.likelihood,
       :vacation_percentage => vacation_percentage,
       :holiday_in_week => holiday_in_week,
       :investment_fridays => project.investment_fridays?,
@@ -65,6 +67,10 @@ class RevenueItem < ActiveRecord::Base
 
   def base_rate
     super.to_f
+  end
+
+  def speculative?
+    Allocation::SPECULATIVE_LIKELIHOODS.include? likelihood
   end
 
   private

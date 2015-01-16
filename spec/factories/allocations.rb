@@ -7,7 +7,7 @@ FactoryGirl.define do
     end_date   { Date.today + 1.week }
     billable   { [true, false].sample }
     percent_allocated { 100 }
-
+    likelihood { '100% Booked' }
 
     trait :this_week do
       start_date { Date.today.at_beginning_of_week }
@@ -29,8 +29,8 @@ FactoryGirl.define do
       binding true
     end
 
-    trait :provisional do
-      provisional true
+    trait :speculative do
+      likelihood { '90% Likely' }
     end
   end
 end

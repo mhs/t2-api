@@ -84,7 +84,7 @@ module SampleData
         FactoryGirl.create :allocation,
         person: person,
         project: project,
-        provisional: (person.allocations.size > 2),
+        likelihood: (person.allocations.size > 2 ? '90% Likely' : '100% Booked'),
         percent_allocated: 50,
         start_date: dates.min,
         end_date: dates.max

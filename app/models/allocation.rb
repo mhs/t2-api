@@ -1,7 +1,13 @@
 class Allocation < ActiveRecord::Base
-  attr_accessible :notes, :start_date, :end_date, :billable, :binding, :provisional, :person, :person_id, :project, :project_id, :percent_allocated
+  attr_accessible :notes, :start_date, :end_date, :billable, :binding,
+                  :person, :person_id, :project, :project_id, :percent_allocated,
+                  :likelihood, :role
 
   attr_accessor :conflicts # used by the serialization code
+
+  ALL_LIKELIHOODS = ['30% Likely','60% Likely','90% Likely', '100% Booked']
+  BOOKED_LIKELIHOODS = ['100% Booked']
+  SPECULATIVE_LIKELIHOODS = ALL_LIKELIHOODS - BOOKED_LIKELIHOODS
 
   belongs_to :person
   belongs_to :project
@@ -11,9 +17,9 @@ class Allocation < ActiveRecord::Base
 
   before_destroy :clean_up_revenue
 
-  validates :person_id, :project_id, :start_date, :end_date, presence: true
+  validates :project_id, :start_date, :end_date, :likelihood, presence: true
   validates_date :end_date, on_or_after: :start_date
-
+  validate :person_or_role_present
   validates :percent_allocated, inclusion: {in: 0..100, message: "must be between 0 and 100"}
 
   scope :current, -> { includes(:project).where("projects.deleted_at is NULL").references(:project) }
@@ -42,11 +48,11 @@ class Allocation < ActiveRecord::Base
   scope :assignable, -> { current.includes(:project).where(:projects => { vacation: false }) }
   scope :unassignable, -> { current.includes(:project).where(:projects => { vacation: true }) }
   scope :billable, -> { where(billable: true) }
-  scope :provisional, -> { where(provisional: true) }
   scope :bound, -> { where(binding: true) }
   scope :vacation, -> { current.where(:projects => { vacation: true }) }
   scope :by_office, lambda { |office| office ? joins(:office).where("people.office_id" => office.id) : where(false) }
-  scope :includes_provisional, lambda { |x| x ? where(nil) : where(provisional: false) }
+  scope :includes_speculative, lambda { |x| x ? where(nil) : where(likelihood: BOOKED_LIKELIHOODS) }
+  scope :speculative, -> { where(likelihood: SPECULATIVE_LIKELIHOODS) }
 
   scope :billable_and_assignable, -> { billable.assignable }
 
@@ -83,6 +89,12 @@ class Allocation < ActiveRecord::Base
     #
     revenue_items.this_month_and_on.destroy_all
     revenue_items.before_this_month.update_all(allocation_id: nil)
+  end
+
+  def person_or_role_present
+    if person.nil? && role.nil?
+      errors.add(:person_id, 'Need to select a role or person')
+    end
   end
 
 end

@@ -1,13 +1,13 @@
 class Utilization
   extend Memoist
 
-  attr_accessor :person, :start_date, :end_date, :includes_provisional
+  attr_accessor :person, :start_date, :end_date, :includes_speculative
 
-  def initialize(person:, start_date: nil, end_date: nil, includes_provisional:)
+  def initialize(person:, start_date: nil, end_date: nil, includes_speculative: false)
     @person     = person
     @start_date = start_date.presence || Date.today
     @end_date   = end_date.presence   || start_date.presence || Date.today
-    @includes_provisional = includes_provisional
+    @includes_speculative = includes_speculative
   end
 
   def billable_percentage
@@ -55,14 +55,14 @@ class Utilization
 
   def vacation_allocation_percentage
     percent = vacation.sum(:percent_allocated).to_f
-    percent <= 100.0 ? percent : 100.0 
+    percent <= 100.0 ? percent : 100.0
   end
   memoize :vacation_allocation_percentage
 
   private
 
   def allocations
-    person.allocations.within(start_date, end_date).includes_provisional(includes_provisional)
+    person.allocations.within(start_date, end_date).includes_speculative(includes_speculative)
   end
 
   def vacation
