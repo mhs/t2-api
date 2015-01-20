@@ -1,0 +1,13 @@
+- fte_grouped_by_office(set).each do |office_name, people|
+  %table
+    %thead
+      %tr
+        %th= office_name
+    %tbody
+      - people.sort_by{ |name, _| name }.each do |name, percent|
+        %tr
+          %td= person_utilization(name, percent, local_assigns[:suppress].nil? ? true : false)
+%table.meta-footer
+  %tfoot
+    %tr
+      %td= explanation
