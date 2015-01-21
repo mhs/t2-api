@@ -104,11 +104,7 @@ class Person < ActiveRecord::Base
   end
 
   def availabilities_for(start_date, end_date, allocations_within_range=nil)
-    avail = overlap_calculator_for(start_date, end_date, allocations_within_range).availabilities
-    if avail.any? {|a| a.person_id == 138}
-      binding.pry
-    end
-    avail
+    overlap_calculator_for(start_date, end_date, allocations_within_range).availabilities
   end
 
   def conflicts_for(start_date, end_date, allocations_within_range=nil)
