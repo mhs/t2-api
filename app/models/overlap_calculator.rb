@@ -31,7 +31,7 @@ class OverlapCalculator
   end
 
   def availabilities
-    overlaps.select(&:available?).map(&:to_availability)
+    overlaps.select(&:available?).map(&:to_availability).reject { |a| a.weekend? }
   end
 
 end

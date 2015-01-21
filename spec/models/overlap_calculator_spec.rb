@@ -1,7 +1,8 @@
 require 'spec_helper'
 describe OverlapCalculator do
 
-  let(:person) { double(id: 42, percent_billable: 100) }
+  # let(:person) { double(id: 42, percent_billable: 100) }
+  let(:person) { FactoryGirl.create(:person) }
   let(:start_date) { Date.today.beginning_of_week }
   let(:end_date) { day(14) }
   let(:initial_overlap) { Overlap.new(person: person, start_date: start_date, end_date: end_date) }
@@ -111,6 +112,22 @@ describe OverlapCalculator do
         expect(result.first.start_date).to eq(day(3))
         expect(result.first.end_date).to eq(initial_overlap.end_date)
       end
+    end
+
+    context "allocated over two weeks" do
+      let(:end_date) { day(13) } # end on Sunday
+      let(:monday) { Date.today.beginning_of_week }
+      let(:friday) { monday + 4.days }
+      let(:next_monday) { monday + 7.days }
+      let(:next_friday) { friday + 7.days }
+      let!(:allocation1) { FactoryGirl.create(:allocation, person: person, start_date: monday, end_date: friday) }
+      let!(:allocation2) { FactoryGirl.create(:allocation, person: person, start_date: next_monday, end_date: next_friday) }
+      let(:allocations) { [allocation1, allocation2] }
+
+      it "returns no availabilty for weekend chunks" do
+        expect(result.size).to eq(0)
+      end
+
     end
 
     context "partially available when partially allocated" do

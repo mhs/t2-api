@@ -67,5 +67,9 @@ class Availability
     end_date < start_date
   end
 
+  def weekend?
+    (end_date - start_date).to_i == 1 && end_date.weekend? && start_date.weekend?
+  end
+
   alias read_attribute_for_serialization send
 end
