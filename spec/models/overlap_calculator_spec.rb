@@ -115,19 +115,35 @@ describe OverlapCalculator do
     end
 
     context "allocated over two weeks" do
-      let(:end_date) { day(13) } # end on Sunday
-      let(:monday) { Date.today.beginning_of_week }
-      let(:friday) { monday + 4.days }
+      let(:end_date)    { day(13) } # end on Sunday
+      let(:monday)      { Date.today.beginning_of_week }
+      let(:thursday)    { monday + 3.days }
+      let(:friday)      { monday + 4.days }
+      let(:sunday)      { monday + 6.days }
       let(:next_monday) { monday + 7.days }
       let(:next_friday) { friday + 7.days }
-      let!(:allocation1) { FactoryGirl.create(:allocation, person: person, start_date: monday, end_date: friday) }
-      let!(:allocation2) { FactoryGirl.create(:allocation, person: person, start_date: next_monday, end_date: next_friday) }
-      let(:allocations) { [allocation1, allocation2] }
 
-      it "returns no availabilty for weekend chunks" do
-        expect(result.size).to eq(0)
+      context "continuous" do
+        let(:allocations)  { [allocation1, allocation2] }
+        let!(:allocation1) { FactoryGirl.create(:allocation, person: person, start_date: monday, end_date: friday) }
+        let!(:allocation2) { FactoryGirl.create(:allocation, person: person, start_date: next_monday, end_date: next_friday) }
+
+        it "returns no availabilty for weekend chunks" do
+          expect(result.size).to eq(0)
+        end
       end
 
+      context "with weekday pause" do
+        let(:allocations)  { [allocation1, allocation2] }
+        let!(:allocation1) { FactoryGirl.create(:allocation, person: person, start_date: monday, end_date: thursday) }
+        let!(:allocation2) { FactoryGirl.create(:allocation, person: person, start_date: next_monday, end_date: next_friday) }
+
+        it "returns 1 availability" do
+          expect(result.size).to eq(1)
+          expect(result.first.start_date).to eq(friday)
+          expect(result.first.end_date).to eq(sunday)
+        end
+      end
     end
 
     context "partially available when partially allocated" do
