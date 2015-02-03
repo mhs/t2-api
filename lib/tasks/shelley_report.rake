@@ -22,7 +22,11 @@ task :shelley_report => :environment do
   puts "Monthy Per Office Utilization Detail between #{start_of_period} and #{end_of_period}"
   ['Columbus','New York','San Francisco','Singapore'].each do |office_name|
     office = Office.find_by name: office_name
-    snapshots = Snapshot.where(office_id: office.id).where("snap_date >= '#{start_of_period}'").where("snap_date < '#{end_of_period}'").where(includes_provisional: false).reject{|s| [0,6].include?(s.snap_date.wday)}
+    snapshots = Snapshot.where(office_id: office.id)
+      .where("snap_date >= '#{start_of_period}'")
+      .where("snap_date < '#{end_of_period}'")
+      .where(includes_speculative: false)
+      .reject{|s| [0,6].include?(s.snap_date.wday)}
 
     billable = snapshots.map(&:billable).map(&:total).map{|t| t/100}.sum
     billing = snapshots.map(&:billing).map(&:total).map{|t| t/100}.sum
