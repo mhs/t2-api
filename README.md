@@ -182,12 +182,7 @@ Copy the env sample file:
   $ cp .env.sample .env
 ```
 
-and add the following (or their equivalent) to your .profile, .bashrc, .zshrc, whatever:
-
-```
-export GOOGLE_CLIENT_ID="480140443980.apps.googleusercontent.com"
-export GOOGLE_SECRET="v03dRPvKlgn_OsK79MXSDn5j"
-```
+and add the appropriate GOOGLE_CLIENT_ID and GOOGLE_SECRET for Google oauth to your .bash_profile or equivalent.
 
 This sets you up with API access to Google using a default account (adam.mccrea@gmail.com).
 If for whatever reason we need to change this (unlikely), here is what is needed.
