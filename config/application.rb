@@ -78,7 +78,7 @@ module T2Api
       :port                 => 25,
       :enable_starttls_auto => true,
       :user_name            => "bot@neo.com",
-      :password             => "Xmx_aXZK1JkIY_Rb58fYvg",
+      :password             => ENV['MANDRILL_PASSWORD'],
       :authentication       => 'login',
       :domain               => 'neo.com'
     }
