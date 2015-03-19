@@ -182,14 +182,20 @@ Copy the env sample file:
   $ cp .env.sample .env
 ```
 
-and add the appropriate GOOGLE_CLIENT_ID and GOOGLE_SECRET for Google oauth to your .bash_profile or equivalent.
+#### Google Auth
 
-This sets you up with API access to Google using a default account (adam.mccrea@gmail.com).
-If for whatever reason we need to change this (unlikely), here is what is needed.
-First create your Google Client ID and Secret keys from: https://code.google.com/apis/console/.
-Then, in your Google API console, under API Access > Client ID for web applications, set the
-`Redirect URIs` value to `[host]/users/auth/google_oauth2/callback`.
-Eg.: `http://localhost:5000/users/auth/google_oauth2/callback`
+To setup Google Auth, we need to first create your Google Client ID and Secret keys.
+You do this by going to https://code.google.com/apis/console/ and creating a new Project.
+Wait a second, it takes a minute.
+
+1. Go to the APIs & Auth -> APIs tab and add the Contacts API and the Google+ API. These are necessary for OAuth.
+1. Go to the APIs & Auth -> Consent Screen tab and add a Product Name.
+1. Go to the APIs & Auth -> Credentials tab and generate a new ClientID. Set the Redirect Uris & Origins to:
+    `Javascript Origin` value to `[host]`.
+    Eg.: `http://localhost:5000`
+    `Redirect URIs` value to `[host]/users/auth/google_oauth2/callback`.
+    Eg.: `http://localhost:5000/users/auth/google_oauth2/callback`
+1. Copy the GOOGLE_CLIENT_ID and GOOGLE_SECRET to your `.env`.
 
 #### Ruby version
 
