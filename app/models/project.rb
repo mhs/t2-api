@@ -1,9 +1,11 @@
 class Project < ActiveRecord::Base
 
-  DEFAULT_RATES = { 'Developer' => 7000,
-                    'Designer' => 7000,
-                    'Product Manager' => 7000,
-                    'Principal' => 14000 }
+  DEFAULT_RATES = {
+    'Developer'       => 5400,
+    'Designer'        => 5400,
+    'Product Manager' => 5400,
+    'Principal'       => 5400,
+  }
 
   include HasManyCurrent
 

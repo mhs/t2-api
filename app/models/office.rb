@@ -12,8 +12,8 @@ class Office < ActiveRecord::Base
   has_many_current :people
   has_many_current :allocations, :through => :people
 
-  SPECIAL_OFFICES = ["Headquarters"]
-  US_OFFICES = ["Cincinnati", "Columbus", "San Francisco", "New York"]
+  SPECIAL_OFFICES = []
+  US_OFFICES = ["Grand Rapids", "Columbus"]
 
   def self.active
     where(deleted_at: nil)

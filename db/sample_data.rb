@@ -2,9 +2,8 @@ module SampleData
 
   def self.load
   # create the offices
-  [ "Columbus", "New York", "San Francisco", "Singapore", "Headquarters"
-  ].each do |name|
-    Office.where(name: name, slug: name.parameterize).first_or_create
+  ['Grand Rapids', 'Columbus'].each do |name|
+    Office.where(name: name, slug: name.parameterize).first_or_create!
   end
 
   regular_rates = {
