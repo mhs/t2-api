@@ -318,3 +318,9 @@ DEPENDENCIES
   uglifier (>= 1.0.3)
   validates_timeliness
   will_paginate (~> 3.0)
+
+RUBY VERSION
+   ruby 2.1.5p273
+
+BUNDLED WITH
+   1.14.6
